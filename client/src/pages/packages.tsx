@@ -1,17 +1,14 @@
 
-import { useState } from "react";
 import { Link } from "wouter";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle, CardDescription, CardFooter } from "@/components/ui/card";
+import { Card, CardContent, CardHeader, CardFooter } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { Switch } from "@/components/ui/switch";
-import { Label } from "@/components/ui/label";
-import { Check, X, ArrowRight, Zap, Thermometer, Ruler, Download, Coins } from "lucide-react";
+import { Check, X, ArrowRight, Ruler, Download, Info } from "lucide-react";
 import { PACKAGES, SUBSIDIES } from "@/lib/constants";
 import { ChofuTrustBox } from "@/components/brand/ChofuTrustBox";
 
 export default function Packages() {
-  const [includeSolar, setIncludeSolar] = useState(false);
+  const includeSolar = false;
 
   // Helper to calculate effective price
   const getEffectivePrice = (price: number) => {
@@ -57,30 +54,15 @@ export default function Packages() {
           </p>
         </div>
 
-        {/* Subsidy Toggle */}
-        <div className="max-w-xl mx-auto bg-white p-6 rounded-xl shadow-sm border border-slate-200 mb-16">
-          <div className="flex items-center justify-between mb-4">
-            <div className="flex items-center gap-2">
-              <Coins className="text-primary" />
-              <h3 className="font-bold text-slate-900">Förder-Rechner</h3>
-            </div>
-            <Badge variant="outline" className="bg-green-50 text-green-700 border-green-200">Kesseltausch 2026</Badge>
-          </div>
-          
-          <div className="flex items-center justify-between gap-4 p-4 bg-slate-50 rounded-lg border border-slate-100">
-            <div className="space-y-1">
-              <Label htmlFor="solar-mode" className="font-medium text-slate-900">Inklusive Solarthermie?</Label>
-              <p className="text-xs text-slate-500">Zusätzlicher Bonus von € {SUBSIDIES.solar.toLocaleString()}</p>
-            </div>
-            <Switch 
-              id="solar-mode" 
-              checked={includeSolar}
-              onCheckedChange={setIncludeSolar}
-            />
-          </div>
-          <p className="text-xs text-slate-400 mt-4 text-center">
-            *Die Berechnung berücksichtigt die maximale Förderung von 30% der Investitionskosten bzw. die Pauschalsätze.
-          </p>
+        {/* Funding Note */}
+        <div className="max-w-3xl mx-auto mb-8 flex items-start gap-3 bg-blue-50 p-4 rounded-lg border border-blue-100 text-sm text-slate-600">
+           <Info className="text-blue-600 shrink-0 mt-0.5" size={18} />
+           <div>
+             <span className="font-bold text-slate-900">Hinweis zur Förderung:</span> Die Förderlogik ist bereits im Heizkostenrechner berücksichtigt und im ‚effektiven Preis nach Förderung‘ der Pakete enthalten.
+             <Link href="/rechner" className="text-primary font-bold hover:underline ml-2 inline-flex items-center gap-1">
+               Zum Heizkostenrechner <ArrowRight size={14} />
+             </Link>
+           </div>
         </div>
 
         {/* CHOFU Trust Box - Compact Version */}
