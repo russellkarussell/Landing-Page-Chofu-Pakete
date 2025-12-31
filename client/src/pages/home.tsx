@@ -51,7 +51,7 @@ export default function Home() {
             </div>
             
             <h1 className="text-5xl md:text-6xl lg:text-7xl font-heading font-extrabold leading-[1.1] tracking-tight text-[#e5232b]">
-              CHOFU Wärmepumpen. <br/>
+              <span className="font-black">CHOFU</span> Wärmepumpen. <br/>
               <span className="text-primary">Präzision zum Fixpreis.</span>
             </h1>
             
