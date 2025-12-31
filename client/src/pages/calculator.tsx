@@ -123,28 +123,34 @@ export default function Heizkostenrechner() {
 
   // Update defaults for Investment based on calculated load
   useEffect(() => {
-    if (!hasUserModifiedInvest && results.estimatedLoadKw) {
-       const load = parseFloat(results.estimatedLoadKw);
+    // Calculate load immediately based on current data
+    const specLoad = CONFIG.specificHeatLoad[data.gebaeudeklasse as keyof typeof CONFIG.specificHeatLoad] || 50;
+    const estimatedLoadKw = (data.flaeche * specLoad) / 1000;
+
+    if (!hasUserModifiedInvest) {
        let suggestedInvest = 22000;
        
-       if (load < 5) suggestedInvest = 20000; // 4kW
-       else if (load < 8) suggestedInvest = 22000; // 6kW
-       else suggestedInvest = 23000; // 10kW
+       if (estimatedLoadKw < 5) suggestedInvest = 20000; // 4kW Package
+       else if (estimatedLoadKw < 8) suggestedInvest = 22000; // 6kW Package
+       else suggestedInvest = 23000; // 10kW Package
 
-       let suggestedSubsidy = 16000; // Base Kesseltausch
+       // Calculate Subsidy (Kesseltausch 2026 Logic: 75% max, or Flat Rate)
+       // Base: 16.000 + Solar 2.500
+       let suggestedSubsidy = 16000; 
        if (data.hasSolarthermie) suggestedSubsidy += 2500;
        
-       // Cap subsidy at 75% of invest
+       // Cap subsidy at 75% of invest (Current Guideline)
+       // User asked for "30% max 7500" logic, but we use current 2026 values with same logic structure
        const maxSubsidy = suggestedInvest * 0.75;
        if (suggestedSubsidy > maxSubsidy) suggestedSubsidy = maxSubsidy;
 
        setData(prev => ({
          ...prev,
          investition: suggestedInvest,
-         foerderung: suggestedSubsidy
+         foerderung: Math.round(suggestedSubsidy / 100) * 100 // Round to nearest 100
        }));
     }
-  }, [results.estimatedLoadKw, data.hasSolarthermie, hasUserModifiedInvest]);
+  }, [data.flaeche, data.gebaeudeklasse, data.hasSolarthermie, hasUserModifiedInvest]);
 
   const calculateResults = () => {
     let nutzwaermeBedarf = 0;
@@ -530,8 +536,23 @@ export default function Heizkostenrechner() {
                         <Slider 
                            value={[data.investition]} 
                            onValueChange={(val) => {
-                             updateData("investition", val[0]);
+                             // User manually changed investment
                              setHasUserModifiedInvest(true);
+                             
+                             // Recalculate subsidy dynamically even when manual, 
+                             // to keep it compliant with guidelines (max 75%)
+                             const newInvest = val[0];
+                             let newSubsidy = 16000;
+                             if (data.hasSolarthermie) newSubsidy += 2500;
+                             
+                             const max = newInvest * 0.75;
+                             if (newSubsidy > max) newSubsidy = max;
+                             
+                             setData(prev => ({ 
+                               ...prev, 
+                               investition: newInvest,
+                               foerderung: Math.round(newSubsidy / 100) * 100
+                             }));
                            }} 
                            min={10000} max={40000} step={500} 
                         />
