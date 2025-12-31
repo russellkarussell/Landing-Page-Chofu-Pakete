@@ -1,0 +1,239 @@
+Rolle: Du bist Chief Software Engineer mit SEO-Background. Du arbeitest in meinem bestehenden Repo (CHOFU Pakete Landing Page) und erstellst eine neue Produktdetailseite für das 6 kW Modell.
+
+Ziel: Neue Produktseite „CHOFU AEYC-0649ZU-CH1 (6 kW) – R290 Monoblock Luft/Wasser-Wärmepumpe“ erstellen. Die Seite muss modern, schnell, sauber strukturiert, SEO-stark und conversion-orientiert sein (CTA: „Kostenlosen Besichtigungstermin vereinbaren“ + „Zu den Paketen“). Inhalte sind technisch korrekt, aber für Endkunden verständlich.
+
+0) Quellen / Korrektheit (SEHR WICHTIG)
+
+Nutze diese Quellen für Daten & Funktionen:
+
+https://japan-waermepumpe.at/chofu-aeyc-0649zu-ch1/
+
+https://www.westech.shop/chofu-aeyc-0649zu-ch1-6kw-r290-luft-wasser-waermepumpe
+
+die bereits im Repo/Workspace vorhandenen PDFs:
+
+20250311_Installation and instruction manual_CHOFU AEYC (R290).pdf
+
+CMR-4100M Installation Manual.pdf
+
+Regel: Keine technischen Werte erfinden. Wenn ein Wert nicht eindeutig aus Quellen extrahierbar ist, setze einen klaren Platzhalter wie — oder TBD (laut Datenblatt).
+
+1) Routing / Navigation
+
+Füge eine neue Route hinzu:
+
+/waermepumpe/6kw (oder /produkte/chofu-aeyc-0649zu-ch1)
+
+Ergänze im Header/Nav (Desktop + Mobile) einen Menüpunkt unter „Pakete“ oder „Mehr“:
+
+„6kW Wärmepumpe“
+
+Von /pakete sollen Buttons/Links auf diese Produktseite führen:
+
+Beim 6kW-Paket: Link „Wärmepumpe ansehen“ → /waermepumpe/6kw
+
+2) Seitenlayout (Produktdetailseite)
+
+Erstelle die Seite mit folgenden Sektionen (gleiche Struktur wie bei der 4kW-Seite, falls vorhanden – gerne wiederverwenden, aber ohne Refactor-Orgie).
+
+A) Hero (Above the fold)
+
+H1: „CHOFU AEYC-0649ZU-CH1 – 6 kW R290 Wärmepumpe“
+
+Subline: „Monoblock Luft/Wasser – Heizen & Kühlen, Made in Japan. Für effiziente Einfamilienhäuser und Sanierungen.“
+
+Hero-Bild: PXL_20250803_105021980-Photoroom.jpg
+
+3–5 USP Chips:
+
+„R290 (Propan)“
+
+„Monoblock“
+
+„Heizen & Kühlen“
+
+„DC Inverter“
+
+„Made in Japan“
+
+Primary CTA: „Kostenlosen Besichtigungstermin vereinbaren“ → bestehende Kontakt/CTA-Route oder #kontakt
+
+Secondary CTA: „Pakete ansehen“ → /pakete
+
+B) Vertrauens-Strip (kompakt)
+
+2 kompakte Kacheln nebeneinander:
+
+„Made in Japan / CHOFU Qualität“ mit R290 Premium Black Closeup image (1).jpg
+
+„Steuerung & App“ mit CMR-4100M Image.jpg
+
+C) „Kurz erklärt: Was kann diese Wärmepumpe?“
+
+4 Feature-Kacheln mit Icons:
+
+Heizen
+
+Kühlen (systemabhängig)
+
+Warmwasser (über Speicherlösung, systemabhängig)
+
+Smart Control (WLAN/Comfy Connect)
+
+D) Funktionen & Steuerung (CMR-4100M)
+
+Sektion „CMR-4100M Steuerung – Bedienung & Automatik“
+
+6 Bulletpoints, aus Manual ableiten, z. B.:
+
+WLAN (2.4 GHz) & Onlinezugriff über Comfy Connect CHOFU
+
+Heiz-/Kühlbetrieb, Umschaltung je nach Konfiguration
+
+Zeitprogramme (Heizen/Kühlen + Warmwasser)
+
+Heizkurve / witterungsgeführter Betrieb
+
+Low-Tarif / Nachtmodus (zeitgesteuert)
+
+Frostschutz / Sicherheitsfunktionen
+Keine überzogenen Claims, keine erfundenen Features.
+
+E) Technische Daten (tabellarisch)
+
+Erstelle Tabelle „Technische Daten – AEYC-0649ZU-CH1“.
+
+Pflichtzeilen (Werte aus Quellen ziehen; sonst TBD):
+
+Typ: Heating & Cooling Monoblock, DC Inverter (Reverse cycle)
+
+Netz: 1~ 230V 50Hz
+
+Heizleistung A7/W35: 6.0 kW (falls bestätigt)
+
+Leistungsaufnahme A7/W35: TBD
+
+COP A7/W35: TBD
+
+Kühlleistung A35/W18: TBD
+
+Leistungsaufnahme A35/W18: TBD
+
+EER A35/W18: TBD
+
+Kältemittel: R290, Füllmenge: TBD
+
+Abmessungen (H×B×T): TBD
+
+Gewicht: TBD
+
+Temperaturbereich (Außenluft): Heizen TBD; Kühlen TBD
+
+Wasser-Temperaturbereich (laut Manual): TBD
+
+Wasseranschlüsse: TBD
+
+Hinweistext unter der Tabelle:
+
+„Technische Werte gemäß Herstellerunterlagen/Datenblatt. Für Auslegung und Förderfähigkeit ist die objektspezifische Planung entscheidend.“
+
+Wichtig: Wenn in Marketingtexten „75°C“ vorkommt, dann nur als „system-/betriebsabhängig“ und sauber formuliert. Primär sollen Manual-/Datenblattwerte gelten.
+
+F) Downloads / Dokumente
+
+Sektion „Downloads“ (2 Karten):
+
+„Installations- & Bedienungsanleitung – CHOFU AEYC (R290)“ (PDF)
+
+„CMR-4100M Controller – Installationsanleitung“ (PDF)
+Wenn PDFs noch nicht als öffentlich verlinkbare Assets hinterlegt sind, UI als Platzhalter bauen (z. B. /docs/...), sodass ich später einfach austauschen kann.
+
+G) Geeignet für / Einsatzbereiche
+
+3 Kacheln:
+
+Standard-Einfamilienhaus
+
+Sanierter Altbau (Hinweis: Auslegung wichtig)
+
+Zweifamilienhaus / größere Wohnflächen (nur als „möglich“ mit Projektcheck)
+
+H) FAQ (6–8 Items)
+
+„Monoblock – was heißt das?“
+
+„Kann die Anlage kühlen?“
+
+„Wie läuft die Regelung?“ (CMR-4100M, App)
+
+„Brauche ich einen Pufferspeicher?“ (systemabhängig)
+
+„Wie laut ist sie?“ (kein Wert erfinden; auf Datenblatt verweisen)
+
+„Wie läuft Service/Wartung?“ (österreichweit, Ersatzteile; als Anbieterleistung formulieren)
+
+I) Bottom CTA
+
+Große CTA-Box:
+
+Headline: „Kostenlosen Besichtigungstermin vereinbaren“
+
+2 Bulletpoints:
+
+„Auslegung & Machbarkeit vor Ort“
+
+„Fixpreisangebot über Installationspartner“
+
+Button: „Termin vereinbaren“
+
+Secondary: „Pakete vergleichen“ → /pakete
+
+3) SEO Anforderungen
+
+Title: „CHOFU AEYC-0649ZU-CH1 – 6 kW R290 Wärmepumpe | Heizkraft“
+
+Meta-Description (≤155 Zeichen):
+„6 kW CHOFU R290 Monoblock Wärmepumpe (Heizen & Kühlen). Made in Japan. Technische Daten, Funktionen, Downloads & Beratung.“
+
+Saubere Heading-Struktur (1× H1)
+
+Product Schema (JSON-LD):
+
+name, brand=CHOFU, model=AEYC-0649ZU-CH1, category, images, url
+
+offers optional ohne Preis
+
+Interne Links:
+
+/pakete, /heizkostenrechner, /kontakt
+
+4) Assets (Bilder)
+
+Verwende:
+
+Hero: PXL_20250803_105021980-Photoroom.jpg
+
+Closeup: R290 Premium Black Closeup image (1).jpg
+
+Controller: CMR-4100M Image.jpg
+Optional Winterbild als Sektion-Visual „Betrieb bei tiefen Temperaturen“ (ohne konkrete -°C Behauptung, wenn nicht belegt)
+
+Alt-Texte:
+
+„CHOFU R290 Monoblock Wärmepumpe im Außenbereich“
+
+„CHOFU Made in Japan – Detailansicht“
+
+„CMR-4100M Controller – Bedienoberfläche“
+
+5) Definition of Done
+
+Route erreichbar, Nav-Link vorhanden, von 6kW-Paket verlinkt
+
+Keine erfundenen technischen Werte (TBD wenn unklar)
+
+CTA funktioniert, Downloads UI vorhanden
+
+Keine Änderungen an Preislogik, Rechner, HubSpot, anderen Seiten
+
+Implementiere nur diese 6kW-Produktseite.

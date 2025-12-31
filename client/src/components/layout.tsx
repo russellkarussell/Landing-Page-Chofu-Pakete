@@ -23,7 +23,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
   const navLinks = [
     { href: "/", label: "Startseite", icon: Home },
     { href: "/pakete", label: "Pakete", icon: Package },
-    { href: "/waermepumpe/4kw", label: "4kW Wärmepumpe", icon: Leaf },
+    { href: "/waermepumpe/6kw", label: "6kW Wärmepumpe", icon: Leaf },
     { href: "/rechner", label: "Heizkostenrechner", icon: Calculator },
     { href: "/kontakt", label: "Kontakt", icon: Phone },
   ];
