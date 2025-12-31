@@ -1,4 +1,5 @@
 
+import { Slider } from "@/components/ui/slider";
 import { useState } from "react";
 import { Link } from "wouter";
 import { Button } from "@/components/ui/button";
@@ -21,7 +22,7 @@ export default function Home() {
   const [isCalculating, setIsCalculating] = useState(false);
 
   // Mini Calculator State
-  const [calcData, setCalcData] = useState({ size: "", type: "Altbau" });
+  const [calcData, setCalcData] = useState({ size: "140", type: "Altbau" });
   const [result, setResult] = useState<{
     low: string;
     high: string;
@@ -181,48 +182,49 @@ export default function Home() {
                 {calcStep === 1 ? (
                   <div className="space-y-6">
                     {/* Wohnfläche Input */}
-                    <div className="space-y-2">
-                      <Label htmlFor="area" className="text-xs uppercase font-bold text-slate-500 tracking-wider">Wohnfläche</Label>
-                      <div className="relative">
-                        <div className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400">
-                          <HomeIcon size={18} />
-                        </div>
-                        <Input 
-                          id="area" 
-                          placeholder="140" 
-                          type="number"
-                          min="40"
-                          max="350"
-                          className="pl-10 h-12 text-lg border-slate-200 focus:border-primary focus:ring-primary rounded-lg transition-all"
-                          value={calcData.size}
-                          onChange={(e) => setCalcData({...calcData, size: e.target.value})}
-                          onKeyDown={(e) => e.key === 'Enter' && calcData.size && handleCalc()}
+                    <div className="space-y-4">
+                      <div className="flex items-center justify-between">
+                        <Label htmlFor="area" className="text-xs uppercase font-bold text-slate-500 tracking-wider">Wohnfläche</Label>
+                        <span className="font-bold text-primary text-lg">{calcData.size || 140} <span className="text-sm font-normal text-slate-400">m²</span></span>
+                      </div>
+                      
+                      <div className="px-1">
+                        <Slider 
+                          defaultValue={[parseInt(calcData.size || "140")]} 
+                          max={350} 
+                          min={40} 
+                          step={10} 
+                          onValueChange={(vals) => setCalcData({...calcData, size: vals[0].toString()})}
+                          className="py-4"
                         />
-                        <div className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 text-sm font-medium">m²</div>
                       </div>
                       <p className="text-[11px] text-slate-400 pl-1">Beheizte Wohnfläche (ca.)</p>
                     </div>
 
                     {/* Gebäudetyp Input */}
-                    <div className="space-y-2">
+                    <div className="space-y-3">
                       <Label className="text-xs uppercase font-bold text-slate-500 tracking-wider">Gebäudetyp</Label>
-                      <div className="relative">
-                        <div className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 z-10">
-                          <Building size={18} />
-                        </div>
-                        <Select 
-                          defaultValue={calcData.type} 
-                          onValueChange={(val) => setCalcData({...calcData, type: val})}
-                        >
-                          <SelectTrigger className="pl-10 h-12 text-base border-slate-200 focus:border-primary focus:ring-primary rounded-lg transition-all">
-                            <SelectValue />
-                          </SelectTrigger>
-                          <SelectContent className="rounded-lg shadow-lg border-slate-100">
-                            <SelectItem value="Altbau">Altbau (vor 1990)</SelectItem>
-                            <SelectItem value="Saniert">Teilsaniert</SelectItem>
-                            <SelectItem value="Neubau">Neubau (nach 2010)</SelectItem>
-                          </SelectContent>
-                        </Select>
+                      <div className="grid grid-cols-3 gap-2">
+                        {["Altbau", "Saniert", "Neubau"].map((type) => (
+                          <div 
+                            key={type}
+                            onClick={() => setCalcData({...calcData, type})}
+                            className={`
+                              cursor-pointer rounded-lg border-2 p-3 text-center transition-all duration-200 flex flex-col items-center justify-center gap-2 h-24
+                              ${calcData.type === type 
+                                ? 'border-primary bg-primary/5 text-primary shadow-sm' 
+                                : 'border-slate-100 bg-white text-slate-500 hover:border-slate-200 hover:bg-slate-50'
+                              }
+                            `}
+                          >
+                            <Building size={20} className={calcData.type === type ? 'text-primary' : 'text-slate-400'} />
+                            <span className="text-xs font-bold leading-tight">
+                              {type === "Altbau" && "Altbau (vor 1990)"}
+                              {type === "Saniert" && "Teilsaniert"}
+                              {type === "Neubau" && "Neubau (nach 2010)"}
+                            </span>
+                          </div>
+                        ))}
                       </div>
                       <p className="text-[11px] text-slate-400 pl-1">Wärmeschutz grob (für erste Einschätzung)</p>
                     </div>
