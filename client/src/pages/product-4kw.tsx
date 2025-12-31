@@ -14,7 +14,8 @@ import {
   ShieldCheck, 
   Calendar, 
   Zap,
-  Info
+  Info,
+  Home
 } from "lucide-react";
 import heroImage from "@assets/PXL_20250803_105021980-Photoroom_1767198306969.jpg";
 import closeupImage from "@assets/R290_Premium_Black_Closeup_image_(1)_1767198326200.jpg";
