@@ -11,6 +11,7 @@ import { Check, ArrowRight, Zap, ShieldCheck, Euro, Coins } from "lucide-react";
 import { BUNDESLAENDER, PACKAGES, PARTNERS, SUBSIDIES } from "@/lib/constants";
 import heroImage from "@assets/generated_images/modern_austrian_house_with_heat_pump.png";
 import { motion } from "framer-motion";
+import { BrandSection } from "@/components/brand-modules";
 
 export default function Home() {
   const [selectedBundesland, setSelectedBundesland] = useState<string>("Wien");
@@ -174,6 +175,9 @@ export default function Home() {
           </div>
         </div>
       </section>
+
+      {/* Brand Section (New) */}
+      <BrandSection />
 
       {/* Subsidy Info Section */}
       <section className="py-16 bg-white border-b border-slate-100">

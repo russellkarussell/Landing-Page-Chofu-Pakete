@@ -1,0 +1,191 @@
+Du arbeitest als Lead UX Writer + Frontend Engineer + SEO Specialist an einer bestehenden mehrseitigen Website für Wärmepumpen-Fixpreis-Pakete (Endkunden). Alle bestehenden Seiten, Layouts, Rechner und HubSpot Integrationen bleiben grundsätzlich erhalten.
+Dein Auftrag ist ausschließlich: CHOFU als Marke für Endkunden verständlich und vertrauenswürdig erklären und die Website um Brandstory-Module erweitern, die sich an Herstellern wie thermic-energy / TWL orientieren (technisch, seriös, keine plakativen Werbeclaims).
+
+1) Ziel & Positionierung
+
+Integriere eine CHOFU-Brandstory, die Endkunden abholt, die CHOFU nicht kennen. Sie soll klar beantworten:
+
+Wer ist CHOFU?
+
+CHOFU SEISAKUSHO (長府製作所) ist ein japanischer Hersteller im Bereich Heiz- und Haustechnik, gegründet 1954 in Japan.
+
+CHOFU entwickelt und fertigt seit Jahrzehnten energiebezogene Haustechnikprodukte und hat die Basis vieler effizienter Systeme in Japan mitgeprägt.
+(Fakten: Gründung 1954; Ursprung/Entwicklung zum Haustechnikhersteller) 
+chofu.co.jp
++2
+chofu.co.jp
++2
+
+Warum CHOFU? (Japanische Qualität / Made in Japan / Handwerkskultur)
+
+Fokus auf Präzision, langlebige Konstruktion, robuste Serienfertigung und hohe Qualitätsstandards.
+
+Klare Aussage „Made in Japan“: Diese Wärmepumpen werden in Japan gefertigt (sofern im Projekt/Produktportfolio zutreffend; als Aussage entsprechend darstellen). 
+Japan Wärmepumpe Chofu
++1
+
+CHOFU Technologie-Fokus (verständlich, nicht nerdig)
+
+Erkläre, dass CHOFU u. a. R32 Heat Pump Systems anbietet und auch CO₂-Heat-Pump-Technologie (natürliches Kältemittel) seit vielen Jahren fertigt – ohne in zu tiefe Engineering-Details zu gehen. 
+chofuglobal.com
++1
+
+Betonung: Effizienz, leiser Betrieb (nur falls du es belegen kannst), Zuverlässigkeit, Systemtauglichkeit für Heizen und Warmwasser je nach Paket.
+
+CHOFU in Europa (Proof durch Betreiber/Marke vor Ort)
+
+Integriere den Proof-Point als Aussage des Anbieters:
+„Über 5.000 Geräte in Betrieb“ (europaweit / im DACH-Umfeld – exakt so, wie vom Betreiber vorgegeben).
+
+Formuliere es sauber als Vertrauenssignal, ohne es als offizielle CHOFU-Zahl auszugeben. Beispiel:
+„Als Vertriebspartner betreuen wir bereits über 5.000 installierte CHOFU-Systeme im Feldbetrieb.“
+
+Baue einen kurzen Absatz „Erfahrung aus realen Anlagen“ + „Ersatzteilverfügbarkeit / Know-how“.
+
+Service in Österreich (klarer Vorteil gegenüber Online-Anbietern)
+
+Deutlich kommunizieren: österreichweiter Service für Beratung, Reparaturen, Wartungen; eigenes Ersatzteillager.
+
+Ebenfalls als Anbieterleistung formulieren (nicht als CHOFU-Werksleistung).
+
+2) Deliverables (konkret implementieren)
+
+Implementiere folgende Elemente im bestehenden Projekt:
+
+A) Startseite: neue Sektion „CHOFU – Japanische Wärmepumpentechnik“
+
+Füge eine neue Sektion (oberhalb oder unterhalb Paketübersicht) hinzu:
+
+Überschrift (H2): „CHOFU – Wärmepumpentechnik aus Japan“
+
+2–3 kurze Absätze: Wer ist CHOFU (1954), Philosophie/Qualität, Technologiefokus
+
+3–5 Benefit-Kacheln (Icons + 1 Satz), z. B.:
+
+„Made in Japan Fertigung“
+
+„Langjährige Herstellererfahrung seit 1954“
+
+„Technologie für Heizen & Warmwasser“
+
+„Über 5.000 Systeme im Feldbetrieb (unser Bestand)“
+
+„AT-weiter Service & Ersatzteile“
+
+CTA-Buttons:
+
+Primär: „Kostenlosen Besichtigungstermin vereinbaren“
+
+Sekundär: „Mehr über CHOFU“ → Link zu /chofu
+
+B) Neue Unterseite /chofu (falls nicht vorhanden)
+
+Erstelle eine neue Seite /chofu mit strukturierter, SEO-optimierter Brandstory.
+
+Seitenaufbau:
+
+H1: „Wer ist CHOFU?“
+
+Block „Kurzprofil“ (Gründung 1954; Japan; Hersteller im Bereich Haustechnik/Heiztechnik) 
+chofu.co.jp
++2
+chofu.co.jp
++2
+
+Block „Warum CHOFU?“ (japanische Qualitätskultur; Made in Japan – sachlich) 
+Japan Wärmepumpe Chofu
++1
+
+Block „Technologie“
+
+R32 Heat Pump Systems (kurz erklären) 
+chofuglobal.com
+
+CO₂-Heat-Pump-Systeme (kurz erklären; Dekarbonisierung; Herstellererfahrung) 
+chofuglobal.com
+
+Hinweis: Je nach Paket/Modell kann Kältemittel variieren, daher allgemein formulieren.
+
+Block „CHOFU in Europa – Erfahrung vor Ort“
+
+„>5.000 Geräte in Betrieb“ als Anbieter-Statement
+
+Fokus: reale Anlagen, Supportfähigkeit, Ersatzteilversorgung
+
+Block „Service & Ersatzteile in Österreich“
+
+Wartung, Reparatur, Ersatzteillager, Kontaktwege
+
+Abschließender CTA-Block: „Kostenlosen Besichtigungstermin vereinbaren“ + Kontakt
+
+SEO Anforderungen:
+
+title: „CHOFU Wärmepumpe – Hersteller aus Japan | Qualität & Service in Österreich“
+
+meta description: 150–160 Zeichen, sachlich
+
+Semantische Struktur (H1 einmal, danach H2/H3)
+
+Optional: FAQ (3–5 Fragen) – z. B. „Wo werden CHOFU Geräte gefertigt?“, „Wie läuft Service ab?“, „Gibt es Ersatzteile in Österreich?“
+
+C) Paketdetailseiten (minimaler Eingriff)
+
+Auf jeder Paketdetailseite nur ein kleines Brand-Trust-Element einfügen (kein Redesign):
+
+„CHOFU Technologie“ Mini-Box mit 2–3 Sätzen + Link /chofu
+
+Optional: Badge „Made in Japan“ (nur wenn in deinem Portfolio zutreffend; ansonsten neutral „Japanischer Hersteller“)
+
+3) Content-Implementation (wartbar)
+
+Lege Inhalte nicht „hart“ in JSX ab, sondern als strukturierte Daten:
+
+content/brand/chofu.de.json mit Feldern:
+
+heroTitle, heroSubtitle
+
+sections[] (id, title, paragraphs[])
+
+benefits[] (title, text, iconName)
+
+claims[] (z. B. „>5000 in Betrieb“ als Anbieterclaim)
+
+service[] (AT-weiter Service, Ersatzteillager, Wartung/Reparatur)
+
+Baue React-Komponenten:
+
+<BrandSection />
+
+<BenefitGrid />
+
+<TrustCallout />
+
+<BrandCTA />
+
+4) Tonalität & Compliance
+
+Deutsch, technisch-seriös, keine übertriebenen Werbeversprechen.
+
+Die „>5.000 Geräte“ und „AT-weiter Service/Ersatzteile“ explizit als Leistung/Erfahrung des Anbieters darstellen.
+
+CHOFU-Fakten nur so formulieren, wie sie durch die genannten Quellen gedeckt sind (Gründung 1954; Hersteller; R32/CO₂-Systeme; Historie/Technologie). 
+chofu.co.jp
++3
+chofu.co.jp
++3
+chofuglobal.com
++3
+
+5) Akzeptanzkriterien
+
+Startseite hat neue CHOFU Brandstory-Sektion + CTA nach /chofu
+
+/chofu ist fertig, responsive, SEO-sauber
+
+Paketdetailseiten haben eine kleine CHOFU Trust-Box
+
+Inhalte sind in JSON ausgelagert, leicht editierbar
+
+Kein Bruch im bestehenden Designsystem
+
+Setze diese Änderungen um, ohne andere Bereiche der Website zu verändern.

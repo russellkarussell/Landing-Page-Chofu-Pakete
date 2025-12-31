@@ -10,6 +10,7 @@ import Home from "@/pages/home";
 import Packages from "@/pages/packages";
 import Contact from "@/pages/contact";
 import Heizkostenrechner from "@/pages/calculator";
+import ChofuBrandPage from "@/pages/chofu";
 
 function Router() {
   return (
@@ -19,6 +20,7 @@ function Router() {
         <Route path="/pakete" component={Packages} />
         <Route path="/kontakt" component={Contact} />
         <Route path="/rechner" component={Heizkostenrechner} />
+        <Route path="/chofu" component={ChofuBrandPage} />
         <Route component={NotFound} />
       </Switch>
     </Layout>

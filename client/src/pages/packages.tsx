@@ -8,6 +8,7 @@ import { Switch } from "@/components/ui/switch";
 import { Label } from "@/components/ui/label";
 import { Check, X, ArrowRight, Zap, Thermometer, Ruler, Download, Coins } from "lucide-react";
 import { PACKAGES, SUBSIDIES } from "@/lib/constants";
+import { TrustCallout } from "@/components/brand-modules";
 
 export default function Packages() {
   const [includeSolar, setIncludeSolar] = useState(false);
@@ -127,6 +128,8 @@ export default function Packages() {
                 </CardHeader>
                 
                 <CardContent className="flex-grow pt-8 space-y-8">
+                  <TrustCallout />
+                  
                   <div>
                     <h4 className="font-bold text-slate-900 mb-3 flex items-center gap-2">
                       <Ruler size={16} className="text-primary" /> Geeignet für:

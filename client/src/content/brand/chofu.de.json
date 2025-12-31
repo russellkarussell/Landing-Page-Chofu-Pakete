@@ -1,0 +1,90 @@
+
+{
+  "brand": {
+    "name": "CHOFU",
+    "fullName": "CHOFU SEISAKUSHO CO., LTD.",
+    "founded": "1954",
+    "origin": "Shimonoseki, Japan",
+    "tagline": "Präzision aus Japan. Zuhause in Österreich."
+  },
+  "sections": [
+    {
+      "id": "intro",
+      "title": "CHOFU – Wärmepumpentechnik aus Japan",
+      "text": [
+        "CHOFU SEISAKUSHO entwickelt und fertigt seit 1954 hochwertige Haustechnikprodukte in Japan. Als einer der führenden Hersteller prägt das Unternehmen seit Jahrzehnten die Standards für effiziente Heizsysteme.",
+        "Die Wärmepumpen zeichnen sich durch japanische Ingenieurskunst, robuste Bauweise und eine klare Fokussierung auf Langlebigkeit aus."
+      ]
+    },
+    {
+      "id": "why_chofu",
+      "title": "Warum CHOFU?",
+      "text": [
+        "In einer Zeit kurzlebiger Produkte setzt CHOFU auf Beständigkeit. Die Fertigung erfolgt mit höchster Präzision in Japan, wobei jeder Produktionsschritt strengen Qualitätskontrollen unterliegt.",
+        "Das Ergebnis sind Systeme, die auch unter anspruchsvollen Bedingungen zuverlässig arbeiten."
+      ]
+    },
+    {
+      "id": "technology",
+      "title": "Technologie-Fokus",
+      "features": [
+        {
+          "title": "R32 & R290 Systeme",
+          "desc": "Zukunftssichere Kältemittel für hohe Effizienz und Umweltverträglichkeit."
+        },
+        {
+          "title": "CO₂-Heat-Pump Expertise",
+          "desc": "Pionierarbeit bei natürlichen Kältemitteln für maximale Vorlauftemperaturen."
+        },
+        {
+          "title": "Inverter-Technologie",
+          "desc": "Stufenlose Leistungsanpassung für flüsterleisen und sparsamen Betrieb."
+        }
+      ]
+    },
+    {
+      "id": "service_at",
+      "title": "Service & Sicherheit in Österreich",
+      "text": [
+        "Als Vertriebspartner betreuen wir bereits über 5.000 installierte CHOFU-Systeme im Feldbetrieb. Diese Erfahrung fließt direkt in unsere Beratung ein.",
+        "Wir garantieren einen österreichweiten Service sowie ein eigenes Ersatzteillager, um im Fall der Fälle schnell reagieren zu können."
+      ]
+    }
+  ],
+  "benefits": [
+    {
+      "title": "Made in Japan",
+      "text": "Gefertigt nach höchsten Qualitätsstandards.",
+      "icon": "Globe"
+    },
+    {
+      "title": "Seit 1954",
+      "text": "Über 70 Jahre Erfahrung in der Haustechnik.",
+      "icon": "Award"
+    },
+    {
+      "title": ">5.000 Systeme",
+      "text": "Bereits erfolgreich in Betrieb (unser Bestand).",
+      "icon": "CheckCircle"
+    },
+    {
+      "title": "AT-weiter Service",
+      "text": "Eigenes Ersatzteillager & Techniker-Netzwerk.",
+      "icon": "Wrench"
+    }
+  ],
+  "faq": [
+    {
+      "question": "Wo werden CHOFU Wärmepumpen hergestellt?",
+      "answer": "CHOFU fertigt seine Wärmepumpen in eigenen Werken in Japan. Das Unternehmen legt großen Wert auf eine hohe Fertigungstiefe und Qualitätskontrolle."
+    },
+    {
+      "question": "Wie ist die Ersatzteilversorgung geregelt?",
+      "answer": "Wir führen ein eigenes Ersatzteillager in Österreich. Gängige Verschleiß- und Ersatzteile sind sofort verfügbar, was kurze Reaktionszeiten ermöglicht."
+    },
+    {
+      "question": "Für welche Gebäude eignen sich die Systeme?",
+      "answer": "Dank moderner R32 und R290 Technologie eignen sich CHOFU Wärmepumpen sowohl für den energieeffizienten Neubau als auch für die Sanierung von Bestandsgebäuden mit Heizkörpern."
+    }
+  ]
+}
