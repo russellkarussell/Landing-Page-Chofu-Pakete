@@ -85,7 +85,11 @@ export default function Packages() {
         {/* Packages Grid */}
         <div className="grid lg:grid-cols-3 gap-8 mb-24">
           {PACKAGES.map((pkg) => {
-            const fundingAmount = getFundingAmount(pkg.price);
+            const funding = SUBSIDIES.base + (includeSolar ? SUBSIDIES.solar : 0);
+            const cap = pkg.price * SUBSIDIES.maxPercentage;
+            const fundingAmount = Math.min(funding, cap);
+            const isCapped = fundingAmount === cap;
+            
             const effectivePrice = pkg.price - fundingAmount;
 
             return (
@@ -114,6 +118,11 @@ export default function Packages() {
                   
                   <div className="bg-green-100/50 text-green-800 text-xs font-bold px-3 py-2 rounded-lg inline-block border border-green-200">
                     - € {fundingAmount.toLocaleString()} Förderung {includeSolar && "+ Solarbonus"} abgezogen
+                    {isCapped && (
+                      <div className="text-amber-700 font-normal mt-1 border-t border-green-200 pt-1 flex items-start gap-1">
+                        <span className="text-[10px] leading-tight">Maximal 30% der Investitionskosten förderbar.</span>
+                      </div>
+                    )}
                   </div>
                 </CardHeader>
                 
