@@ -24,6 +24,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
     { href: "/", label: "Startseite", icon: Home },
     { href: "/pakete", label: "Pakete", icon: Package },
     { href: "/waermepumpe/6kw", label: "6kW Wärmepumpe", icon: Leaf },
+    { href: "/waermepumpe/10kw", label: "10kW Wärmepumpe", icon: Zap },
     { href: "/rechner", label: "Heizkostenrechner", icon: Calculator },
     { href: "/kontakt", label: "Kontakt", icon: Phone },
   ];

@@ -145,6 +145,13 @@ export default function Packages() {
                     </Link>
                   </Button>
                   
+                  {pkg.kw === 10 && (
+                     <Button variant="ghost" className="w-full text-slate-500 hover:text-primary hover:bg-primary/5" asChild>
+                        <Link href="/waermepumpe/10kw">
+                          Details zur 10 kW Wärmepumpe <ArrowRight size={14} className="ml-1" />
+                        </Link>
+                     </Button>
+                  )}
                   {pkg.kw === 6 && (
                      <Button variant="ghost" className="w-full text-slate-500 hover:text-primary hover:bg-primary/5" asChild>
                         <Link href="/waermepumpe/6kw">

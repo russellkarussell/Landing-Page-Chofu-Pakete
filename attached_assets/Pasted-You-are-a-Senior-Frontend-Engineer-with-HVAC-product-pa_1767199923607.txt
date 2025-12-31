@@ -1,0 +1,164 @@
+You are a Senior Frontend Engineer with HVAC product-page experience and SEO background. You work inside an existing React/Vite project (already contains product pages for 4kW and 6kW). You must follow the existing design system, components, spacing, typography, and routing patterns.
+
+CRITICAL SCOPE
+
+If a 10kW product page already exists:
+
+DO NOT create a new route.
+
+Edit the existing 10kW product page and replace ALL TBD placeholders with real values below.
+
+Keep layout, sections, styling, CTAs, components unchanged.
+
+If a 10kW product page does NOT exist yet:
+
+Create it by copying/duplicating the existing 6kW product page (same components/sections) and only change the content, specs, SEO, and internal links.
+
+DO NOT change global navigation, homepage, packages page, calculator, or HubSpot integration.
+Only this single product page.
+
+PRODUCT TO BUILD
+
+Product name (H1): CHOFU AEYC-1049ZU-CH1 – 10 kW R290 Luft/Wasser-Wärmepumpe
+Short subtitle (hero): Made in Japan. 75 °C Vorlauf. Volle Leistung bei −5 °C / W55 – ohne Heizstab.
+Category/Label: R290 / Monoblock / Inverter / Premium Black
+
+Primary CTA: Kostenlosen Besichtigungstermin vereinbaren
+Secondary CTA: Pakete ansehen / Zum Komplettpaket (wenn es bereits so gelöst ist wie bei 4kW/6kW)
+
+IMAGES (use the user provided images)
+
+Use the images the user uploaded in this message. Do not invent new images.
+
+Image mapping suggestion (keep consistent with existing pages):
+
+Hero / Main product image: the standing outdoor unit on white background (tall unit, 2 fans)
+
+Trust / detail visual: the CHOFU Made in Japan closeup logo image
+
+Controller section: the CMR-4100 schedule screen image (white wall, colored schedule bar)
+
+If the page has an image gallery, include all 3 above. If it has only 1–2 slots, prioritize hero + controller.
+
+VERIFIED TECHNICAL DATA (replace every TBD with these exact values)
+General
+
+Model: AEYC-1049ZU-CH1
+
+Refrigerant: R290 (Propan), GWP 3
+
+Type: Luft/Wasser Wärmepumpe, DC-Inverter, Monoblock, Heizen & Kühlen
+
+Power supply: 1Ø ~230 V / 50 Hz
+
+Max. flow temperature: 75 °C
+
+“Volle Leistung bei −5 °C / W55”: Ja (ohne Heizstab)
+
+Heating performance
+
+Heating capacity A7/W35: 10 kW
+
+COP A7/W35: 4,95
+
+COP A7/W55: 3,26
+
+COP A2/W35: 3,81
+
+COP A2/W55: 2,45
+
+COP A−7/W35: 2,44
+
+COP A−7/W55: 1,93
+
+Sound
+
+Sound power level (test condition A7/W55): 54 dB(A)
+
+Sound pressure (Night mode):
+
+1 m: 47 dB(A)
+
+3 m: 38 dB(A)
+
+5 m: 34 dB(A)
+
+Energy efficiency
+
+Energy class: A+++ (35 °C) / A++ (55 °C)
+
+Operating range
+
+Outdoor temperature range (Cooling): 15 °C to 45 °C
+
+Outdoor temperature range (Heating): −25 °C to 45 °C
+
+Note: operation only when outdoor temp is ≥ −20 °C (if you have a “notes / safety” section)
+
+Electrical / Refrigerant / Dimensions
+
+Max current: 24,0 A
+
+Refrigerant charge: 1,15 kg
+
+Dimensions (H × W × D): 886 × 1000 × 330 mm
+
+Net weight: 117 kg
+
+Footprint: 0,33 m² (if you show footprint)
+
+Important: if any table currently shows other values (from copy of 6kW), overwrite them with the values above.
+
+CONTROLLER / FEATURES SECTION (CMR-4100 / user manuals apply)
+
+If the page has a “Steuerung / Bedienung / Funktionen” block, include these bullet points (no placeholders):
+
+Touch-Controller CMR-4100 (optional)
+
+Zeitprogramme (Heizen/Kühlen/Warmwasser)
+
+Witterungsgeführte Regelung (Heizkurve)
+
+Nachtmodus / Geräuschreduzierung
+
+Status-Übersicht, Fehlermeldungen & Service-Infos
+Keep wording consistent with your 4kW/6kW page style.
+
+Do not claim SG Ready unless the site already states it elsewhere. Do not add “integrated electric heater”.
+
+PAGE STRUCTURE (keep existing, only adapt content)
+
+Preserve existing sections such as:
+
+Hero (H1 + key USPs + CTAs)
+
+Key highlights (cards)
+
+Technical data table (must be fully filled, no TBD)
+
+Features / controller section
+
+Downloads (if exists): keep but ensure links are not broken; if you don’t have a datasheet link yet, keep the section but do NOT use TBD; hide the button or show “auf Anfrage” depending on existing site pattern.
+
+FAQ (optional): update answers to 10kW where relevant.
+
+SEO REQUIREMENTS
+
+Title tag: CHOFU AEYC-1049ZU-CH1 (10 kW) R290 Wärmepumpe | Heizkraft
+
+Meta description (max ~155 chars, no placeholders):
+10 kW CHOFU R290 Luft/Wasser-Wärmepumpe, Made in Japan, bis 75 °C Vorlauf, leise im Nachtmodus. Beratung & Fixpreis-Pakete.
+
+H1 only once, clean URL slug consistent with existing routing (do not change if already exists).
+
+Add meaningful image alt texts (German, descriptive).
+
+ACCEPTANCE CRITERIA
+
+✅ The 10kW page shows no TBD anywhere
+
+✅ Specs match exactly the values above
+
+✅ No layout regressions; design remains consistent with 4kW/6kW pages
+
+✅ Builds successfully

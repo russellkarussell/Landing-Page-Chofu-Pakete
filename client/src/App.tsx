@@ -10,6 +10,7 @@ import Home from "@/pages/home";
 import Packages from "@/pages/packages";
 import Product4kW from "@/pages/product-4kw";
 import Product6kW from "@/pages/product-6kw";
+import Product10kW from "@/pages/product-10kw";
 import Contact from "@/pages/contact";
 import Heizkostenrechner from "@/pages/calculator";
 import ChofuBrandPage from "@/pages/chofu";
@@ -22,6 +23,7 @@ function Router() {
         <Route path="/pakete" component={Packages} />
         <Route path="/waermepumpe/4kw" component={Product4kW} />
         <Route path="/waermepumpe/6kw" component={Product6kW} />
+        <Route path="/waermepumpe/10kw" component={Product10kW} />
         <Route path="/kontakt" component={Contact} />
         <Route path="/rechner" component={Heizkostenrechner} />
         <Route path="/chofu" component={ChofuBrandPage} />
