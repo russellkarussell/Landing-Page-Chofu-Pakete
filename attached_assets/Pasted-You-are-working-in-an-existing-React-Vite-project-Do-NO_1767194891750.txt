@@ -1,0 +1,81 @@
+You are working in an existing React (Vite) project.
+Do NOT refactor routing, calculators, pricing logic, package data, or HubSpot integrations.
+Only remove the standalone “Förder-Rechner” module from the packages page and adjust layout so packages appear higher on the page.
+
+You may only touch:
+
+client/src/pages/packages.tsx
+
+(optional) one small shared UI component if the Förder-Rechner is extracted (e.g. client/src/components/...), but prefer editing only the packages page.
+
+No other files.
+
+GOAL
+
+Remove the large “Förder-Rechner” card/section from the packages page because:
+
+funding logic is already integrated in the Heizkostenrechner
+
+“Effektiver Preis nach Förderung” is already shown inside each package card
+
+Bring package cards (“4kW / 6kW / 10kW”) above the fold.
+
+IMPLEMENTATION REQUIREMENTS
+1) Identify and remove the Förder-Rechner section
+
+In client/src/pages/packages.tsx, locate the section that renders the “Förder-Rechner” UI (likely a Card with title “Förder-Rechner”, toggle “Inklusive Solarthermie?”, etc.).
+
+Remove this section entirely from render output.
+
+Do not leave empty spacing or placeholders.
+
+2) Keep funding communication, but minimal
+
+Replace it with a small, non-blocking info callout (1–2 lines) placed either:
+
+directly under the page headline/subheadline, OR
+
+directly above the package grid.
+
+Text (German, can be exactly this):
+„Hinweis zur Förderung: Die Förderlogik ist bereits im Heizkostenrechner berücksichtigt und im ‚effektiven Preis nach Förderung‘ der Pakete enthalten.“
+
+Add a link-style CTA next to it:
+
+Zum Heizkostenrechner → route to your existing Heizkostenrechner page (use the current route used in the navbar).
+
+This callout must be visually subtle (small box or inline info row), not a large card.
+
+3) Layout tightening
+
+After removing the large module:
+
+Reduce vertical spacing so the package grid starts higher.
+
+Ensure the package cards are visible quickly without unnecessary scroll.
+
+4) Non-regression constraints
+
+Do NOT change:
+
+how “Effektiver Preis nach Förderung” is calculated/displayed in package cards
+
+the Heizkostenrechner logic
+
+any funding numbers
+
+any other pages
+
+navigation, header, footer
+
+ACCEPTANCE CRITERIA
+
+The packages page no longer shows the “Förder-Rechner” module
+
+The package cards are moved up and visible sooner
+
+A small funding info note + link to Heizkostenrechner is present
+
+No other functionality is changed
+
+Implement this change only.
