@@ -1,0 +1,139 @@
+You are working in an existing React (Vite) project.
+Do NOT refactor routing, pricing logic, calculators, HubSpot forms/chat, or global styling.
+Only adjust the layout and content of the /pakete page.
+
+You may only touch:
+
+client/src/pages/packages.tsx
+
+client/src/content/brand/chofu.de.json
+
+(optional) create one small UI component under
+client/src/components/trust/ or client/src/components/brand/
+
+No other files may be modified.
+
+GOAL
+
+Make package cards the primary content and show them as early as possible.
+
+Move Förderhinweis and CHOFU Trust below the package cards.
+
+Display both as compact, equal-weight trust boxes in one row (desktop).
+
+Keep everything calm, minimal, and conversion-oriented.
+
+IMPLEMENTATION REQUIREMENTS
+1) Package positioning
+
+Ensure the package cards/grid are rendered directly after the page headline/subheadline.
+
+Remove any large content blocks between headline and package grid.
+
+Packages must be the first major visual element after the intro.
+
+2) Trust-Row directly under the packages
+
+Insert a new section immediately below the package grid.
+
+Layout
+
+Desktop: 2 columns, same height
+
+Mobile: stacked vertically
+
+Compact padding (no large cards)
+
+Subtle background or outline (trust, not promotion)
+
+3) Trust Box A – Förderung (kompakt)
+
+Title (H4 or strong):
+Förderung berücksichtigt
+
+Text (max. 1–2 lines):
+Die Förderlogik ist bereits im Heizkostenrechner berücksichtigt und im effektiven Preis nach Förderung der Pakete enthalten.
+
+Link (inline style):
+Zum Heizkostenrechner →
+(use the existing Heizkostenrechner route)
+
+4) Trust Box B – CHOFU Qualität (kompakt)
+
+Title (H4 or strong):
+CHOFU Qualität
+
+Text (max. 1–2 lines):
+Japanischer Hersteller seit 1954 – über 5.000 betreute Systeme sowie Service und Ersatzteile in Österreich.
+
+Link (inline style):
+Mehr über CHOFU →
+(link to /chofu)
+
+⚠️ The “> 5.000” statement must be phrased as provider experience, not as an official CHOFU factory claim.
+
+5) Content source
+
+Texts for both trust boxes should be sourced from:
+
+client/src/content/brand/chofu.de.json
+
+Add fields such as:
+
+packagesFundingNotice
+
+packagesFundingLinkLabel
+
+packagesChofuTrustText
+
+packagesChofuLinkLabel
+
+Avoid hardcoding long texts in JSX.
+
+6) Optional component
+
+If it improves readability, create one component:
+
+TrustRow.tsx or PackagesTrustRow.tsx
+
+Requirements:
+
+Pure presentational component
+
+Props-driven
+
+No business logic
+
+Responsive
+
+NON-REGRESSION RULES
+
+Do NOT change:
+
+Package prices or calculations
+
+“Effektiver Preis nach Förderung”
+
+Heizkostenrechner logic
+
+Navigation or CTAs
+
+Do NOT reintroduce the Förder-Rechner module.
+
+ACCEPTANCE CRITERIA
+
+Packages are visible earlier (less scroll)
+
+Directly below packages:
+
+one compact trust row
+
+Förderung (left) + CHOFU (right)
+
+Links to Heizkostenrechner and /chofu work
+
+Design is calm and consistent with the rest of the site
+
+No other pages affected
+
+Implement this change only.

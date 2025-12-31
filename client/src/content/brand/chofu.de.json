@@ -123,5 +123,15 @@
     ],
     "linkLabel": "Mehr über CHOFU",
     "ctaLabel": "Kostenlosen Besichtigungstermin vereinbaren"
+  },
+  "packagesFundingNotice": {
+    "title": "Förderung berücksichtigt",
+    "text": "Die Förderlogik ist bereits im Heizkostenrechner berücksichtigt und im ‚effektiven Preis nach Förderung‘ der Pakete enthalten.",
+    "linkLabel": "Zum Heizkostenrechner"
+  },
+  "packagesChofuTrust": {
+    "title": "CHOFU Qualität",
+    "text": "Japanischer Hersteller seit 1954 – über 5.000 betreute Systeme sowie Service und Ersatzteile in Österreich.",
+    "linkLabel": "Mehr über CHOFU"
   }
 }

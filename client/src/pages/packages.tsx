@@ -5,7 +5,7 @@ import { Card, CardContent, CardHeader, CardFooter } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge";
 import { Check, X, ArrowRight, Ruler, Download, Info } from "lucide-react";
 import { PACKAGES, SUBSIDIES } from "@/lib/constants";
-import { ChofuTrustBox } from "@/components/brand/ChofuTrustBox";
+import { PackagesTrustRow } from "@/components/brand/PackagesTrustRow";
 
 export default function Packages() {
   const includeSolar = false;
@@ -54,22 +54,8 @@ export default function Packages() {
           </p>
         </div>
 
-        {/* Funding Note */}
-        <div className="max-w-3xl mx-auto mb-8 flex items-start gap-3 bg-blue-50 p-4 rounded-lg border border-blue-100 text-sm text-slate-600">
-           <Info className="text-blue-600 shrink-0 mt-0.5" size={18} />
-           <div>
-             <span className="font-bold text-slate-900">Hinweis zur Förderung:</span> Die Förderlogik ist bereits im Heizkostenrechner berücksichtigt und im ‚effektiven Preis nach Förderung‘ der Pakete enthalten.
-             <Link href="/rechner" className="text-primary font-bold hover:underline ml-2 inline-flex items-center gap-1">
-               Zum Heizkostenrechner <ArrowRight size={14} />
-             </Link>
-           </div>
-        </div>
-
-        {/* CHOFU Trust Box - Compact Version */}
-        <ChofuTrustBox />
-
         {/* Packages Grid */}
-        <div className="grid lg:grid-cols-3 gap-8 mb-24">
+        <div className="grid lg:grid-cols-3 gap-8 mb-12">
           {PACKAGES.map((pkg) => {
             const funding = SUBSIDIES.base + (includeSolar ? SUBSIDIES.solar : 0);
             const cap = pkg.price * SUBSIDIES.maxPercentage;
@@ -152,6 +138,9 @@ export default function Packages() {
             );
           })}
         </div>
+
+        {/* Trust Row (Funding + CHOFU) */}
+        <PackagesTrustRow />
 
         {/* Detailed Comparison Table */}
         <div className="max-w-4xl mx-auto bg-white rounded-2xl shadow-lg overflow-hidden border border-slate-200">
