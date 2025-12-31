@@ -7,22 +7,90 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Check, ArrowRight, Zap, ShieldCheck, Euro, Coins } from "lucide-react";
+import { Check, ArrowRight, Zap, ShieldCheck, Euro, Coins, Info, Home as HomeIcon, Building, Loader2, Calculator } from "lucide-react";
 import { BUNDESLAENDER, PACKAGES, PARTNERS, SUBSIDIES } from "@/lib/constants";
 import heroImage from "@assets/generated_images/modern_austrian_house_with_heat_pump.png";
 import { motion } from "framer-motion";
 import ehpaLabel from "@assets/image_1767188918778.png";
 import { ChofuHomepageTeaser } from "@/components/brand/ChofuHomepageTeaser";
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 
 export default function Home() {
   const [selectedBundesland, setSelectedBundesland] = useState<string>("Wien");
   const [calcStep, setCalcStep] = useState(1);
+  const [isCalculating, setIsCalculating] = useState(false);
 
   // Mini Calculator State
   const [calcData, setCalcData] = useState({ size: "", type: "Altbau" });
+  const [result, setResult] = useState<{
+    low: string;
+    high: string;
+    recommendation: string;
+    suitability: "Sehr gut geeignet" | "Geeignet" | "Details prüfen";
+    suitabilityColor: string;
+  } | null>(null);
 
   const handleCalc = () => {
-    setCalcStep(2);
+    // Validation
+    const area = parseFloat(calcData.size);
+    if (!area || area < 40 || area > 350) {
+      // Input validation handled by UI feedback or simple return for now
+      return;
+    }
+
+    setIsCalculating(true);
+
+    // Factors
+    const factors: Record<string, number> = {
+      "Altbau": 80,
+      "Saniert": 60,
+      "Neubau": 40
+    };
+    
+    const factor = factors[calcData.type] || 60;
+    const heatLoadkW = (area * factor) / 1000;
+    
+    // Uncertainty band +/- 15%
+    const low = heatLoadkW * 0.85;
+    const high = heatLoadkW * 1.15;
+
+    // Recommendation logic
+    let recommendation = "";
+    if (high <= 4.5) {
+      recommendation = "CHOFU 4 kW";
+    } else if (high <= 7.0) {
+      recommendation = "CHOFU 6 kW";
+    } else {
+      recommendation = "CHOFU 10 kW";
+    }
+
+    // Suitability logic
+    let suitability: "Sehr gut geeignet" | "Geeignet" | "Details prüfen" = "Geeignet";
+    let suitabilityColor = "bg-blue-100 text-blue-700 border-blue-200";
+
+    if (calcData.type === "Neubau" && high <= 4.5) {
+      suitability = "Sehr gut geeignet";
+      suitabilityColor = "bg-green-100 text-green-700 border-green-200";
+    } else if (calcData.type === "Saniert" && high <= 7.0) {
+      suitability = "Geeignet";
+      suitabilityColor = "bg-blue-100 text-blue-700 border-blue-200";
+    } else if (calcData.type === "Altbau" && high >= 9.0) {
+      suitability = "Details prüfen";
+      suitabilityColor = "bg-amber-100 text-amber-700 border-amber-200";
+    }
+
+    // Simulate delay
+    setTimeout(() => {
+      setResult({
+        low: low.toFixed(1),
+        high: high.toFixed(1),
+        recommendation,
+        suitability,
+        suitabilityColor
+      });
+      setCalcStep(2);
+      setIsCalculating(false);
+    }, 400);
   };
 
   return (
@@ -87,86 +155,163 @@ export default function Home() {
 
           {/* Right: Technical Stats / Calc */}
           <div className="lg:pl-12 animate-in slide-in-from-right duration-700 delay-200 lg:bg-transparent">
-             {/* Only show on mobile or wrap differently? Keeping the calc for function but styling it "Tech" */}
-            <Card className="bg-white border border-slate-200 shadow-xl rounded-none relative overflow-hidden">
-              <div className="absolute top-0 left-0 w-1 h-full bg-primary" />
-              <CardHeader className="pb-4 border-b border-slate-100 bg-slate-50/50">
-                <CardTitle className="text-xl font-heading font-bold text-slate-900 uppercase tracking-wide">
-                  Effizienz-Check
-                </CardTitle>
-                <p className="text-slate-500 text-xs uppercase tracking-wider font-medium">
-                  Prüfen Sie Ihre Eignung
-                </p>
-              </CardHeader>
-              <CardContent className="pt-6">
+             {/* Efficiency Check Module */}
+            <Card className="bg-white border border-slate-200 shadow-xl rounded-xl relative overflow-hidden max-w-md mx-auto lg:ml-auto">
+              {/* Header Row */}
+              <div className="flex items-center justify-between px-6 py-4 border-b border-slate-100 bg-slate-50/80 backdrop-blur-sm">
+                <div>
+                  <h3 className="font-bold text-slate-900 text-lg leading-none mb-1">Effizienz-Check</h3>
+                  <p className="text-xs text-slate-500 font-medium">Prüfen Sie Ihre Eignung (Orientierungswert)</p>
+                </div>
+                <TooltipProvider>
+                  <Tooltip delayDuration={0}>
+                    <TooltipTrigger asChild>
+                      <div className="p-1.5 rounded-full hover:bg-slate-200 text-slate-400 cursor-help transition-colors">
+                        <Info size={16} />
+                      </div>
+                    </TooltipTrigger>
+                    <TooltipContent side="left" className="max-w-[200px] text-xs">
+                      Der Check liefert eine grobe Orientierung. Die finale Auslegung erfolgt bei der Besichtigung.
+                    </TooltipContent>
+                  </Tooltip>
+                </TooltipProvider>
+              </div>
+
+              <CardContent className="p-6">
                 {calcStep === 1 ? (
-                  <div className="space-y-5">
+                  <div className="space-y-6">
+                    {/* Wohnfläche Input */}
                     <div className="space-y-2">
-                      <Label htmlFor="area" className="text-xs uppercase font-bold text-slate-500">Wohnfläche (m²)</Label>
-                      <Input 
-                        id="area" 
-                        placeholder="140" 
-                        type="number"
-                        className="rounded-none border-slate-300 focus:ring-primary h-12 text-lg"
-                        value={calcData.size}
-                        onChange={(e) => setCalcData({...calcData, size: e.target.value})}
-                      />
+                      <Label htmlFor="area" className="text-xs uppercase font-bold text-slate-500 tracking-wider">Wohnfläche</Label>
+                      <div className="relative">
+                        <div className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400">
+                          <HomeIcon size={18} />
+                        </div>
+                        <Input 
+                          id="area" 
+                          placeholder="140" 
+                          type="number"
+                          min="40"
+                          max="350"
+                          className="pl-10 h-12 text-lg border-slate-200 focus:border-primary focus:ring-primary rounded-lg transition-all"
+                          value={calcData.size}
+                          onChange={(e) => setCalcData({...calcData, size: e.target.value})}
+                          onKeyDown={(e) => e.key === 'Enter' && calcData.size && handleCalc()}
+                        />
+                        <div className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 text-sm font-medium">m²</div>
+                      </div>
+                      <p className="text-[11px] text-slate-400 pl-1">Beheizte Wohnfläche (ca.)</p>
                     </div>
+
+                    {/* Gebäudetyp Input */}
                     <div className="space-y-2">
-                      <Label className="text-xs uppercase font-bold text-slate-500">Gebäudetyp</Label>
-                      <Select 
-                        defaultValue={calcData.type} 
-                        onValueChange={(val) => setCalcData({...calcData, type: val})}
-                      >
-                        <SelectTrigger className="rounded-none border-slate-300 h-12">
-                          <SelectValue />
-                        </SelectTrigger>
-                        <SelectContent className="rounded-none">
-                          <SelectItem value="Altbau">Altbau (vor 1990)</SelectItem>
-                          <SelectItem value="Saniert">Teilsaniert</SelectItem>
-                          <SelectItem value="Neubau">Neubau (nach 2010)</SelectItem>
-                        </SelectContent>
-                      </Select>
+                      <Label className="text-xs uppercase font-bold text-slate-500 tracking-wider">Gebäudetyp</Label>
+                      <div className="relative">
+                        <div className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 z-10">
+                          <Building size={18} />
+                        </div>
+                        <Select 
+                          defaultValue={calcData.type} 
+                          onValueChange={(val) => setCalcData({...calcData, type: val})}
+                        >
+                          <SelectTrigger className="pl-10 h-12 text-base border-slate-200 focus:border-primary focus:ring-primary rounded-lg transition-all">
+                            <SelectValue />
+                          </SelectTrigger>
+                          <SelectContent className="rounded-lg shadow-lg border-slate-100">
+                            <SelectItem value="Altbau">Altbau (vor 1990)</SelectItem>
+                            <SelectItem value="Saniert">Teilsaniert</SelectItem>
+                            <SelectItem value="Neubau">Neubau (nach 2010)</SelectItem>
+                          </SelectContent>
+                        </Select>
+                      </div>
+                      <p className="text-[11px] text-slate-400 pl-1">Wärmeschutz grob (für erste Einschätzung)</p>
                     </div>
+
+                    {/* Submit Button */}
                     <Button 
-                      className="w-full text-lg h-12 mt-4 rounded-none font-bold uppercase" 
+                      className="w-full h-12 mt-2 rounded-lg font-bold text-base shadow-lg shadow-primary/20 hover:shadow-primary/30 transition-all active:scale-[0.98]" 
                       onClick={handleCalc}
-                      disabled={!calcData.size}
+                      disabled={!calcData.size || isCalculating || parseInt(calcData.size) < 40 || parseInt(calcData.size) > 350}
                     >
-                      Potenzial berechnen
+                      {isCalculating ? (
+                        <>
+                          <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                          Berechne...
+                        </>
+                      ) : (
+                        <>
+                          Potenzial berechnen <ArrowRight className="ml-2 h-4 w-4" />
+                        </>
+                      )}
                     </Button>
+                    
+                    {/* Validation Error Message */}
+                    {calcData.size && (parseInt(calcData.size) < 40 || parseInt(calcData.size) > 350) && (
+                      <p className="text-xs text-red-500 text-center font-medium mt-2">
+                        Bitte geben Sie eine Wohnfläche zwischen 40 und 350 m² ein.
+                      </p>
+                    )}
                   </div>
                 ) : (
-                  <div className="space-y-6 text-center py-4">
-                    <div className="flex items-center justify-center gap-3 mb-2">
-                      <Zap size={24} className="text-accent fill-accent" />
-                      <h3 className="text-xl font-bold text-slate-900 uppercase">Hohe Effizienz</h3>
-                    </div>
-                    <div className="bg-slate-50 p-4 border border-slate-100 text-left space-y-2">
-                      <div className="flex justify-between text-sm">
-                        <span className="text-slate-500">Objekt:</span>
-                        <span className="font-bold text-slate-900">{calcData.size}m² / {calcData.type}</span>
-                      </div>
-                      <div className="flex justify-between text-sm">
-                        <span className="text-slate-500">Empfehlung:</span>
-                        <span className="font-bold text-primary">Chofu 6kW - 10kW</span>
-                      </div>
-                      <div className="flex justify-between text-sm">
-                        <span className="text-slate-500">Ersparnis:</span>
-                        <span className="font-bold text-green-600">bis zu 50%</span>
+                  <div className="space-y-6 animate-in fade-in zoom-in-95 duration-300">
+                    {/* Result Header Badge */}
+                    <div className="flex justify-center mb-2">
+                      <div className={`px-4 py-1.5 rounded-full text-sm font-bold border ${result?.suitabilityColor} flex items-center gap-2`}>
+                        {result?.suitability === "Sehr gut geeignet" && <Check size={16} strokeWidth={3} />}
+                        {result?.suitability === "Geeignet" && <Check size={16} strokeWidth={3} />}
+                        {result?.suitability === "Details prüfen" && <Info size={16} strokeWidth={3} />}
+                        {result?.suitability}
                       </div>
                     </div>
-                    <div className="space-y-3">
-                      <Button asChild className="w-full h-12 rounded-none font-bold uppercase">
-                         <Link href="/kontakt">Termin vereinbaren</Link>
+
+                    {/* KPI Grid */}
+                    <div className="grid grid-cols-3 gap-3">
+                      <div className="bg-slate-50 p-3 rounded-lg border border-slate-100 text-center">
+                        <div className="text-[10px] uppercase text-slate-500 font-bold mb-1">Heizlast</div>
+                        <div className="font-bold text-slate-900 text-sm md:text-base leading-tight">
+                          {result?.low}–{result?.high} <span className="text-xs text-slate-500 font-normal">kW</span>
+                        </div>
+                      </div>
+                      <div className="bg-slate-50 p-3 rounded-lg border border-slate-100 text-center ring-1 ring-primary/20 bg-primary/5">
+                        <div className="text-[10px] uppercase text-primary font-bold mb-1">Empfehlung</div>
+                        <div className="font-bold text-primary text-sm md:text-base leading-tight">
+                          {result?.recommendation}
+                        </div>
+                      </div>
+                      <div className="bg-slate-50 p-3 rounded-lg border border-slate-100 text-center">
+                        <div className="text-[10px] uppercase text-slate-500 font-bold mb-1">Gebäude</div>
+                        <div className="font-bold text-slate-900 text-sm md:text-base leading-tight truncate">
+                          {calcData.type}
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* Explanation */}
+                    <p className="text-xs text-slate-500 leading-relaxed text-center px-2">
+                      Die Empfehlung basiert auf einer konservativen Heizlast-Schätzung. Für exakte Auslegung (Hydraulik, Heizflächen, Vorlauftemperaturen) empfehlen wir die Besichtigung.
+                    </p>
+
+                    {/* CTAs */}
+                    <div className="space-y-3 pt-2">
+                      <Button asChild className="w-full h-12 rounded-lg font-bold shadow-md hover:shadow-lg transition-all">
+                         <Link href="/kontakt">Kostenlosen Besichtigungstermin</Link>
                       </Button>
                       <Button 
-                        variant="ghost" 
-                        className="w-full text-slate-500 hover:text-slate-900 rounded-none uppercase text-xs tracking-wider"
+                        asChild
+                        variant="outline" 
+                        className="w-full h-10 rounded-lg text-slate-600 border-slate-200 hover:bg-slate-50 hover:text-slate-900"
+                      >
+                        <Link href="/rechner">
+                          <Calculator size={16} className="mr-2" /> Zum Heizkostenrechner
+                        </Link>
+                      </Button>
+                      
+                      <button 
                         onClick={() => setCalcStep(1)}
+                        className="w-full text-center text-xs text-slate-400 hover:text-primary transition-colors mt-2"
                       >
                         Neu berechnen
-                      </Button>
+                      </button>
                     </div>
                   </div>
                 )}
@@ -176,6 +321,7 @@ export default function Home() {
         </div>
       </section>
       {/* Brand Section (New) */}
+
       <ChofuHomepageTeaser />
       {/* Subsidy Info Section */}
       <section className="py-16 bg-white border-b border-slate-100">

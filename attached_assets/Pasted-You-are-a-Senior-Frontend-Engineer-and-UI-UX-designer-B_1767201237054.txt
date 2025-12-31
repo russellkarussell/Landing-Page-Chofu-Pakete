@@ -1,0 +1,164 @@
+You are a Senior Frontend Engineer and UI/UX designer (B2C landing page quality) working inside my existing React/Vite project.
+
+CRITICAL SCOPE
+
+Only modify the “Effizienz-Check” component inside client/src/pages/home.tsx (or wherever it currently lives).
+
+Do NOT change global layout, navigation, other sections, routes, pricing cards, packages, calculator pages, or HubSpot.
+
+Keep existing typography scale and general design language, but improve this module significantly.
+
+PART A — FIX THE LOGIC (NO PLACEHOLDER)
+
+Implement a real, transparent estimation using existing inputs:
+
+Wohnfläche (m²)
+
+Gebäudetyp (Altbau / Teilsaniert / Neubau)
+
+Validation:
+
+Wohnfläche must be 40–350. If invalid, show inline error and disable submit.
+
+Heat demand factor (W/m²):
+
+Altbau (vor 1990): 80
+
+Teilsaniert: 60
+
+Neubau (nach 2010): 40
+
+Compute:
+
+heatLoad_kW = (area * factor) / 1000
+
+uncertainty band ±15%:
+
+low = heatLoad_kW * 0.85
+
+high = heatLoad_kW * 1.15
+
+Recommendation:
+
+if high <= 4.5 → recommend 4 kW
+
+else if high <= 7.0 → recommend 6 kW
+
+else → recommend 10 kW
+
+Suitability label:
+
+Neubau and high <= 4.5 → “Sehr gut geeignet”
+
+Teilsaniert and high <= 7.0 → “Geeignet”
+
+Altbau and high >= 9.0 → “Details prüfen (Heizkörper / Vorlauf / Hydraulik)”
+
+otherwise “Geeignet”
+
+Replace any hardcoded texts like “Chofu 6kW – 10kW” or “bis zu 50%” with correct, cautious wording.
+
+PART B — DESIGN UPGRADE (MAKE IT LOOK PREMIUM)
+
+Redesign only within the module container.
+
+1) Module container / card
+
+Use a modern card look: subtle border, soft shadow, rounded corners.
+
+Add a compact header row with:
+
+title “Effizienz-Check”
+
+small subtitle “Prüfen Sie Ihre Eignung (Orientierungswert)”
+
+a small info icon with tooltip text (no external libs):
+Tooltip: “Der Check liefert eine grobe Orientierung. Die finale Auslegung erfolgt bei der Besichtigung.”
+
+2) Inputs UI
+
+Replace primitive inputs with consistent, styled fields:
+
+Label in small caps (or lighter)
+
+Input with focus ring, icon left (home icon for m², building icon for type).
+
+Add helper text under inputs:
+
+Wohnfläche: “Beheizte Wohnfläche (ca.)”
+
+Gebäudetyp: “Wärmeschutz grob (für erste Einschätzung)”
+
+3) Primary button
+
+Make “Potenzial berechnen” a strong primary button:
+
+full width on mobile, fit content on desktop
+
+hover/active states
+
+add right arrow icon
+
+show loading state for 300–500ms (fake delay) for perceived responsiveness
+
+4) Result UI (step 2)
+
+Show results in a premium way:
+
+A top “result badge” (colored chip) with the suitability label:
+
+Sehr gut geeignet (green style)
+
+Geeignet (blue style)
+
+Details prüfen (amber style)
+
+3 KPI tiles in a 3-column grid (1-column on mobile):
+
+“Heizlast (Schätzung)” → “{low}–{high} kW”
+
+“Empfehlung” → “CHOFU {4|6|10} kW”
+
+“Gebäudetyp” → selected label
+
+Under KPI tiles: a short explanation paragraph:
+“Die Empfehlung basiert auf einer konservativen Heizlast-Schätzung. Für exakte Auslegung (Hydraulik, Heizflächen, Vorlauftemperaturen) empfehlen wir die Besichtigung.”
+
+5) CTA buttons in result
+
+Add two buttons:
+
+Primary: “Kostenlosen Besichtigungstermin vereinbaren” → existing contact/booking route (same as elsewhere)
+
+Secondary (outline): “Zum Heizkostenrechner” → /heizkostenrechner
+
+6) Icons
+
+Use an icon approach that does not add heavy dependencies.
+Preferred:
+
+If the project already uses an icon set (e.g., lucide-react / heroicons), reuse it.
+Otherwise:
+
+Use lightweight inline SVG icons (home, building, info, arrow-right, calculator, calendar).
+No new major libraries unless already installed.
+
+7) Accessibility & responsiveness
+
+Ensure labels linked to inputs
+
+Keyboard focus visible
+
+Works well on mobile (spacing, full width button, stacked KPIs)
+
+ACCEPTANCE CRITERIA
+
+Recommendation changes with area/type.
+
+No static placeholder claims remain.
+
+UI looks like a modern SaaS/product module: icons, chips, KPI tiles, buttons with states.
+
+No other parts of the site are visually changed.
+
+Implement now.
