@@ -1,0 +1,84 @@
+Do NOT refactor routing, pricing logic, calculators, HubSpot, or other pages.
+Only add one product image per package card on the /pakete page.
+
+You may only touch:
+
+client/src/pages/packages.tsx
+
+(optional) create one small presentational component under client/src/components/packages/
+
+add the provided images to client/src/assets/ (or public/) and reference them
+
+No other files.
+
+Goal
+
+On the packages page, each package card (4kW / 6kW / 10kW) must show a real CHOFU outdoor unit image so users immediately see what they are buying.
+
+Image mapping (use exactly this)
+
+Use these images as package key visuals:
+
+4kW Einsteiger-Paket: use image file named chofu-4kw.jpg (source provided by me)
+
+6kW Komfort-Paket (Bestseller): use image file named chofu-6kw.jpg
+
+10kW Performance-Paket: use image file named chofu-10kw.jpg
+
+(If the project prefers PNG, keep PNG. If you rename files, keep the mapping above.)
+
+Implementation details
+
+Add an image area to each package card:
+
+Place it above the package title (preferred for consistent card layout)
+
+Keep height compact (e.g. 140–180px desktop, responsive on mobile)
+
+Use object-fit: cover with rounded corners
+
+Ensure images do not push the price too far down
+
+Accessibility:
+
+Add meaningful alt text:
+
+“CHOFU Wärmepumpe Außeneinheit – 4 kW Paket”
+
+“CHOFU Wärmepumpe Außeneinheit – 6 kW Paket”
+
+“CHOFU Wärmepumpe Außeneinheit – 10 kW Paket”
+
+Performance:
+
+Ensure images are optimized and not huge in layout.
+
+If needed, use a lightweight image component (but avoid introducing new dependencies).
+
+Non-regression:
+
+Do not change prices, content, calculations, or CTA buttons.
+
+Only visual addition.
+
+Acceptance criteria
+
+On /pakete, each package card shows exactly one image.
+
+The mapping is correct.
+
+Layout still looks clean and comparable across cards.
+
+Mobile layout remains readable without excessive scroll.
+
+Implement Step 1 only.
+
+Was du Replit konkret geben solltest
+
+Für Step 1 gibst du Replit genau diese 3 Bilder (upload in Replit Assets) und sagst ihm, sie so zu benennen:
+
+chofu-4kw.png → aus /mnt/data/8519d8b4-55bb-474b-a884-6802c3e219f0.png
+
+chofu-6kw.png → aus /mnt/data/0efb856a-1276-436f-b8df-75775d41dd99.png
+
+chofu-10kw.png → aus /mnt/data/dd2a0378-53fd-47ae-9e81-1dfc68dc1547.png

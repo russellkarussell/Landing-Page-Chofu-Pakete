@@ -6,9 +6,22 @@ import { Badge } from "@/components/ui/badge";
 import { Check, X, ArrowRight, Ruler, Download, Info } from "lucide-react";
 import { PACKAGES, SUBSIDIES } from "@/lib/constants";
 import { PackagesTrustRow } from "@/components/brand/PackagesTrustRow";
+import chofu4kw from "@assets/image_1767196454458.png";
+import chofu6kw from "@assets/image_1767196466560.png";
+import chofu10kw from "@assets/image_1767196476462.png";
 
 export default function Packages() {
   const includeSolar = false;
+
+  // Image mapping helper
+  const getPackageImage = (kw: number) => {
+    switch(kw) {
+      case 4: return chofu4kw;
+      case 6: return chofu6kw;
+      case 10: return chofu10kw;
+      default: return chofu6kw;
+    }
+  };
 
   // Helper to calculate effective price
   const getEffectivePrice = (price: number) => {
@@ -71,7 +84,16 @@ export default function Packages() {
                     Bestseller
                   </div>
                 )}
-                <CardHeader className="bg-slate-50 border-b border-slate-100 pb-8">
+                {/* Product Image Area */}
+                <div className="h-44 w-full relative overflow-hidden bg-slate-100 border-b border-slate-100">
+                  <img 
+                    src={getPackageImage(pkg.kw)} 
+                    alt={`CHOFU Wärmepumpe Außeneinheit – ${pkg.kw} kW Paket`}
+                    className="w-full h-full object-cover object-center hover:scale-105 transition-transform duration-500"
+                  />
+                </div>
+                
+                <CardHeader className="bg-slate-50 border-b border-slate-100 pb-8 pt-6">
                   <div className="flex justify-between items-start mb-4">
                     <h3 className="text-2xl font-bold text-slate-900">{pkg.name}</h3>
                     <Badge variant="outline" className="font-mono">{pkg.kw} kW</Badge>
