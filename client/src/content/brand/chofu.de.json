@@ -121,5 +121,15 @@
     ],
     "ctaPrimary": "Kostenlosen Besichtigungstermin vereinbaren",
     "ctaSecondary": "Mehr über CHOFU"
+  },
+  "packagesTrust": {
+    "title": "CHOFU Qualität – kurz erklärt",
+    "text": [
+      "Seit 1954 fertigt CHOFU in Japan Haustechnik mit höchster Präzision.",
+      "Wir betreuen bereits über 5.000 installierte Systeme im österreichischen Feldbetrieb.",
+      "Österreichweiter Service und gesicherte Ersatzteilversorgung sind garantiert."
+    ],
+    "linkLabel": "Mehr über CHOFU",
+    "ctaLabel": "Kostenlosen Besichtigungstermin vereinbaren"
   }
 }

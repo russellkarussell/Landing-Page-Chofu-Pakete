@@ -9,6 +9,7 @@ import { Label } from "@/components/ui/label";
 import { Check, X, ArrowRight, Zap, Thermometer, Ruler, Download, Coins } from "lucide-react";
 import { PACKAGES, SUBSIDIES } from "@/lib/constants";
 import { TrustCallout } from "@/components/brand-modules";
+import { ChofuTrustBox } from "@/components/brand/ChofuTrustBox";
 
 export default function Packages() {
   const [includeSolar, setIncludeSolar] = useState(false);
@@ -82,6 +83,9 @@ export default function Packages() {
             *Die Berechnung berücksichtigt die maximale Förderung von 30% der Investitionskosten bzw. die Pauschalsätze.
           </p>
         </div>
+
+        {/* CHOFU Trust Box - Compact Version */}
+        <ChofuTrustBox />
 
         {/* Packages Grid */}
         <div className="grid lg:grid-cols-3 gap-8 mb-24">

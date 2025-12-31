@@ -1,0 +1,113 @@
+STRICT SCOPE – BITTE GENAU EINHALTEN
+
+You are working in an existing React (Vite) project.
+Do NOT refactor the app. Do NOT change routing, calculators, HubSpot forms/chat, or package logic.
+Only implement a compact CHOFU trust box on the packages page.
+
+You may only touch:
+
+client/src/pages/packages.tsx
+
+client/src/content/brand/chofu.de.json
+
+(optional) create one new component under
+client/src/components/brand/
+
+No other files may be modified.
+
+GOAL
+
+Add a compact CHOFU trust box on the packages overview page to increase trust and conversions while users compare packages.
+
+This box must:
+
+be short and calm (not a full brand page)
+
+link to /chofu
+
+optionally include a secondary “free inspection” CTA
+
+reuse content from chofu.de.json (no hardcoded paragraphs)
+
+IMPLEMENTATION DETAILS
+1) Packages page (client/src/pages/packages.tsx)
+
+Insert a card/callout box without removing existing content.
+
+Placement (choose the best fit):
+
+Option A: directly above the package cards/table
+
+Option B: directly below the package cards/table
+
+Box content structure:
+
+Title (H3):
+CHOFU Qualität – kurz erklärt
+
+2–3 short sentences max:
+
+Japanese manufacturer experience (founded 1954)
+
+Made in Japan quality approach (if already used in Step 1)
+
+Provider proof: > 5.000 betreute Systeme im Feldbetrieb (must be phrased as provider statement)
+
+Austria-wide service & spare parts availability
+
+Links / CTAs:
+
+Text link: Mehr über CHOFU → /chofu
+
+Optional small button: Kostenlosen Besichtigungstermin vereinbaren
+(use the same route/CTA logic that already exists in the project)
+
+Visual style:
+
+Use existing card styles (spacing, rounded corners, subtle background)
+
+No new global styling
+
+Must look consistent with the rest of the site
+
+2) Content source (client/src/content/brand/chofu.de.json)
+
+Add a dedicated block for the packages trust box, e.g.:
+
+packagesTrustTitle
+
+packagesTrustText[] (2–3 strings)
+
+packagesTrustLinkLabel
+
+packagesTrustCtaLabel (optional)
+
+Ensure the “> 5.000” statement is clearly written as a provider-managed installed base, not an official CHOFU factory number.
+
+3) Optional component
+
+If packages page would get cluttered, create:
+
+client/src/components/brand/ChofuTrustBox.tsx
+
+Requirements:
+
+Props-driven
+
+No business logic
+
+Responsive
+
+Minimal
+
+ACCEPTANCE CRITERIA
+
+Packages page shows the CHOFU trust box in a sensible position
+
+Content is pulled from chofu.de.json
+
+/chofu link works
+
+No other page or logic is modified
+
+Visual style matches existing UI
