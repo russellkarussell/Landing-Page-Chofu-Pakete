@@ -107,18 +107,44 @@ export default function Heizkostenrechner() {
     hasFans: false,
     
     // Step 3
-    investition: 20000,
-    foerderung: 5000,
+    investition: 22000,
+    foerderung: 16000,
     wartungAlt: 150,
     wartungNeu: 250,
   });
 
   const [results, setResults] = useState<any>({});
+  const [hasUserModifiedInvest, setHasUserModifiedInvest] = useState(false);
 
   // Calculations
   useEffect(() => {
     calculateResults();
   }, [data]);
+
+  // Update defaults for Investment based on calculated load
+  useEffect(() => {
+    if (!hasUserModifiedInvest && results.estimatedLoadKw) {
+       const load = parseFloat(results.estimatedLoadKw);
+       let suggestedInvest = 22000;
+       
+       if (load < 5) suggestedInvest = 20000; // 4kW
+       else if (load < 8) suggestedInvest = 22000; // 6kW
+       else suggestedInvest = 23000; // 10kW
+
+       let suggestedSubsidy = 16000; // Base Kesseltausch
+       if (data.hasSolarthermie) suggestedSubsidy += 2500;
+       
+       // Cap subsidy at 75% of invest
+       const maxSubsidy = suggestedInvest * 0.75;
+       if (suggestedSubsidy > maxSubsidy) suggestedSubsidy = maxSubsidy;
+
+       setData(prev => ({
+         ...prev,
+         investition: suggestedInvest,
+         foerderung: suggestedSubsidy
+       }));
+    }
+  }, [results.estimatedLoadKw, data.hasSolarthermie, hasUserModifiedInvest]);
 
   const calculateResults = () => {
     let nutzwaermeBedarf = 0;
@@ -503,7 +529,10 @@ export default function Heizkostenrechner() {
                         </div>
                         <Slider 
                            value={[data.investition]} 
-                           onValueChange={(val) => updateData("investition", val[0])} 
+                           onValueChange={(val) => {
+                             updateData("investition", val[0]);
+                             setHasUserModifiedInvest(true);
+                           }} 
                            min={10000} max={40000} step={500} 
                         />
                      </div>
@@ -515,7 +544,10 @@ export default function Heizkostenrechner() {
                         </div>
                         <Slider 
                            value={[data.foerderung]} 
-                           onValueChange={(val) => updateData("foerderung", val[0])} 
+                           onValueChange={(val) => {
+                             updateData("foerderung", val[0]);
+                             setHasUserModifiedInvest(true);
+                           }} 
                            min={0} max={25000} step={100} 
                         />
                      </div>

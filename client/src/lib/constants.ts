@@ -12,9 +12,9 @@ export const BUNDESLAENDER = [
 ];
 
 export const SUBSIDIES = {
-  base: 7500, // Wärmepumpe Luft/Wasser
+  base: 16000, // Kesseltausch Bundesförderung 2025
   solar: 2500, // Solarbonus
-  maxPercentage: 0.30 // Max 30% of costs
+  maxPercentage: 0.75 // Max 75% of costs
 };
 
 export const PACKAGES = [
