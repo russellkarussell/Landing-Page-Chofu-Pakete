@@ -16,6 +16,36 @@ import ehpaLabel from "@assets/image_1767188918778.png";
 import { ChofuHomepageTeaser } from "@/components/brand/ChofuHomepageTeaser";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 
+// Custom Icons for Building Types
+const IconAltbau = ({ className }: { className?: string }) => (
+  <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" className={className}>
+    <path d="M3 10L12 3L21 10" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+    <path d="M5 10V21H19V10" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+    <rect x="8" y="14" width="3" height="3" stroke="currentColor" strokeWidth="1.5" />
+    <rect x="13" y="14" width="3" height="3" stroke="currentColor" strokeWidth="1.5" />
+    <path d="M2 21H22" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/>
+  </svg>
+);
+
+const IconSaniert = ({ className }: { className?: string }) => (
+  <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" className={className}>
+    <path d="M3 10L12 3L21 10" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+    <path d="M5 10V21H19V10" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+    <rect x="7" y="13" width="10" height="6" stroke="currentColor" strokeWidth="1.5"/>
+    <path d="M12 13V19" stroke="currentColor" strokeWidth="1.5"/>
+    <path d="M19 5L22 8" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" opacity="0.5"/>
+  </svg>
+);
+
+const IconNeubau = ({ className }: { className?: string }) => (
+  <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" className={className}>
+    <rect x="4" y="6" width="16" height="15" rx="1" stroke="currentColor" strokeWidth="1.5"/>
+    <path d="M4 10H20" stroke="currentColor" strokeWidth="1.5"/>
+    <rect x="7" y="13" width="10" height="6" stroke="currentColor" strokeWidth="1.5"/>
+    <path d="M8 2L10 5H14L16 2" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+  </svg>
+);
+
 export default function Home() {
   const [selectedBundesland, setSelectedBundesland] = useState<string>("Wien");
   const [calcStep, setCalcStep] = useState(1);
@@ -202,31 +232,55 @@ export default function Home() {
                     </div>
 
                     {/* Gebäudetyp Input */}
-                    <div className="space-y-3">
+                    <div className="space-y-4">
                       <Label className="text-xs uppercase font-bold text-slate-500 tracking-wider">Gebäudetyp</Label>
-                      <div className="grid grid-cols-3 gap-2">
-                        {["Altbau", "Saniert", "Neubau"].map((type) => (
-                          <div 
-                            key={type}
-                            onClick={() => setCalcData({...calcData, type})}
-                            className={`
-                              cursor-pointer rounded-lg border-2 p-3 text-center transition-all duration-200 flex flex-col items-center justify-center gap-2 h-24
-                              ${calcData.type === type 
-                                ? 'border-primary bg-primary/5 text-primary shadow-sm' 
-                                : 'border-slate-100 bg-white text-slate-500 hover:border-slate-200 hover:bg-slate-50'
-                              }
-                            `}
-                          >
-                            <Building size={20} className={calcData.type === type ? 'text-primary' : 'text-slate-400'} />
-                            <span className="text-xs font-bold leading-tight">
-                              {type === "Altbau" && "Altbau (vor 1990)"}
-                              {type === "Saniert" && "Teilsaniert"}
-                              {type === "Neubau" && "Neubau (nach 2010)"}
-                            </span>
-                          </div>
-                        ))}
+                      <div className="grid grid-cols-3 gap-3">
+                        {[
+                          { id: "Altbau", label: "Altbau (vor 1990)", Icon: IconAltbau },
+                          { id: "Saniert", label: "Teilsaniert", Icon: IconSaniert },
+                          { id: "Neubau", label: "Neubau (nach 2010)", Icon: IconNeubau },
+                        ].map((type) => {
+                          const isSelected = calcData.type === type.id;
+                          return (
+                            <button
+                              key={type.id}
+                              onClick={() => setCalcData({...calcData, type: type.id})}
+                              className={`
+                                relative rounded-xl border-2 p-3 flex flex-col items-center justify-center gap-3 h-28 transition-all duration-300 group
+                                focus:outline-none focus:ring-2 focus:ring-primary/50 focus:ring-offset-2
+                                ${isSelected 
+                                  ? 'border-primary bg-primary/5 shadow-md' 
+                                  : 'border-slate-100 bg-white text-slate-400 hover:border-slate-300 hover:bg-slate-50'
+                                }
+                              `}
+                              type="button"
+                              aria-pressed={isSelected}
+                              aria-label={type.label}
+                            >
+                              {isSelected && (
+                                <div className="absolute top-2 right-2 text-primary animate-in fade-in zoom-in duration-300">
+                                  <Check size={14} strokeWidth={4} />
+                                </div>
+                              )}
+                              
+                              <type.Icon 
+                                className={`w-10 h-10 transition-colors duration-300 ${
+                                  isSelected 
+                                    ? 'text-primary' 
+                                    : 'text-slate-300 group-hover:text-slate-500'
+                                }`} 
+                              />
+                              
+                              <span className={`text-[11px] font-bold leading-tight transition-colors duration-300 ${
+                                isSelected ? 'text-primary' : 'text-slate-500 group-hover:text-slate-700'
+                              }`}>
+                                {type.label}
+                              </span>
+                            </button>
+                          );
+                        })}
                       </div>
-                      <p className="text-[11px] text-slate-400 pl-1">Wärmeschutz grob (für erste Einschätzung)</p>
+                      <p className="text-[11px] text-slate-400 pl-1 text-center">Wärmeschutz grob (für erste Einschätzung)</p>
                     </div>
 
                     {/* Submit Button */}

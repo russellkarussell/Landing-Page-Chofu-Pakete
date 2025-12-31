@@ -1,0 +1,186 @@
+You are a Senior UI/UX Engineer with strong product design background.
+
+SCOPE (VERY IMPORTANT)
+
+Only modify the Gebäudetyp selector inside the Effizienz-Check.
+
+Do NOT change logic, copy, calculations, routing, or overall layout.
+
+Only improve icons, visual language, and micro-interactions of the three building options.
+
+DESIGN GOAL
+
+Make the three building types instantly understandable without reading text, using visual cues that signal:
+
+Baujahr / Modernität
+
+Dämmstandard
+
+Fenster & Dachform
+
+Technologischer Fortschritt
+
+The icons must look:
+
+clean
+
+modern
+
+professional
+
+not cartoonish
+
+consistent with a premium energy / HVAC brand
+
+ICON CONCEPT (EXACTLY THIS)
+1) Altbau (vor 1990)
+
+Visual language:
+
+Classic pitched roof
+
+Small windows
+
+Thick walls
+
+Slightly asymmetrical / traditional shape
+
+Icon details:
+
+House silhouette with small window openings
+
+Visible roof overhang
+
+Optional subtle “brick” or line texture
+
+No solar, no modern elements
+
+Label stays:
+Altbau (vor 1990)
+
+2) Teilsaniert
+
+Visual language:
+
+Transitional building
+
+Modernized windows, but classic structure
+
+Feels “upgraded but not new”
+
+Icon details:
+
+Same basic house shape as Altbau
+
+Larger windows
+
+Cleaner lines
+
+Optional subtle checkmark or insulation layer line
+
+Label stays:
+Teilsaniert
+
+3) Neubau (nach 2010)
+
+Visual language:
+
+Minimalist, modern architecture
+
+Flat roof or very clean pitched roof
+
+Large windows
+
+Energy-efficient look
+
+Icon details:
+
+Cubic or minimalist house
+
+Large window surfaces
+
+Optional solar panel line
+
+Sharp, clean geometry
+
+Label stays:
+Neubau (nach 2010)
+
+IMPLEMENTATION RULES
+Icons
+
+Use inline SVG icons (preferred) or existing icon system if already in project.
+
+All icons must:
+
+Have same visual weight
+
+Same size
+
+Same stroke width
+
+Primary color: existing brand blue
+
+Inactive state: muted blue/gray
+
+Active state: full brand blue
+
+Interaction states
+
+Default: light border, muted icon
+
+Hover:
+
+border slightly darker
+
+icon color increases
+
+Selected:
+
+strong border
+
+filled background (very subtle tint)
+
+icon fully saturated
+
+optional small check indicator (top right corner)
+
+Layout
+
+Icon above label
+
+Label centered
+
+Maintain current spacing and grid
+
+Do not increase component height significantly
+
+ACCESSIBILITY
+
+Entire card must be clickable
+
+Keyboard focus visible
+
+ARIA role for selectable option
+
+ACCEPTANCE CRITERIA
+
+A user can understand the difference between Altbau / Teilsaniert / Neubau without reading the labels.
+
+Icons feel like part of a premium heating / energy product.
+
+No logic or calculation code is changed.
+
+No other part of the page is affected.
+
+Implement now.
+
+Optional (nice-to-have, only if easy)
+
+Add a subtle tooltip on hover:
+
+Altbau: „Geringerer Wärmeschutz“
+
+Teilsaniert: „Teilweise modernisiert“
+
+Neubau: „Hoher Wärmeschutz“
