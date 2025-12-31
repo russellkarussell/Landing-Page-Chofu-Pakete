@@ -6,6 +6,8 @@ import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import headerLogo from "@assets/Heizkraft_Banner_1767187239440.png";
 
+import Heizkraft_Banner_ohne_BG from "@assets/Heizkraft Banner ohne BG.png";
+
 export default function Layout({ children }: { children: React.ReactNode }) {
   const [location] = useLocation();
   const [isScrolled, setIsScrolled] = useState(false);
@@ -37,7 +39,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
           <Link href="/" className="flex flex-col items-start gap-0 group">
             <div className="h-10 w-auto">
               <img 
-                src={headerLogo} 
+                src={Heizkraft_Banner_ohne_BG} 
                 alt="Heizkraft" 
                 className="h-full w-auto object-contain"
               />
@@ -90,12 +92,10 @@ export default function Layout({ children }: { children: React.ReactNode }) {
           </div>
         </div>
       </header>
-
       {/* Main Content */}
       <main className="flex-grow pt-20">
         {children}
       </main>
-
       {/* Footer */}
       <footer className="bg-slate-900 text-slate-300 py-16 border-t border-slate-800">
         <div className="container mx-auto px-4 grid md:grid-cols-4 gap-12">
