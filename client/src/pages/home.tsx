@@ -71,41 +71,6 @@ export default function Home() {
                 </Link>
               </Button>
             </div>
-            
-            <div className="pt-8 grid grid-cols-2 gap-y-3 gap-x-6 text-sm text-slate-500 font-bold uppercase tracking-wider">
-              <div className="flex items-center gap-2">
-                <Check className="text-primary shrink-0" size={18} strokeWidth={3} />
-                <span>R290 Kältemittel</span>
-              </div>
-              <div className="flex items-center gap-2">
-                <Check className="text-primary shrink-0" size={18} strokeWidth={3} />
-                <span>Bis 75°C Vorlauf</span>
-              </div>
-              <div className="flex items-center gap-2">
-                <Check className="text-primary shrink-0" size={18} strokeWidth={3} />
-                <span>Kompakt: 0,33m²</span>
-              </div>
-              <div className="flex items-center gap-2">
-                <Check className="text-primary shrink-0" size={18} strokeWidth={3} />
-                <span>Leise: 31dB(A)</span>
-              </div>
-              <div className="flex items-center gap-2">
-                <Check className="text-primary shrink-0" size={18} strokeWidth={3} />
-                <span>Effizienz A+++</span>
-              </div>
-              <div className="flex items-center gap-2">
-                <Check className="text-primary shrink-0" size={18} strokeWidth={3} />
-                <span>Altbautauglich</span>
-              </div>
-              <div className="flex items-center gap-2">
-                <Check className="text-primary shrink-0" size={18} strokeWidth={3} />
-                <span>SG-Ready</span>
-              </div>
-              <div className="flex items-center gap-2">
-                <Check className="text-primary shrink-0" size={18} strokeWidth={3} />
-                <span>EHPA Zertifiziert</span>
-              </div>
-            </div>
           </div>
 
           {/* Right: Technical Stats / Calc */}
@@ -196,6 +161,43 @@ export default function Home() {
               </CardContent>
             </Card>
           </div>
+        </div>
+
+        <div className="container mx-auto px-4 relative z-10 pt-16 pb-20">
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-y-6 gap-x-8 text-sm text-slate-600 font-bold uppercase tracking-wider">
+              <div className="flex items-center gap-3">
+                <Check className="text-primary shrink-0" size={20} strokeWidth={3} />
+                <span>R290 Kältemittel</span>
+              </div>
+              <div className="flex items-center gap-3">
+                <Check className="text-primary shrink-0" size={20} strokeWidth={3} />
+                <span>Bis 75°C Vorlauf</span>
+              </div>
+              <div className="flex items-center gap-3">
+                <Check className="text-primary shrink-0" size={20} strokeWidth={3} />
+                <span>Kompakt: 0,33m²</span>
+              </div>
+              <div className="flex items-center gap-3">
+                <Check className="text-primary shrink-0" size={20} strokeWidth={3} />
+                <span>Leise: 31dB(A)</span>
+              </div>
+              <div className="flex items-center gap-3">
+                <Check className="text-primary shrink-0" size={20} strokeWidth={3} />
+                <span>Effizienz A+++</span>
+              </div>
+              <div className="flex items-center gap-3">
+                <Check className="text-primary shrink-0" size={20} strokeWidth={3} />
+                <span>Altbautauglich</span>
+              </div>
+              <div className="flex items-center gap-3">
+                <Check className="text-primary shrink-0" size={20} strokeWidth={3} />
+                <span>SG-Ready</span>
+              </div>
+              <div className="flex items-center gap-3">
+                <Check className="text-primary shrink-0" size={20} strokeWidth={3} />
+                <span>EHPA Zertifiziert</span>
+              </div>
+            </div>
         </div>
       </section>
       {/* Brand Section (New) */}
