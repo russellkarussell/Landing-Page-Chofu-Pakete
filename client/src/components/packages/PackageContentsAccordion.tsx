@@ -160,9 +160,6 @@ export function PackageContentsAccordion({ kw }: { kw: number }) {
               </div>
             ))}
             
-            <div className="pt-2 text-[10px] text-slate-400 text-center italic">
-               Quelle: westech.shop
-            </div>
           </div>
         </AccordionContent>
       </AccordionItem>
