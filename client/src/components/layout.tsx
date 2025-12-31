@@ -1,6 +1,6 @@
 
 import { Link, useLocation } from "wouter";
-import { Leaf, Menu, X, Phone, Calculator, Package, Home } from "lucide-react";
+import { Leaf, Menu, X, Phone, Calculator, Package, Home, Zap } from "lucide-react";
 import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
