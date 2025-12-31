@@ -400,30 +400,32 @@ export default function Heizkostenrechner() {
                     </div>
                   </div>
 
-                  <div className="grid md:grid-cols-2 gap-8">
-                     <div className="space-y-4">
-                        <div className="flex justify-between">
-                           <Label>Wirkungsgrad Altanlage</Label>
-                           <span className="font-bold text-primary">{data.wirkungsgradAlt}%</span>
-                        </div>
-                        <Slider 
-                           value={[data.wirkungsgradAlt]} 
-                           onValueChange={(val) => updateData("wirkungsgradAlt", val[0])} 
-                           min={50} max={100} step={1} 
-                        />
-                     </div>
-                     <div className="space-y-4">
-                        <div className="flex justify-between">
-                           <Label>Aktueller Preis / Einheit</Label>
-                           <span className="font-bold text-primary">{data.preisAlt} €</span>
-                        </div>
-                        <Slider 
-                           value={[data.preisAlt]} 
-                           onValueChange={(val) => updateData("preisAlt", val[0])} 
-                           min={0.05} max={3.00} step={0.01} 
-                        />
-                     </div>
-                  </div>
+                  {data.heizsystem !== "keine" && (
+                    <div className="grid md:grid-cols-2 gap-8 animate-in fade-in slide-in-from-top-4 duration-300">
+                       <div className="space-y-4">
+                          <div className="flex justify-between">
+                             <Label>Wirkungsgrad Altanlage</Label>
+                             <span className="font-bold text-primary">{data.wirkungsgradAlt}%</span>
+                          </div>
+                          <Slider 
+                             value={[data.wirkungsgradAlt]} 
+                             onValueChange={(val) => updateData("wirkungsgradAlt", val[0])} 
+                             min={50} max={100} step={1} 
+                          />
+                       </div>
+                       <div className="space-y-4">
+                          <div className="flex justify-between">
+                             <Label>Aktueller Preis / Einheit</Label>
+                             <span className="font-bold text-primary">{data.preisAlt} €</span>
+                          </div>
+                          <Slider 
+                             value={[data.preisAlt]} 
+                             onValueChange={(val) => updateData("preisAlt", val[0])} 
+                             min={0.05} max={3.00} step={0.01} 
+                          />
+                       </div>
+                    </div>
+                  )}
                 </motion.div>
               )}
 
