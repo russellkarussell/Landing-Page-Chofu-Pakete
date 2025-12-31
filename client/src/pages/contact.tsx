@@ -2,6 +2,8 @@
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
+import { useLocation } from "wouter";
+import { useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
@@ -22,6 +24,8 @@ const formSchema = z.object({
 
 export default function Contact() {
   const { toast } = useToast();
+  const [location] = useLocation();
+
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -32,6 +36,24 @@ export default function Contact() {
       message: "",
     },
   });
+
+  useEffect(() => {
+    const searchParams = new URLSearchParams(window.location.search);
+    const area = searchParams.get("area");
+    const type = searchParams.get("type");
+    const recommendation = searchParams.get("recommendation");
+
+    if (area || type || recommendation) {
+      const message = `Effizienz-Check Ergebnis:
+Wohnfläche: ${area ? area + ' m²' : '-'}
+Gebäudetyp: ${type || '-'}
+Empfehlung: ${recommendation || '-'}
+
+Bitte um Beratung zu diesem Objekt.`;
+      
+      form.setValue("message", message);
+    }
+  }, [form]);
 
   function onSubmit(values: z.infer<typeof formSchema>) {
     console.log(values);

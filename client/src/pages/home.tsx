@@ -294,7 +294,7 @@ export default function Home() {
                     {/* CTAs */}
                     <div className="space-y-3 pt-2">
                       <Button asChild className="w-full h-12 rounded-lg font-bold shadow-md hover:shadow-lg transition-all">
-                         <Link href="/kontakt">Kostenlosen Besichtigungstermin</Link>
+                         <Link href={`/kontakt?area=${calcData.size}&type=${calcData.type}&recommendation=${encodeURIComponent(result?.recommendation || "")}`}>Kostenlosen Besichtigungstermin</Link>
                       </Button>
                       <Button 
                         asChild
