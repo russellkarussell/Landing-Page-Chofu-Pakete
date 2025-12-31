@@ -26,7 +26,6 @@ export default function Home() {
 
   return (
     <div className="flex flex-col gap-0">
-      
       {/* Hero Section */}
       <section className="relative min-h-[90vh] flex items-center bg-slate-50 overflow-hidden">
         {/* Technical Grid Background */}
@@ -51,7 +50,7 @@ export default function Home() {
               <span>JAPANISCHE TECHNOLOGIE. ÖSTERREICHISCHER SERVICE.</span>
             </div>
             
-            <h1 className="text-5xl md:text-6xl lg:text-7xl font-heading font-extrabold text-slate-900 leading-[1.1] tracking-tight">
+            <h1 className="text-5xl md:text-6xl lg:text-7xl font-heading font-extrabold leading-[1.1] tracking-tight text-[#e5232b]">
               Chofu Wärmepumpen. <br/>
               <span className="text-primary">Präzision zum Fixpreis.</span>
             </h1>
@@ -175,10 +174,8 @@ export default function Home() {
           </div>
         </div>
       </section>
-
       {/* Brand Section (New) */}
       <BrandSection />
-
       {/* Subsidy Info Section */}
       <section className="py-16 bg-white border-b border-slate-100">
         <div className="container mx-auto px-4">
@@ -219,7 +216,6 @@ export default function Home() {
           </div>
         </div>
       </section>
-
       {/* Packages Preview Section */}
       <section className="py-24 bg-slate-50 relative">
         <div className="absolute inset-0 bg-grid-pattern opacity-[0.03] pointer-events-none" />
@@ -271,7 +267,6 @@ export default function Home() {
           </div>
         </div>
       </section>
-
       {/* Partners Section (Redesigned) */}
       <section className="py-24 bg-white border-t border-slate-200">
         <div className="container mx-auto px-4">
@@ -341,7 +336,6 @@ export default function Home() {
           </div>
         </div>
       </section>
-
       {/* CTA Section */}
       <section className="py-20 bg-primary text-white relative overflow-hidden">
         <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-20" />
@@ -356,7 +350,6 @@ export default function Home() {
           </Button>
         </div>
       </section>
-
     </div>
   );
 }
