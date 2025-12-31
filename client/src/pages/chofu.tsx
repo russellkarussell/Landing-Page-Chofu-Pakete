@@ -28,11 +28,11 @@ export default function ChofuBrandPage() {
       <section className="bg-slate-900 text-white py-20 md:py-32 relative overflow-hidden">
         {/* Background Image with Overlay */}
         <div 
-          className="absolute inset-0 bg-cover bg-center z-0 opacity-60 mix-blend-overlay grayscale" 
+          className="absolute inset-0 bg-cover bg-center z-0 opacity-40 grayscale" 
           style={{ backgroundImage: `url(${heroImage})` }} 
         />
-        <div className="absolute inset-0 bg-slate-900/80 z-0" />
-        <div className="absolute inset-0 bg-gradient-to-r from-slate-900 via-slate-900/90 to-transparent z-0" />
+        <div className="absolute inset-0 bg-slate-900/70 z-0" />
+        <div className="absolute inset-0 bg-gradient-to-r from-slate-900 via-slate-900/80 to-transparent z-0" />
         
         <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-10 pointer-events-none z-0" />
         <div className="container mx-auto px-4 relative z-10">
