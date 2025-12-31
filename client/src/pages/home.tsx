@@ -11,7 +11,7 @@ import { Check, ArrowRight, Zap, ShieldCheck, Euro, Coins } from "lucide-react";
 import { BUNDESLAENDER, PACKAGES, PARTNERS, SUBSIDIES } from "@/lib/constants";
 import heroImage from "@assets/generated_images/modern_austrian_house_with_heat_pump.png";
 import { motion } from "framer-motion";
-import { BrandSection } from "@/components/brand-modules";
+import ehpaLabel from "@assets/image_1767188918778.png";
 
 export default function Home() {
   const [selectedBundesland, setSelectedBundesland] = useState<string>("Wien");
@@ -191,6 +191,14 @@ export default function Home() {
                 <p className="text-lg text-slate-600 leading-relaxed">
                   Nutzen Sie die aktuelle Förderaktion "Kesseltausch". Chofu Wärmepumpen erfüllen alle technischen Voraussetzungen für die maximale Förderhöhe.
                 </p>
+                <a 
+                  href="https://www.sanierungsoffensive.gv.at/kesseltausch/ein-zweifamilienhaus-oder-reihenhaus" 
+                  target="_blank" 
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-2 text-primary font-bold hover:underline"
+                >
+                  Mehr Informationen zur Förderung <ArrowRight size={16} />
+                </a>
                 <div className="flex gap-8 pt-4">
                   <div>
                     <span className="block text-4xl font-heading font-bold text-slate-900">€{SUBSIDIES.base.toLocaleString()}</span>
@@ -206,8 +214,8 @@ export default function Home() {
              {/* Tech Badge */}
              <div className="relative p-1 bg-gradient-to-br from-slate-100 to-slate-200 rounded-none border border-slate-200 w-full max-w-sm">
                 <div className="bg-white p-6 text-center space-y-4">
-                  <div className="w-16 h-16 bg-primary mx-auto flex items-center justify-center text-white">
-                    <Check size={32} strokeWidth={3} />
+                  <div className="mx-auto flex items-center justify-center">
+                    <img src={ehpaLabel} alt="EHPA Gütesiegel" className="h-32 w-auto object-contain" />
                   </div>
                   <h3 className="font-bold text-slate-900 text-lg uppercase tracking-wide">EHPA Gütesiegel</h3>
                   <p className="text-sm text-slate-500">Unsere Anlagen sind zertifiziert und voll förderfähig in ganz Österreich.</p>
