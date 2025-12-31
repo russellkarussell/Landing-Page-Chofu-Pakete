@@ -34,16 +34,16 @@ export default function Layout({ children }: { children: React.ReactNode }) {
         }`}
       >
         <div className="container mx-auto px-4 flex items-center justify-between">
-          <Link href="/" className="flex items-center gap-2 group">
-            <div className="h-12 w-auto flex items-center">
+          <Link href="/" className="flex flex-col items-start gap-0 group">
+            <div className="h-10 w-auto">
               <img 
                 src={headerLogo} 
                 alt="Heizkraft" 
                 className="h-full w-auto object-contain"
               />
             </div>
-            <span className={`text-[10px] font-bold tracking-widest ml-2 block self-end pb-1 text-[#E60012] uppercase whitespace-nowrap`}>
-              POWERED BY CHOFU
+            <span className="text-[10px] font-bold tracking-widest uppercase whitespace-nowrap ml-1 mt-1">
+              <span className="text-slate-900">POWERED BY</span> <span className="text-[#E60012]">CHOFU</span>
             </span>
           </Link>
 
