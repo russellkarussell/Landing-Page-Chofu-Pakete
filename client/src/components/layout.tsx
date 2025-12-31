@@ -4,6 +4,7 @@ import { Leaf, Menu, X, Phone, Calculator, Package, Home } from "lucide-react";
 import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
+import headerLogo from "@assets/Heizkraft_Banner_1767187239440.png";
 
 export default function Layout({ children }: { children: React.ReactNode }) {
   const [location] = useLocation();
@@ -34,11 +35,15 @@ export default function Layout({ children }: { children: React.ReactNode }) {
       >
         <div className="container mx-auto px-4 flex items-center justify-between">
           <Link href="/" className="flex items-center gap-2 group">
-            <div className="bg-primary text-primary-foreground p-2 rounded-lg group-hover:scale-105 transition-transform">
-              <Leaf size={24} strokeWidth={2.5} />
+            <div className="h-12 w-auto flex items-center">
+              <img 
+                src={headerLogo} 
+                alt="Heizkraft" 
+                className="h-full w-auto object-contain"
+              />
             </div>
-            <span className={`text-xl font-heading font-extrabold tracking-tight transition-colors uppercase ${isScrolled ? "text-slate-900" : "text-slate-900"}`}>
-              EcoHeat<span className="text-primary">Austria</span> <span className="text-[10px] font-normal tracking-widest ml-1 text-slate-500 block -mt-1">POWERED BY CHOFU</span>
+            <span className={`text-[10px] font-bold tracking-widest ml-2 block self-end pb-1 text-[#E60012] uppercase whitespace-nowrap`}>
+              POWERED BY CHOFU
             </span>
           </Link>
 
