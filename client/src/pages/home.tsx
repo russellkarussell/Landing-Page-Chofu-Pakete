@@ -12,6 +12,7 @@ import { BUNDESLAENDER, PACKAGES, PARTNERS, SUBSIDIES } from "@/lib/constants";
 import heroImage from "@assets/generated_images/modern_austrian_house_with_heat_pump.png";
 import { motion } from "framer-motion";
 import ehpaLabel from "@assets/image_1767188918778.png";
+import { BrandSection } from "@/components/brand-modules";
 
 export default function Home() {
   const [selectedBundesland, setSelectedBundesland] = useState<string>("Wien");
