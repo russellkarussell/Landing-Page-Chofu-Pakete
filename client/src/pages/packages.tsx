@@ -113,7 +113,7 @@ export default function Packages() {
                   </div>
                   
                   <div className="bg-green-100/50 text-green-800 text-xs font-bold px-3 py-2 rounded-lg inline-block border border-green-200">
-                    - € {fundingAmount.toLocaleString()} Förderung abgezogen
+                    - € {fundingAmount.toLocaleString()} Förderung {includeSolar && "+ Solarbonus"} abgezogen
                   </div>
                 </CardHeader>
                 
