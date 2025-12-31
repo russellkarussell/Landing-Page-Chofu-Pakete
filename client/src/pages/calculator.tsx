@@ -134,15 +134,19 @@ export default function Heizkostenrechner() {
        else if (estimatedLoadKw < 8) suggestedInvest = 22000; // 6kW Package
        else suggestedInvest = 23000; // 10kW Package
 
-       // Calculate Subsidy (Kesseltausch 2026 Logic: 75% max, or Flat Rate)
-       // Base: 16.000 + Solar 2.500
-       let suggestedSubsidy = 16000; 
-       if (data.hasSolarthermie) suggestedSubsidy += 2500;
+       // Calculate Subsidy (User Logic: 30% max 7500)
+       // Base: 30% of Invest, capped at 7500
+       const calculatedPercentage = suggestedInvest * 0.30;
+       let maxCap = 7500;
        
-       // Cap subsidy at 75% of invest (Current Guideline)
-       // User asked for "30% max 7500" logic, but we use current 2026 values with same logic structure
-       const maxSubsidy = suggestedInvest * 0.75;
-       if (suggestedSubsidy > maxSubsidy) suggestedSubsidy = maxSubsidy;
+       // Assuming Solar Bonus increases the cap or is added on top?
+       // Usually flat rate bonuses are added ON TOP of percentage calcs or limits.
+       // Let's assume 30% rule applies to base, then + bonus.
+       // But user said "invest 20k -> 6k funding", which is exactly 30%.
+       
+       let suggestedSubsidy = Math.min(calculatedPercentage, maxCap);
+       
+       if (data.hasSolarthermie) suggestedSubsidy += 2500;
 
        setData(prev => ({
          ...prev,
@@ -540,13 +544,15 @@ export default function Heizkostenrechner() {
                              setHasUserModifiedInvest(true);
                              
                              // Recalculate subsidy dynamically even when manual, 
-                             // to keep it compliant with guidelines (max 75%)
+                             // to keep it compliant with guidelines (30% max 7500)
                              const newInvest = val[0];
-                             let newSubsidy = 16000;
-                             if (data.hasSolarthermie) newSubsidy += 2500;
                              
-                             const max = newInvest * 0.75;
-                             if (newSubsidy > max) newSubsidy = max;
+                             const calculatedPercentage = newInvest * 0.30;
+                             let maxCap = 7500;
+                             
+                             let newSubsidy = Math.min(calculatedPercentage, maxCap);
+                             
+                             if (data.hasSolarthermie) newSubsidy += 2500;
                              
                              setData(prev => ({ 
                                ...prev, 
