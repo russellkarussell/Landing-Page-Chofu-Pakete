@@ -1,0 +1,106 @@
+You are a Senior Frontend Engineer and SEO-minded UX developer working inside my existing React/Vite project.
+
+GOAL
+
+Create a new overview page that lists and compares the 3 CHOFU heat pumps (4kW, 6kW, 10kW) and adjust the navigation so the models are not scattered as separate top-level nav items.
+
+CRITICAL SCOPE
+
+DO NOT redesign the whole site.
+
+Keep typography, spacing, colors, buttons, and existing component style.
+
+Only:
+
+Add the new overview page /waermepumpen (or follow existing routing conventions).
+
+Update navigation to show one menu item: “Wärmepumpen” → links to /waermepumpen.
+
+Remove the three separate model nav items (4kW/6kW/10kW) from the top-level nav, but keep the pages accessible via the overview page.
+
+PAGE CONTENT: /waermepumpen
+
+Use a clean layout with:
+
+Hero:
+
+H1: “CHOFU Wärmepumpen – 4 kW, 6 kW, 10 kW”
+
+Subline: “R290 Monoblock. Made in Japan. Heizen & Kühlen. Technische Daten & Downloads.”
+
+Product cards (3 cards):
+For each card:
+
+Use the existing product images (same images are fine).
+
+Show: model name, power class (4/6/10 kW), 3–5 key facts, and 2 CTAs:
+
+Primary: “Produktdetails” → link to existing product page routes:
+
+4kW: /waermepumpe/4kw
+
+6kW: /waermepumpe/6kw
+
+10kW: /waermepumpe/10kw (use the actual existing route if different)
+
+Secondary: “Zum Paket” → link to /pakete with anchor or query (if anchors exist), otherwise link to /pakete.
+
+Key facts (keep short, do not invent):
+
+R290 (Propan)
+
+Monoblock
+
+Max. Vorlauf 75 °C
+
+Energieeffizienz A+++ (35 °C) / A++ (55 °C) (where applicable)
+
+“Leise im Nachtmodus” (only if the product pages already mention sound)
+
+Comparison table (below cards):
+Create a compact table with rows: 4kW / 6kW / 10kW
+Columns:
+
+Heizleistung A7/W35
+
+COP A7/W35
+
+Max. Vorlauf
+
+Empfohlen für
+
+Abmessungen (HxBxT)
+
+Gewicht
+
+Geräusch Nachtmodus @5m (only if available; otherwise show “—” without using TBD)
+
+Pull the exact values from the existing product pages (they were already implemented).
+
+“Welche Leistung passt?” section:
+A short 3-bullet guidance plus a button:
+
+“Zum Heizkostenrechner” → /heizkostenrechner
+
+Bottom CTA:
+Big CTA block:
+
+Headline: “Kostenlosen Besichtigungstermin vereinbaren”
+
+Button: “Termin vereinbaren” → /kontakt or existing CTA target.
+
+SEO
+
+Title: “CHOFU Wärmepumpen 4–10 kW | Vergleich & technische Daten | Heizkraft”
+
+Meta description: “Vergleichen Sie CHOFU R290 Wärmepumpen (4, 6, 10 kW). Technische Daten, Funktionen, Downloads und Beratung in Österreich.”
+
+DONE WHEN
+
+/waermepumpen exists and looks consistent with the site
+
+Nav shows only “Wärmepumpen” instead of 3 model links
+
+Product pages remain unchanged and reachable
+
+No placeholders like TBD anywhere

@@ -1,6 +1,6 @@
 
 import { Link, useLocation } from "wouter";
-import { Leaf, Menu, X, Phone, Calculator, Package, Home, Zap } from "lucide-react";
+import { Leaf, Menu, X, Phone, Calculator, Package, Home, Zap, LayoutGrid } from "lucide-react";
 import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
@@ -23,8 +23,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
   const navLinks = [
     { href: "/", label: "Startseite", icon: Home },
     { href: "/pakete", label: "Pakete", icon: Package },
-    { href: "/waermepumpe/6kw", label: "6kW Wärmepumpe", icon: Leaf },
-    { href: "/waermepumpe/10kw", label: "10kW Wärmepumpe", icon: Zap },
+    { href: "/waermepumpen", label: "Wärmepumpen", icon: LayoutGrid },
     { href: "/rechner", label: "Heizkostenrechner", icon: Calculator },
     { href: "/kontakt", label: "Kontakt", icon: Phone },
   ];
