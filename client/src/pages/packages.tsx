@@ -138,12 +138,20 @@ export default function Packages() {
                   <PackageContentsAccordion kw={pkg.kw} />
                 </CardContent>
 
-                <CardFooter className="pb-8 pt-4 bg-slate-50/50 border-t border-slate-100">
+                <CardFooter className="pb-8 pt-4 bg-slate-50/50 border-t border-slate-100 flex flex-col gap-3">
                   <Button className="w-full h-12 text-lg font-bold shadow-md hover:shadow-lg transition-all" variant={pkg.highlight ? "default" : "outline"} asChild>
                     <Link href="/kontakt">
                       Termin vereinbaren
                     </Link>
                   </Button>
+                  
+                  {pkg.kw === 4 && (
+                     <Button variant="ghost" className="w-full text-slate-500 hover:text-primary hover:bg-primary/5" asChild>
+                        <Link href="/waermepumpe/4kw">
+                          Details zur 4 kW Wärmepumpe <ArrowRight size={14} className="ml-1" />
+                        </Link>
+                     </Button>
+                  )}
                 </CardFooter>
               </Card>
             );

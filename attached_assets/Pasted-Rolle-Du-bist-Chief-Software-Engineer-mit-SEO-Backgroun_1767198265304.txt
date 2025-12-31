@@ -1,0 +1,234 @@
+Rolle: Du bist Chief Software Engineer mit SEO-Background. Du arbeitest in meinem bestehenden Repo (Landing Page CHOFU Pakete) und erweiterst es um eine neue Produktdetailseite für das 4 kW Modell.
+
+Ziel: Neue Produktseite „CHOFU AEYC-0449ZU-CH1 (4 kW) – R290 Monoblock Luft/Wasser-Wärmepumpe“ erstellen. Die Seite muss modern, schnell, sauber strukturiert, SEO-stark und conversion-orientiert sein (CTA: „Kostenlosen Besichtigungstermin vereinbaren“ + „Zu den Paketen“). Inhalte sind technisch korrekt, aber für Endkunden verständlich.
+
+1) Routing / Navigation
+
+Füge eine neue Route hinzu:
+
+/waermepumpe/4kw (oder /produkte/chofu-aeyc-0449zu-ch1)
+
+Ergänze im Header/Nav (Desktop + Mobile) einen Menüpunkt unter „Pakete“ oder „Mehr“:
+
+„4kW Wärmepumpe“
+
+Von /pakete sollen Buttons/Links auf diese Produktseite führen:
+
+Beim 4kW-Paket: Link „Wärmepumpe ansehen“ → /waermepumpe/4kw
+
+2) Seitenlayout (Produktdetailseite)
+
+Erstelle eine Seite mit folgenden Sektionen (in dieser Reihenfolge). Ziel: oben sofort Produkt + Nutzen, danach Features, danach harte Daten, danach Downloads + CTA.
+
+A) Hero (Above the fold)
+
+Linke Seite: Headline + kurze Nutzenbotschaft
+
+H1: „CHOFU AEYC-0449ZU-CH1 – 4 kW R290 Wärmepumpe“
+
+Subline: „Monoblock Luft/Wasser – Heizen & Kühlen, Made in Japan, ideal für Neubau & Niedrigenergiehäuser.“
+
+Rechte Seite: großes Hero-Bild (Outdoor Unit im Garten)
+
+Darunter: 3–5 kompakte „USP Chips“:
+
+„R290 (Propan)“
+
+„Monoblock“
+
+„Heizen & Kühlen“
+
+„DC Inverter“
+
+„Made in Japan“
+
+Primary CTA Button: „Kostenlosen Besichtigungstermin vereinbaren“ → führt zur Kontaktseite oder öffnet HubSpot-Form/CTA (wenn vorhanden: #kontakt).
+
+Secondary CTA: „Pakete ansehen“ → /pakete
+
+B) Vertrauens-Strip (sehr kompakt)
+
+Zwei kleine Kacheln nebeneinander (Desktop), untereinander (Mobile):
+
+„Made in Japan / CHOFU Qualität“ (mit Closeup-Logo-Bild)
+
+„Steuerung & App“ (mit Controller-Bild + 1 Satz zu Online/Smart)
+
+Das muss bewusst kompakt sein (kein langer Textblock).
+
+C) „Kurz erklärt: Was kann diese Wärmepumpe?“
+
+4 Kacheln mit Icons + 2 Zeilen Text:
+
+Heizen (Radiatoren/FBH)
+
+Kühlen (Fan-Coils/Flächenkühlung – allgemein formulieren)
+
+Warmwasser möglich (über Speicher/3-Wege-Ventil-Konzept; keine falschen Versprechen, sondern „systemabhängig“)
+
+Smart Control (WLAN/Onlinezugriff über Comfy Connect CHOFU)
+
+D) Funktionen & Steuerung (CMR-4100M)
+
+Erstelle eine Sektion „CMR-4100M Steuerung – Bedienung & Automatik“, mit:
+
+6 Bulletpoints (kundenfreundlich formuliert, technisch korrekt):
+
+WLAN (2.4 GHz) und Online-Steuerung über Comfy Connect CHOFU (Web/App)
+
+Heiz- und Kühlbetrieb
+
+Zeitprogramme (Heizen/Kühlen + Warmwasser)
+
+Heizkurve (Climatic Curve) für effizienten Betrieb
+
+Nachtmodus & Low-Tarif Zeitfenster
+
+Frostschutzfunktionen (raum-/außen-/wasserseitig)
+
+Baue rechts/links ein Controller-Bild ein.
+
+E) Technische Daten (harte Fakten, tabellarisch)
+
+Erstelle eine Tabelle „Technische Daten – AEYC-0449ZU-CH1“ mit mindestens diesen Zeilen:
+
+Typ: Heating & Cooling Monoblock, DC Inverter (Reverse cycle)
+
+Netz: 1~ 230V 50Hz
+
+Heizleistung A7/W35: 4.0 kW
+
+Leistungsaufnahme A7/W35: 0.87 kW
+
+COP A7/W35: 4.60
+
+Kühlleistung A35/W18: 4.0 kW
+
+Leistungsaufnahme A35/W18: 1.00 kW
+
+EER A35/W18: 4.00
+
+Kältemittel: R290, Füllmenge: 0.50 kg
+
+Abmessungen (H×B×T): 886 × 1000 × 330 mm
+
+Gewicht: 66 kg
+
+Temperaturbereich (Außenluft): Heizen –20…45 °C; Kühlen 15…45 °C
+
+Eintritt Wassertemperatur: 18…65 °C
+
+Wasseranschlüsse: R3/4 (20A) Vorlauf/Rücklauf (so wie im Manual dargestellt)
+Wichtig: Wenn irgendetwas im Code als „75°C“ steht, NICHT übernehmen. Für diese Seite gilt für R290-Modelle im Systemkontext: max. Vorlauf bis 75°C ist eine Marketing-Angabe – aber hier beziehen wir uns auf Manualwerte (Inlet Water 18–65°C). Formuliere sauber: „Wasser-Temperaturbereich laut Herstellermanual“.
+
+F) Downloads / Dokumente
+
+Sektion „Downloads“ mit 2 Download-Karten:
+
+„Installations- & Bedienungsanleitung – CHOFU AEYC (R290)“ (PDF)
+
+„CMR-4100M Controller – Installationsanleitung“ (PDF)
+
+Wenn PDFs nicht als Assets im Repo liegen: lege sie als Platzhalter-Links an (z. B. /docs/…); baue die UI so, dass ich die Dateien später einfach ersetzen kann.
+
+G) Geeignet für / Einsatzbereiche
+
+3 Kacheln:
+
+Neubau / Niedrigenergiehaus
+
+Sanierter Altbau (mit Hinweis: richtige Auslegung entscheidend)
+
+Hybrid/Bestandsanlage (nur als „möglich“ – keine harten Versprechen)
+
+H) FAQ (kurz, vertriebsnah, ohne rechtliche Graubereiche)
+
+6–8 FAQs, u. a.:
+
+„Ist das eine Monoblock-Wärmepumpe?“
+
+„Kann sie auch kühlen?“
+
+„Wie laut ist sie?“ → Antwort: „abhängig von Aufstellung; technische Daten im Datenblatt“ (keine dB erfinden)
+
+„Brauche ich einen Pufferspeicher?“ → „systemabhängig“
+
+„Wie läuft die Steuerung?“ → CMR-4100M + App/Comfy Connect
+
+„Was passiert bei Frost?“ → Frostschutzfunktionen + Empfehlung Fachpartner
+
+I) Bottom CTA (Conversion)
+
+Große CTA-Box:
+
+Headline: „Kostenlosen Besichtigungstermin vereinbaren“
+
+2 Bulletpoints: „Auslegung & Prüfung vor Ort“, „Fixpreisangebot über Installationspartner“
+
+Button: „Termin vereinbaren“ (zu Kontakt/HubSpot)
+
+Secondary: „Pakete vergleichen“ → /pakete
+
+3) SEO Anforderungen (wichtig)
+
+Setze:
+
+Title: „CHOFU AEYC-0449ZU-CH1 – 4 kW R290 Wärmepumpe | Heizkraft“
+
+Meta-Description (max. ~155 Zeichen): „4 kW CHOFU R290 Monoblock Wärmepumpe (Heizen & Kühlen). Made in Japan. Technische Daten, Funktionen, Downloads & Beratung.“
+
+Verwende saubere H-Struktur (nur ein H1, dann H2/H3).
+
+Baue Product Schema (JSON-LD) ein:
+
+name, brand (CHOFU), model, category, image (lokale Pfade), offers optional ohne Preis (oder „price: null“), url.
+
+Interne Links:
+
+Link zu /pakete, /heizkostenrechner, /kontakt
+
+4) Design / UI Guidelines
+
+Optik passend zur bestehenden Landingpage (Heizkraft/CHOFU Stil):
+
+viel Weißraum, klare Typografie, solide Card-UI
+
+responsive: Mobile first
+
+Bilder als optimierte Assets, ordentliche Alt-Texte (SEO)
+
+Keine unnötigen neuen Dependencies einführen.
+
+Saubere Komponentenstruktur (z. B. /pages/Product4kW.tsx + wiederverwendbare Komponenten).
+
+5) Assets (Bilder)
+
+Nutze diese Bilder auf der Seite:
+
+Hero (Outdoor Unit): PXL_20250803_105021980-Photoroom.jpg
+
+Closeup „CHOFU Made in Japan“: R290 Premium Black Closeup image (1).jpg
+
+Controller: CMR-4100M Image.jpg
+
+Optional Winterbild als „Betrieb bei tiefen Temperaturen“ Visual: (mein Winterhaus-Bild)
+
+Alt-Texte:
+
+„CHOFU R290 Monoblock Wärmepumpe im Außenbereich“
+
+„CHOFU Made in Japan – Detailansicht“
+
+„CMR-4100M Controller – Bedienoberfläche“
+
+6) Definition of Done
+
+Route erreichbar, Nav-Link vorhanden, von Paketen verlinkt
+
+Seite Lighthouse-ready (keine riesigen unkomprimierten Images)
+
+Keine konsistenzbrechenden Angaben (keine erfundenen Werte)
+
+CTA funktioniert, Downloads als Platzhalter vorhanden
+
+Commit/Änderungen nachvollziehbar dokumentiert
