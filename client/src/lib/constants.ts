@@ -11,6 +11,12 @@ export const BUNDESLAENDER = [
   "Wien"
 ];
 
+export const SUBSIDIES = {
+  base: 7500, // Wärmepumpe Luft/Wasser
+  solar: 2500, // Solarbonus
+  maxPercentage: 0.30 // Max 30% of costs
+};
+
 export const PACKAGES = [
   {
     id: "4kw",
@@ -22,7 +28,7 @@ export const PACKAGES = [
     suitability: ["Neubau", "Niedrigenergiehaus", "Bis ca. 120m²"],
     features: [
       "Chofu 4kW Monoblock Luft/Wasser WP",
-      "Kältemittel R290 (Propan)",
+      "Kältemittel R290 (Propan) - Volle Förderung!",
       "Inkl. Standard-Montage",
       "Inkl. Inbetriebnahme",
       "Smarte Steuerung via App"
@@ -38,7 +44,7 @@ export const PACKAGES = [
     suitability: ["Sanierter Altbau", "Standard Einfamilienhaus", "Bis ca. 160m²"],
     features: [
       "Chofu 6kW Monoblock Luft/Wasser WP",
-      "Kältemittel R290 (Propan)",
+      "Kältemittel R290 (Propan) - Volle Förderung!",
       "Inkl. Standard-Montage",
       "Inkl. Inbetriebnahme",
       "Hohe Vorlauftemperaturen möglich"

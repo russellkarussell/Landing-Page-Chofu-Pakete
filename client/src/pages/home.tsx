@@ -7,8 +7,8 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Check, ArrowRight, Zap, ShieldCheck, Euro } from "lucide-react";
-import { BUNDESLAENDER, PACKAGES, PARTNERS } from "@/lib/constants";
+import { Check, ArrowRight, Zap, ShieldCheck, Euro, Coins } from "lucide-react";
+import { BUNDESLAENDER, PACKAGES, PARTNERS, SUBSIDIES } from "@/lib/constants";
 import heroImage from "@assets/generated_images/modern_austrian_house_with_heat_pump.png";
 import { motion } from "framer-motion";
 
@@ -44,7 +44,7 @@ export default function Home() {
           <div className="space-y-8 animate-in slide-in-from-left duration-700">
             <div className="inline-flex items-center gap-2 bg-primary/20 text-primary-foreground px-3 py-1 rounded-full text-sm font-medium border border-primary/30 backdrop-blur-sm">
               <Zap size={14} className="fill-current" />
-              <span>Jetzt Förderung sichern!</span>
+              <span>Bis zu € {(SUBSIDIES.base + SUBSIDIES.solar).toLocaleString()} Förderung möglich!</span>
             </div>
             
             <h1 className="text-5xl md:text-6xl lg:text-7xl font-heading font-bold text-white leading-[1.1]">
@@ -163,6 +163,44 @@ export default function Home() {
         </div>
       </section>
 
+      {/* Subsidy Info Section */}
+      <section className="py-16 bg-green-50/50 border-b border-green-100">
+        <div className="container mx-auto px-4">
+          <div className="flex flex-col md:flex-row gap-8 items-center justify-between">
+             <div className="space-y-4 max-w-2xl">
+                <div className="flex items-center gap-2 text-primary font-bold">
+                  <Coins className="h-6 w-6" />
+                  <span>Kesseltausch 2026</span>
+                </div>
+                <h2 className="text-3xl font-heading font-bold text-slate-900">
+                  Holen Sie sich Ihre Förderung
+                </h2>
+                <p className="text-lg text-slate-700">
+                  Der Bund fördert den Umstieg auf klimafreundliche Heizsysteme massiv.
+                  Sichern Sie sich bis zu <strong>€ {SUBSIDIES.base.toLocaleString()} Basis-Förderung</strong> für Ihre Wärmepumpe
+                  und zusätzlich <strong>€ {SUBSIDIES.solar.toLocaleString()} Solar-Bonus</strong> bei gleichzeitiger Installation einer thermischen Solaranlage.
+                </p>
+             </div>
+             <div className="bg-white p-6 rounded-xl shadow-md border border-green-100 min-w-[300px]">
+                <ul className="space-y-3 text-sm">
+                  <li className="flex justify-between items-center pb-2 border-b border-slate-100">
+                    <span className="text-slate-600">Basis-Förderung WP:</span>
+                    <span className="font-bold text-green-700">€ {SUBSIDIES.base.toLocaleString()}</span>
+                  </li>
+                  <li className="flex justify-between items-center pb-2 border-b border-slate-100">
+                    <span className="text-slate-600">Solar-Bonus:</span>
+                    <span className="font-bold text-green-700">+ € {SUBSIDIES.solar.toLocaleString()}</span>
+                  </li>
+                  <li className="flex justify-between items-center pt-1">
+                    <span className="font-bold text-slate-900">Gesamt möglich:</span>
+                    <span className="font-bold text-primary text-lg">€ {(SUBSIDIES.base + SUBSIDIES.solar).toLocaleString()}</span>
+                  </li>
+                </ul>
+             </div>
+          </div>
+        </div>
+      </section>
+
       {/* Packages Preview Section */}
       <section className="py-24 bg-slate-50">
         <div className="container mx-auto px-4">
@@ -189,7 +227,9 @@ export default function Home() {
                     <span className="text-4xl font-heading font-bold text-slate-900">€ {pkg.price.toLocaleString()}</span>
                     <span className="text-slate-500 ml-2">inkl. MwSt.</span>
                   </div>
-                  <p className="text-sm text-slate-500 mt-2">zzgl. allfälliger Förderungen</p>
+                  <p className="text-sm text-green-600 font-medium mt-2">
+                    Ab € {(pkg.price - SUBSIDIES.base).toLocaleString()} mit Förderung*
+                  </p>
                 </CardHeader>
                 <CardContent className="flex-grow pt-6">
                   <p className="text-slate-600 mb-6 text-sm">{pkg.description}</p>
