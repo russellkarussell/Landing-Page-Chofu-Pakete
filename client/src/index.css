@@ -5,12 +5,12 @@
 
 @theme inline {
   --font-sans: "Inter", sans-serif;
-  --font-heading: "Outfit", sans-serif;
+  --font-heading: "Manrope", sans-serif;
 
-  --radius-sm: calc(var(--radius) - 4px);
-  --radius-md: calc(var(--radius) - 2px);
+  --radius-sm: calc(var(--radius) - 2px);
+  --radius-md: calc(var(--radius) - 1px);
   --radius-lg: var(--radius);
-  --radius-xl: calc(var(--radius) + 4px);
+  --radius-xl: calc(var(--radius) + 2px);
 
   --color-background: hsl(var(--background));
   --color-foreground: hsl(var(--foreground));
@@ -54,71 +54,74 @@
 }
 
 :root {
-  /* Eco-Modern Palette */
-  /* Primary: Deep Forest Green - Trustworthy, Sustainable */
-  --primary: 142 76% 36%;
+  /* Chofu Inspired: Technical, Precision, Japanese Engineering */
+  
+  /* Primary: Corporate Blue (Trust, Technology) */
+  --primary: 215 100% 35%; /* Deep Royal Blue */
   --primary-foreground: 0 0% 100%;
 
-  /* Secondary: Soft Sage/Mint - Approachable, Fresh */
-  --secondary: 140 30% 90%;
-  --secondary-foreground: 142 76% 20%;
+  /* Secondary: Cool Grey / Metallic */
+  --secondary: 210 20% 96%;
+  --secondary-foreground: 220 40% 20%;
 
-  /* Background: Clean White */
+  /* Accent: Energetic Red (Heat, Brand Accent) */
+  --accent: 350 85% 60%;
+  --accent-foreground: 0 0% 100%;
+
+  /* Background: Clean, Clinical White */
   --background: 0 0% 100%;
-  --foreground: 222 47% 11%; /* Dark Slate for text */
+  --foreground: 215 25% 15%; /* Dark Blue-Grey Text */
 
-  /* Muted: Neutral Greys */
-  --muted: 210 40% 96.1%;
-  --muted-foreground: 215.4 16.3% 46.9%;
-
-  /* Accents: Solar Orange/Yellow for calls to action or highlights if needed, but keeping it green-focused mostly */
-  --accent: 210 40% 96.1%;
-  --accent-foreground: 222 47% 11%;
+  /* Muted: Technical Greys */
+  --muted: 210 20% 96%;
+  --muted-foreground: 215 20% 45%;
 
   --destructive: 0 84.2% 60.2%;
   --destructive-foreground: 210 40% 98%;
 
-  --border: 214.3 31.8% 91.4%;
-  --input: 214.3 31.8% 91.4%;
-  --ring: 142 76% 36%;
+  /* Borders: Sharp, Subtle */
+  --border: 215 20% 90%;
+  --input: 215 20% 90%;
+  --ring: 215 100% 35%;
 
   --card: 0 0% 100%;
-  --card-foreground: 222 47% 11%;
+  --card-foreground: 215 25% 15%;
   
   --popover: 0 0% 100%;
-  --popover-foreground: 222 47% 11%;
+  --popover-foreground: 215 25% 15%;
 
-  --radius: 0.75rem;
+  /* Sharper corners for "Precision" look */
+  --radius: 0.25rem; 
 }
 
 .dark {
   --background: 222 47% 11%;
   --foreground: 210 40% 98%;
 
-  --card: 222 47% 11%;
+  --card: 217 33% 15%;
   --card-foreground: 210 40% 98%;
 
-  --popover: 222 47% 11%;
+  --popover: 217 33% 15%;
   --popover-foreground: 210 40% 98%;
 
-  --primary: 142 70% 45%;
+  --primary: 215 90% 50%;
   --primary-foreground: 0 0% 100%;
 
-  --secondary: 217.2 32.6% 17.5%;
+  --secondary: 217 33% 20%;
   --secondary-foreground: 210 40% 98%;
 
-  --muted: 217.2 32.6% 17.5%;
+  --muted: 217 33% 20%;
   --muted-foreground: 215 20.2% 65.1%;
 
-  --accent: 217.2 32.6% 17.5%;
-  --accent-foreground: 210 40% 98%;
+  --accent: 350 85% 60%;
+  --accent-foreground: 0 0% 100%;
 
   --destructive: 0 62.8% 30.6%;
   --destructive-foreground: 210 40% 98%;
 
-  --border: 217.2 32.6% 17.5%;
-  --input: 217.2 32.6% 17.5%;
-  --ring: 142 70% 50%;
+  --border: 217 33% 20%;
+  --input: 217 33% 20%;
+  --ring: 215 90% 50%;
 }
 
 @layer base {
@@ -137,5 +140,11 @@
   .transparent-text-stroke {
     -webkit-text-stroke: 1px currentColor;
     color: transparent;
+  }
+  
+  .bg-grid-pattern {
+    background-image: linear-gradient(to right, #e2e8f0 1px, transparent 1px),
+                      linear-gradient(to bottom, #e2e8f0 1px, transparent 1px);
+    background-size: 40px 40px;
   }
 }

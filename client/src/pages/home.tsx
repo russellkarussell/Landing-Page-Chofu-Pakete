@@ -27,94 +27,100 @@ export default function Home() {
     <div className="flex flex-col gap-0">
       
       {/* Hero Section */}
-      <section className="relative min-h-[90vh] flex items-center bg-slate-900 overflow-hidden">
+      <section className="relative min-h-[90vh] flex items-center bg-slate-50 overflow-hidden">
+        {/* Technical Grid Background */}
+        <div className="absolute inset-0 z-0 bg-grid-pattern opacity-[0.03] pointer-events-none" />
+        
         {/* Background Image with Overlay */}
-        <div className="absolute inset-0 z-0">
-          <img 
+        <div className="absolute right-0 top-0 bottom-0 w-1/2 z-0 hidden lg:block">
+           <div className="absolute inset-0 bg-gradient-to-r from-slate-50 via-slate-50/50 to-transparent z-10" />
+           <img 
             src={heroImage} 
             alt="Moderne Wärmepumpe Österreich" 
-            className="w-full h-full object-cover opacity-60"
+            className="w-full h-full object-cover object-center grayscale-[30%] contrast-[1.1]"
           />
-          <div className="absolute inset-0 bg-gradient-to-r from-slate-900/90 via-slate-900/60 to-transparent" />
         </div>
 
         <div className="container mx-auto px-4 relative z-10 grid lg:grid-cols-2 gap-12 items-center pt-20">
           
           {/* Left: Text Content */}
           <div className="space-y-8 animate-in slide-in-from-left duration-700">
-            <div className="inline-flex items-center gap-2 bg-primary/20 text-primary-foreground px-3 py-1 rounded-full text-sm font-medium border border-primary/30 backdrop-blur-sm">
-              <Zap size={14} className="fill-current" />
-              <span>Bis zu € {(SUBSIDIES.base + SUBSIDIES.solar).toLocaleString()} Förderung möglich!</span>
+            <div className="inline-flex items-center gap-3 bg-white text-slate-700 px-4 py-2 text-sm font-bold border border-slate-200 shadow-sm rounded-none tracking-wide">
+              <Zap size={16} className="text-accent fill-accent" />
+              <span>JAPANISCHE TECHNOLOGIE. ÖSTERREICHISCHER SERVICE.</span>
             </div>
             
-            <h1 className="text-5xl md:text-6xl lg:text-7xl font-heading font-bold text-white leading-[1.1]">
-              Wärmepumpen zum <span className="text-primary transparent-text-stroke">Fixpreis.</span>
+            <h1 className="text-5xl md:text-6xl lg:text-7xl font-heading font-extrabold text-slate-900 leading-[1.1] tracking-tight">
+              Chofu Wärmepumpen. <br/>
+              <span className="text-primary">Präzision zum Fixpreis.</span>
             </h1>
             
-            <p className="text-xl text-slate-300 max-w-xl leading-relaxed">
-              Transparent, planbar und installiert von zertifizierten Partnern aus Ihrer Region. Der einfachste Weg zur neuen Heizung in Österreich.
+            <p className="text-xl text-slate-600 max-w-xl leading-relaxed">
+              Hocheffiziente R290 Monoblock-Systeme. Robust, langlebig und perfekt abgestimmt auf Ihr Zuhause. Inklusive Installation durch zertifizierte Partner.
             </p>
 
             <div className="flex flex-col sm:flex-row gap-4">
-              <Button asChild size="lg" className="h-14 px-8 text-lg font-bold shadow-[0_0_20px_rgba(34,197,94,0.3)] hover:shadow-[0_0_30px_rgba(34,197,94,0.5)] transition-shadow">
+              <Button asChild size="lg" className="h-14 px-8 text-lg font-bold shadow-none rounded-none bg-primary hover:bg-primary/90 text-white">
                 <Link href="/kontakt">
-                  Kostenloses Erstgespräch
+                  Beratung anfordern
                 </Link>
               </Button>
-              <Button asChild size="lg" variant="outline" className="h-14 px-8 text-lg bg-white/5 border-white/20 text-white hover:bg-white/10 hover:text-white backdrop-blur-sm">
+              <Button asChild size="lg" variant="outline" className="h-14 px-8 text-lg border-2 border-slate-200 text-slate-700 hover:border-primary hover:text-primary hover:bg-white rounded-none">
                 <Link href="/pakete">
-                  Pakete ansehen
+                  Modelle & Preise
                 </Link>
               </Button>
             </div>
             
-            <div className="pt-8 flex items-center gap-6 text-sm text-slate-400 font-medium">
+            <div className="pt-8 flex items-center gap-8 text-sm text-slate-500 font-bold uppercase tracking-wider">
               <div className="flex items-center gap-2">
-                <Check className="text-primary" size={18} />
-                <span>Alles aus einer Hand</span>
+                <Check className="text-primary" size={20} strokeWidth={3} />
+                <span>R290 Kältemittel</span>
               </div>
               <div className="flex items-center gap-2">
-                <Check className="text-primary" size={18} />
-                <span>Regionale Partner</span>
+                <Check className="text-primary" size={20} strokeWidth={3} />
+                <span>Bis 75°C Vorlauf</span>
               </div>
             </div>
           </div>
 
-          {/* Right: Mini Calculator Card */}
-          <div className="lg:pl-12 animate-in slide-in-from-right duration-700 delay-200">
-            <Card className="backdrop-blur-md bg-white/95 border-none shadow-2xl overflow-hidden">
-              <div className="h-2 bg-primary w-full" />
-              <CardHeader className="pb-4">
-                <CardTitle className="text-2xl font-heading text-slate-900">
-                  Sparpotenzial prüfen
+          {/* Right: Technical Stats / Calc */}
+          <div className="lg:pl-12 animate-in slide-in-from-right duration-700 delay-200 lg:bg-transparent">
+             {/* Only show on mobile or wrap differently? Keeping the calc for function but styling it "Tech" */}
+            <Card className="bg-white border border-slate-200 shadow-xl rounded-none relative overflow-hidden">
+              <div className="absolute top-0 left-0 w-1 h-full bg-primary" />
+              <CardHeader className="pb-4 border-b border-slate-100 bg-slate-50/50">
+                <CardTitle className="text-xl font-heading font-bold text-slate-900 uppercase tracking-wide">
+                  Effizienz-Check
                 </CardTitle>
-                <p className="text-slate-500 text-sm">
-                  Finden Sie heraus, ob sich eine Wärmepumpe für Sie lohnt.
+                <p className="text-slate-500 text-xs uppercase tracking-wider font-medium">
+                  Prüfen Sie Ihre Eignung
                 </p>
               </CardHeader>
-              <CardContent>
+              <CardContent className="pt-6">
                 {calcStep === 1 ? (
-                  <div className="space-y-4">
+                  <div className="space-y-5">
                     <div className="space-y-2">
-                      <Label htmlFor="area">Wohnfläche (m²)</Label>
+                      <Label htmlFor="area" className="text-xs uppercase font-bold text-slate-500">Wohnfläche (m²)</Label>
                       <Input 
                         id="area" 
-                        placeholder="z.B. 140" 
+                        placeholder="140" 
                         type="number"
+                        className="rounded-none border-slate-300 focus:ring-primary h-12 text-lg"
                         value={calcData.size}
                         onChange={(e) => setCalcData({...calcData, size: e.target.value})}
                       />
                     </div>
                     <div className="space-y-2">
-                      <Label>Gebäudetyp</Label>
+                      <Label className="text-xs uppercase font-bold text-slate-500">Gebäudetyp</Label>
                       <Select 
                         defaultValue={calcData.type} 
                         onValueChange={(val) => setCalcData({...calcData, type: val})}
                       >
-                        <SelectTrigger>
+                        <SelectTrigger className="rounded-none border-slate-300 h-12">
                           <SelectValue />
                         </SelectTrigger>
-                        <SelectContent>
+                        <SelectContent className="rounded-none">
                           <SelectItem value="Altbau">Altbau (vor 1990)</SelectItem>
                           <SelectItem value="Saniert">Teilsaniert</SelectItem>
                           <SelectItem value="Neubau">Neubau (nach 2010)</SelectItem>
@@ -122,34 +128,40 @@ export default function Home() {
                       </Select>
                     </div>
                     <Button 
-                      className="w-full text-lg h-12 mt-2" 
+                      className="w-full text-lg h-12 mt-4 rounded-none font-bold uppercase" 
                       onClick={handleCalc}
                       disabled={!calcData.size}
                     >
-                      Jetzt berechnen
+                      Potenzial berechnen
                     </Button>
                   </div>
                 ) : (
-                  <div className="space-y-6 text-center py-4 animate-in fade-in zoom-in-95 duration-300">
-                    <div className="bg-primary/10 rounded-full w-16 h-16 flex items-center justify-center mx-auto text-primary mb-4">
-                      <Check size={32} />
+                  <div className="space-y-6 text-center py-4">
+                    <div className="flex items-center justify-center gap-3 mb-2">
+                      <Zap size={24} className="text-accent fill-accent" />
+                      <h3 className="text-xl font-bold text-slate-900 uppercase">Hohe Effizienz</h3>
                     </div>
-                    <div>
-                      <h3 className="text-xl font-bold text-slate-900 mb-2">Hohes Potenzial!</h3>
-                      <p className="text-slate-600 text-sm mb-4">
-                        Basierend auf Ihren Angaben ({calcData.size}m², {calcData.type}) eignet sich Ihr Haus hervorragend für eine Wärmepumpe.
-                      </p>
-                      <p className="font-bold text-primary text-lg mb-6">
-                        Ersparnis bis zu 50% möglich.
-                      </p>
+                    <div className="bg-slate-50 p-4 border border-slate-100 text-left space-y-2">
+                      <div className="flex justify-between text-sm">
+                        <span className="text-slate-500">Objekt:</span>
+                        <span className="font-bold text-slate-900">{calcData.size}m² / {calcData.type}</span>
+                      </div>
+                      <div className="flex justify-between text-sm">
+                        <span className="text-slate-500">Empfehlung:</span>
+                        <span className="font-bold text-primary">Chofu 6kW - 10kW</span>
+                      </div>
+                      <div className="flex justify-between text-sm">
+                        <span className="text-slate-500">Ersparnis:</span>
+                        <span className="font-bold text-green-600">bis zu 50%</span>
+                      </div>
                     </div>
                     <div className="space-y-3">
-                      <Button asChild className="w-full h-12">
+                      <Button asChild className="w-full h-12 rounded-none font-bold uppercase">
                          <Link href="/kontakt">Termin vereinbaren</Link>
                       </Button>
                       <Button 
                         variant="ghost" 
-                        className="w-full text-slate-500 hover:text-slate-900"
+                        className="w-full text-slate-500 hover:text-slate-900 rounded-none uppercase text-xs tracking-wider"
                         onClick={() => setCalcStep(1)}
                       >
                         Neu berechnen
@@ -164,86 +176,87 @@ export default function Home() {
       </section>
 
       {/* Subsidy Info Section */}
-      <section className="py-16 bg-green-50/50 border-b border-green-100">
+      <section className="py-16 bg-white border-b border-slate-100">
         <div className="container mx-auto px-4">
-          <div className="flex flex-col md:flex-row gap-8 items-center justify-between">
-             <div className="space-y-4 max-w-2xl">
-                <div className="flex items-center gap-2 text-primary font-bold">
-                  <Coins className="h-6 w-6" />
-                  <span>Kesseltausch 2026</span>
+          <div className="flex flex-col md:flex-row gap-12 items-center justify-between">
+             <div className="space-y-6 max-w-2xl">
+                <div className="flex items-center gap-3 text-primary font-bold uppercase tracking-wider text-sm">
+                  <div className="h-px w-8 bg-primary"></div>
+                  <span>Förderoffensive 2026</span>
                 </div>
-                <h2 className="text-3xl font-heading font-bold text-slate-900">
-                  Holen Sie sich Ihre Förderung
+                <h2 className="text-3xl font-heading font-extrabold text-slate-900 leading-tight">
+                  Staatliche Förderung für <br/>klimafreundliche Technologie.
                 </h2>
-                <p className="text-lg text-slate-700">
-                  Der Bund fördert den Umstieg auf klimafreundliche Heizsysteme massiv.
-                  Sichern Sie sich bis zu <strong>€ {SUBSIDIES.base.toLocaleString()} Basis-Förderung</strong> für Ihre Wärmepumpe
-                  und zusätzlich <strong>€ {SUBSIDIES.solar.toLocaleString()} Solar-Bonus</strong> bei gleichzeitiger Installation einer thermischen Solaranlage.
+                <p className="text-lg text-slate-600 leading-relaxed">
+                  Nutzen Sie die aktuelle Förderaktion "Kesseltausch". Chofu Wärmepumpen erfüllen alle technischen Voraussetzungen für die maximale Förderhöhe.
                 </p>
+                <div className="flex gap-8 pt-4">
+                  <div>
+                    <span className="block text-4xl font-heading font-bold text-slate-900">€{SUBSIDIES.base.toLocaleString()}</span>
+                    <span className="text-sm text-slate-500 uppercase tracking-wide font-medium">Basis-Förderung</span>
+                  </div>
+                  <div>
+                    <span className="block text-4xl font-heading font-bold text-slate-900">+€{SUBSIDIES.solar.toLocaleString()}</span>
+                    <span className="text-sm text-slate-500 uppercase tracking-wide font-medium">Solar-Bonus</span>
+                  </div>
+                </div>
              </div>
-             <div className="bg-white p-6 rounded-xl shadow-md border border-green-100 min-w-[300px]">
-                <ul className="space-y-3 text-sm">
-                  <li className="flex justify-between items-center pb-2 border-b border-slate-100">
-                    <span className="text-slate-600">Basis-Förderung WP:</span>
-                    <span className="font-bold text-green-700">€ {SUBSIDIES.base.toLocaleString()}</span>
-                  </li>
-                  <li className="flex justify-between items-center pb-2 border-b border-slate-100">
-                    <span className="text-slate-600">Solar-Bonus:</span>
-                    <span className="font-bold text-green-700">+ € {SUBSIDIES.solar.toLocaleString()}</span>
-                  </li>
-                  <li className="flex justify-between items-center pt-1">
-                    <span className="font-bold text-slate-900">Gesamt möglich:</span>
-                    <span className="font-bold text-primary text-lg">€ {(SUBSIDIES.base + SUBSIDIES.solar).toLocaleString()}</span>
-                  </li>
-                </ul>
+             
+             {/* Tech Badge */}
+             <div className="relative p-1 bg-gradient-to-br from-slate-100 to-slate-200 rounded-none border border-slate-200 w-full max-w-sm">
+                <div className="bg-white p-6 text-center space-y-4">
+                  <div className="w-16 h-16 bg-primary mx-auto flex items-center justify-center text-white">
+                    <Check size={32} strokeWidth={3} />
+                  </div>
+                  <h3 className="font-bold text-slate-900 text-lg uppercase tracking-wide">EHPA Gütesiegel</h3>
+                  <p className="text-sm text-slate-500">Unsere Anlagen sind zertifiziert und voll förderfähig in ganz Österreich.</p>
+                </div>
              </div>
           </div>
         </div>
       </section>
 
       {/* Packages Preview Section */}
-      <section className="py-24 bg-slate-50">
-        <div className="container mx-auto px-4">
+      <section className="py-24 bg-slate-50 relative">
+        <div className="absolute inset-0 bg-grid-pattern opacity-[0.03] pointer-events-none" />
+        <div className="container mx-auto px-4 relative z-10">
           <div className="text-center max-w-3xl mx-auto mb-16">
-            <h2 className="text-3xl md:text-4xl font-heading font-bold text-slate-900 mb-4">
-              Unsere Fixpreis-Pakete
+            <h2 className="text-3xl md:text-4xl font-heading font-extrabold text-slate-900 mb-4 uppercase tracking-tight">
+              Modelle & Ausstattung
             </h2>
             <p className="text-lg text-slate-600">
-              Keine versteckten Kosten. Wählen Sie das Paket, das zu Ihrem Haus passt. Inklusive Montage und Inbetriebnahme.
+              Wählen Sie die passende Leistungsklasse für Ihr Objekt.
             </p>
           </div>
 
           <div className="grid md:grid-cols-3 gap-8">
             {PACKAGES.map((pkg) => (
-              <Card key={pkg.id} className={`flex flex-col border-0 shadow-lg hover:shadow-xl transition-all duration-300 relative ${pkg.highlight ? 'ring-2 ring-primary scale-105 z-10' : 'bg-white'}`}>
+              <Card key={pkg.id} className={`flex flex-col border border-slate-200 shadow-sm hover:shadow-xl transition-all duration-300 relative rounded-none ${pkg.highlight ? 'ring-2 ring-primary z-10' : 'bg-white'}`}>
                 {pkg.highlight && (
-                  <div className="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-primary text-primary-foreground px-4 py-1 rounded-full text-sm font-bold shadow-md whitespace-nowrap">
-                    Beliebteste Wahl
+                  <div className="absolute top-0 right-0 bg-primary text-white px-3 py-1 text-xs font-bold uppercase tracking-widest">
+                    Empfehlung
                   </div>
                 )}
-                <CardHeader className={`${pkg.highlight ? 'bg-primary/5' : ''}`}>
-                  <CardTitle className="text-xl font-bold text-slate-900">{pkg.name}</CardTitle>
-                  <div className="mt-4">
-                    <span className="text-4xl font-heading font-bold text-slate-900">€ {pkg.price.toLocaleString()}</span>
-                    <span className="text-slate-500 ml-2">inkl. MwSt.</span>
+                <CardHeader className="bg-white border-b border-slate-100 pt-8 pb-6">
+                  <div className="mb-2 text-primary font-mono text-sm font-bold uppercase tracking-wider">Serie {pkg.kw}KW</div>
+                  <CardTitle className="text-2xl font-bold text-slate-900 uppercase tracking-tight">{pkg.name}</CardTitle>
+                  <div className="mt-6">
+                    <span className="text-4xl font-heading font-extrabold text-slate-900">€ {pkg.price.toLocaleString()}</span>
+                    <span className="text-slate-400 ml-2 text-sm font-medium">exkl. Förderung</span>
                   </div>
-                  <p className="text-sm text-green-600 font-medium mt-2">
-                    Ab € {(pkg.price - SUBSIDIES.base).toLocaleString()} mit Förderung*
-                  </p>
                 </CardHeader>
-                <CardContent className="flex-grow pt-6">
-                  <p className="text-slate-600 mb-6 text-sm">{pkg.description}</p>
-                  <ul className="space-y-3">
-                    {pkg.features.slice(0, 4).map((feat, i) => (
-                      <li key={i} className="flex items-start gap-2 text-sm text-slate-700">
-                        <Check className="text-primary flex-shrink-0 mt-0.5" size={16} />
+                <CardContent className="flex-grow pt-8 bg-slate-50/50">
+                  <ul className="space-y-4">
+                    {pkg.features.slice(0, 5).map((feat, i) => (
+                      <li key={i} className="flex items-start gap-3 text-sm text-slate-700 font-medium">
+                        <div className="w-1.5 h-1.5 bg-primary mt-2 flex-shrink-0" />
                         {feat}
                       </li>
                     ))}
                   </ul>
                 </CardContent>
-                <CardFooter className="pt-6 pb-8">
-                  <Button asChild variant={pkg.highlight ? "default" : "outline"} className="w-full">
+                <CardFooter className="pt-6 pb-8 bg-white border-t border-slate-100">
+                  <Button asChild variant={pkg.highlight ? "default" : "outline"} className={`w-full h-12 rounded-none font-bold uppercase tracking-wide ${pkg.highlight ? '' : 'border-slate-300 text-slate-700'}`}>
                     <Link href={`/pakete`}>
                       Details ansehen
                     </Link>
@@ -252,87 +265,72 @@ export default function Home() {
               </Card>
             ))}
           </div>
-
-          <div className="mt-12 text-center">
-            <Button asChild variant="link" className="text-slate-600 hover:text-primary mx-auto">
-              <Link href="/pakete" className="flex items-center gap-2">
-                Alle technischen Details vergleichen <ArrowRight size={16} />
-              </Link>
-            </Button>
-          </div>
         </div>
       </section>
 
-      {/* Partners Section */}
-      <section className="py-24 bg-white border-y border-slate-100">
+      {/* Partners Section (Redesigned) */}
+      <section className="py-24 bg-white border-t border-slate-200">
         <div className="container mx-auto px-4">
-          <div className="grid md:grid-cols-2 gap-16 items-center">
+          <div className="grid md:grid-cols-2 gap-16 items-start">
             <div>
-              <h2 className="text-3xl md:text-4xl font-heading font-bold text-slate-900 mb-6">
-                Regionale Installation. <br/>
-                <span className="text-primary">Österreichweit.</span>
+              <div className="flex items-center gap-3 text-primary font-bold uppercase tracking-wider text-sm mb-4">
+                <div className="h-px w-8 bg-primary"></div>
+                <span>Installation & Service</span>
+              </div>
+              <h2 className="text-3xl md:text-4xl font-heading font-extrabold text-slate-900 mb-6 leading-tight">
+                Zertifizierte <br/>Fachpartner.
               </h2>
               <p className="text-lg text-slate-600 mb-8 leading-relaxed">
-                Wir arbeiten ausschließlich mit geprüften Meisterbetrieben aus Ihrer Umgebung zusammen. 
-                Sie profitieren von unserem günstigen Einkaufsvorteil beim Material und der handwerklichen Qualität unserer Partner vor Ort.
+                Die Qualität der Installation ist entscheidend für die Effizienz der Anlage. Deshalb arbeiten wir nur mit geschulten Fachbetrieben, die unsere hohen Qualitätsstandards erfüllen.
               </p>
               
-              <div className="space-y-6">
-                <div className="flex gap-4 items-start">
-                  <div className="bg-primary/10 p-3 rounded-lg text-primary">
-                    <ShieldCheck size={24} />
-                  </div>
-                  <div>
-                    <h4 className="font-bold text-slate-900 mb-1">Geprüfte Qualität</h4>
-                    <p className="text-sm text-slate-600">Alle Partner durchlaufen unser strenges Auswahlverfahren.</p>
-                  </div>
+              <div className="grid grid-cols-2 gap-6">
+                <div className="p-4 border border-slate-200 bg-slate-50">
+                   <h4 className="font-bold text-slate-900 mb-2 uppercase text-sm">Meisterbetriebe</h4>
+                   <p className="text-sm text-slate-500">Ausgewählte Partner mit langjähriger Erfahrung.</p>
                 </div>
-                <div className="flex gap-4 items-start">
-                  <div className="bg-primary/10 p-3 rounded-lg text-primary">
-                    <Euro size={24} />
-                  </div>
-                  <div>
-                    <h4 className="font-bold text-slate-900 mb-1">Fixpreis-Garantie</h4>
-                    <p className="text-sm text-slate-600">Keine Nachträge, keine Überraschungen auf der Rechnung.</p>
-                  </div>
+                <div className="p-4 border border-slate-200 bg-slate-50">
+                   <h4 className="font-bold text-slate-900 mb-2 uppercase text-sm">Fixpreis</h4>
+                   <p className="text-sm text-slate-500">Garantierte Kosten für Material und Arbeit.</p>
                 </div>
               </div>
             </div>
 
-            <div className="bg-slate-50 p-8 rounded-2xl border border-slate-200 shadow-sm">
-              <h3 className="text-xl font-bold text-slate-900 mb-6">Unsere Partner in Ihrer Nähe</h3>
-              
-              <div className="space-y-4">
-                <div className="space-y-2">
-                  <Label>Bundesland wählen:</Label>
-                  <Select value={selectedBundesland} onValueChange={setSelectedBundesland}>
-                    <SelectTrigger className="bg-white">
-                      <SelectValue />
-                    </SelectTrigger>
-                    <SelectContent>
-                      {BUNDESLAENDER.map(b => (
-                        <SelectItem key={b} value={b}>{b}</SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
-                </div>
+            <div className="bg-slate-900 p-8 rounded-none text-white relative overflow-hidden">
+              <div className="relative z-10">
+                <h3 className="text-2xl font-bold mb-6 font-heading">Partner finden</h3>
+                <div className="space-y-6">
+                  <div className="space-y-2">
+                    <Label className="text-slate-400 text-xs uppercase font-bold">Bundesland</Label>
+                    <Select value={selectedBundesland} onValueChange={setSelectedBundesland}>
+                      <SelectTrigger className="bg-slate-800 border-slate-700 text-white h-12 rounded-none">
+                        <SelectValue />
+                      </SelectTrigger>
+                      <SelectContent className="bg-slate-800 border-slate-700 text-white rounded-none">
+                        {BUNDESLAENDER.map(b => (
+                          <SelectItem key={b} value={b} className="focus:bg-slate-700 focus:text-white">{b}</SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                  </div>
 
-                <div className="mt-6 space-y-3">
-                  {PARTNERS[selectedBundesland as keyof typeof PARTNERS]?.map((partner, i) => (
-                    <motion.div 
-                      key={partner.name}
-                      initial={{ opacity: 0, y: 10 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      transition={{ delay: i * 0.1 }}
-                      className="bg-white p-4 rounded-lg border border-slate-200 flex items-center justify-between"
-                    >
-                      <div>
-                        <p className="font-bold text-slate-900">{partner.name}</p>
-                        <p className="text-xs text-slate-500">{partner.desc}</p>
-                      </div>
-                      <div className="h-2 w-2 rounded-full bg-green-500" title="Verfügbar" />
-                    </motion.div>
-                  ))}
+                  <div className="space-y-3 pt-4">
+                    {PARTNERS[selectedBundesland as keyof typeof PARTNERS]?.map((partner, i) => (
+                      <motion.div 
+                        key={partner.name}
+                        initial={{ opacity: 0, x: -10 }}
+                        animate={{ opacity: 1, x: 0 }}
+                        transition={{ delay: i * 0.1 }}
+                        className="flex items-center justify-between p-4 bg-white/5 border border-white/10 hover:bg-white/10 transition-colors cursor-default"
+                      >
+                        <div>
+                          <p className="font-bold text-white text-sm">{partner.name}</p>
+                          <p className="text-xs text-slate-400">{partner.desc}</p>
+                        </div>
+                        <ArrowRight size={16} className="text-primary" />
+                      </motion.div>
+                    ))}
+                  </div>
                 </div>
               </div>
             </div>
@@ -341,17 +339,15 @@ export default function Home() {
       </section>
 
       {/* CTA Section */}
-      <section className="py-20 bg-primary text-white text-center">
-        <div className="container mx-auto px-4">
-          <h2 className="text-3xl md:text-4xl font-heading font-bold mb-6">
-            Bereit für die Zukunft?
+      <section className="py-20 bg-primary text-white relative overflow-hidden">
+        <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-20" />
+        <div className="container mx-auto px-4 text-center relative z-10">
+          <h2 className="text-3xl md:text-5xl font-heading font-extrabold mb-8 tracking-tight">
+            Starten Sie Ihr Projekt.
           </h2>
-          <p className="text-xl opacity-90 mb-8 max-w-2xl mx-auto">
-            Vereinbaren Sie jetzt Ihren kostenlosen Besichtigungstermin und erhalten Sie ein unverbindliches Angebot.
-          </p>
-          <Button asChild size="lg" variant="secondary" className="h-14 px-8 text-lg font-bold text-primary hover:bg-white">
+          <Button asChild size="lg" className="h-16 px-10 text-lg font-bold bg-white text-primary hover:bg-slate-100 rounded-none shadow-xl">
             <Link href="/kontakt">
-              Jetzt Termin vereinbaren
+              Kostenloses Erstgespräch vereinbaren
             </Link>
           </Button>
         </div>

@@ -37,21 +37,21 @@ export default function Layout({ children }: { children: React.ReactNode }) {
             <div className="bg-primary text-primary-foreground p-2 rounded-lg group-hover:scale-105 transition-transform">
               <Leaf size={24} strokeWidth={2.5} />
             </div>
-            <span className={`text-xl font-heading font-bold tracking-tight transition-colors ${isScrolled ? "text-slate-900" : "text-slate-900"}`}>
-              EcoHeat<span className="text-primary">Austria</span>
+            <span className={`text-xl font-heading font-extrabold tracking-tight transition-colors uppercase ${isScrolled ? "text-slate-900" : "text-slate-900"}`}>
+              EcoHeat<span className="text-primary">Austria</span> <span className="text-[10px] font-normal tracking-widest ml-1 text-slate-500 block -mt-1">POWERED BY CHOFU</span>
             </span>
           </Link>
 
           {/* Desktop Nav */}
           <nav className="hidden md:flex items-center gap-8">
             {navLinks.map((link) => (
-              <Link key={link.href} href={link.href} className={`text-sm font-medium transition-colors hover:text-primary ${
-                location === link.href ? "text-primary font-bold" : "text-slate-600"
+              <Link key={link.href} href={link.href} className={`text-sm font-bold uppercase tracking-wide transition-colors hover:text-primary ${
+                location === link.href ? "text-primary border-b-2 border-primary" : "text-slate-600"
               }`}>
                 {link.label}
               </Link>
             ))}
-            <Button className="shadow-lg hover:shadow-xl transition-all" asChild>
+            <Button className="shadow-none rounded-none font-bold uppercase tracking-wider" asChild>
               <Link href="/kontakt">
                 Termin vereinbaren
               </Link>
@@ -92,18 +92,18 @@ export default function Layout({ children }: { children: React.ReactNode }) {
       </main>
 
       {/* Footer */}
-      <footer className="bg-slate-900 text-slate-300 py-12 border-t border-slate-800">
-        <div className="container mx-auto px-4 grid md:grid-cols-4 gap-8">
+      <footer className="bg-slate-900 text-slate-300 py-16 border-t border-slate-800">
+        <div className="container mx-auto px-4 grid md:grid-cols-4 gap-12">
           <div className="col-span-1 md:col-span-2">
-            <div className="flex items-center gap-2 mb-4">
+            <div className="flex items-center gap-2 mb-6">
               <Leaf className="text-primary" />
-              <span className="text-xl font-heading font-bold text-white">
+              <span className="text-2xl font-heading font-extrabold text-white uppercase tracking-tight">
                 EcoHeat<span className="text-primary">Austria</span>
               </span>
             </div>
-            <p className="text-sm text-slate-400 max-w-sm mb-6">
-              Ihr Partner für den einfachen Umstieg auf Wärmepumpen in Österreich. 
-              Transparente Fixpreise, regionale Installation.
+            <p className="text-sm text-slate-400 max-w-sm mb-6 leading-relaxed">
+              Exklusiver Partner für Chofu Wärmepumpen-Systeme in Österreich. 
+              Wir verbinden japanische Ingenieurskunst mit regionaler Handwerksqualität.
             </p>
           </div>
           
