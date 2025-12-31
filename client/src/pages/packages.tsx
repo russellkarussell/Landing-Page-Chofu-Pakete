@@ -9,6 +9,7 @@ import { PackagesTrustRow } from "@/components/brand/PackagesTrustRow";
 import chofu4kw from "@assets/image_1767196454458.png";
 import chofu6kw from "@assets/image_1767196466560.png";
 import chofu10kw from "@assets/image_1767196476462.png";
+import { PackageContentsAccordion } from "@/components/packages/PackageContentsAccordion";
 
 export default function Packages() {
   const includeSolar = false;
@@ -134,19 +135,7 @@ export default function Packages() {
                     </div>
                   </div>
 
-                  <div>
-                    <h4 className="font-bold text-slate-900 mb-3">Im Paket enthalten:</h4>
-                    <ul className="space-y-3">
-                      {pkg.features.map((feat, i) => (
-                        <li key={i} className="flex items-start gap-3 text-sm text-slate-700">
-                          <div className="mt-0.5 rounded-full bg-green-100 p-0.5">
-                            <Check className="text-green-600 w-3 h-3" />
-                          </div>
-                          {feat}
-                        </li>
-                      ))}
-                    </ul>
-                  </div>
+                  <PackageContentsAccordion kw={pkg.kw} />
                 </CardContent>
 
                 <CardFooter className="pb-8 pt-4 bg-slate-50/50 border-t border-slate-100">

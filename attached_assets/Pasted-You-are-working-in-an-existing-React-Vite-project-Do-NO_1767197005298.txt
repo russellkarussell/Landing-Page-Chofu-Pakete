@@ -1,0 +1,180 @@
+You are working in an existing React (Vite) project.
+Do NOT refactor routing, pricing logic, calculators, HubSpot, or any other pages.
+Only add an accordion section (“Im Paket enthalten”) under each package card on the /pakete page, using the package-specific contents provided below.
+
+You may only touch:
+
+client/src/pages/packages.tsx
+
+(optional) create one presentational component under client/src/components/packages/ (e.g. PackageContentsAccordion.tsx)
+No other files.
+
+GOAL
+
+On /pakete, each package card (4kW / 6kW / 10kW) must include an expandable accordion:
+
+Title: “Im Paket enthalten”
+
+Default: collapsed
+
+Expanded: shows a clean, scannable list (with small icons)
+
+This must be package-specific, based on the content below.
+
+UI/UX Requirements
+
+Accordion button is keyboard accessible and uses aria-expanded + aria-controls
+
+Desktop and mobile: list remains readable (no long paragraphs)
+
+Use existing icon system (e.g. lucide-react) if present; otherwise minimal inline SVG icons
+
+Keep the package comparison clean: do not increase card height too much when collapsed
+
+PACKAGE CONTENT DATA (use exactly this)
+4kW EINSTEIGER-PAKET — “Im Paket enthalten”
+
+Use a bullet list like this:
+
+Wärmepumpe & Regelung
+
+CHOFU AEYC-0449ZU-CH1 – 4 kW R290 Monoblock-Wärmepumpe (Made in Japan, Inverter, bis 75 °C Vorlauf)
+
+CHOFU Steuerung CMR-4100M – Touchdisplay mit WLAN
+
+Hydraulik / Innenmodul
+
+HEIZKRAFT compact² Hydrobox (Systemtrennung + Sicherheitstechnik)
+
+1,6 m² Edelstahl-Plattenwärmetauscher (hydraulische Trennung)
+
+3 kW Heizstab (elektrische Zusatzheizung)
+
+3-Wege-Ventil (Danfoss) für Warmwasser-Umschaltung
+
+10 l Ausdehnungsgefäß (wärmepumpenseitig)
+
+Manometer, 2 Entlüfter, 3 bar Sicherheitsventil
+
+2 Umwälzpumpen (je 4,2 m³/h)
+
+Speicher & Systemschutz
+
+HEIZKRAFT WP1 300-GR – 300 l emaillierter Wärmepumpenspeicher (4 m² Wärmetauscherfläche)
+
+Fish S4 30 – 30 l Rücklaufspeicher (Taktschutz & Abtaureserve)
+
+IVAR Dirtstop 1″ Magnetfilter
+
+Verbindungskomponenten
+
+Solarleitung DN20 (2×) inkl. Verschraubungssatz
+
+Reduzierstück 1″ AG × 3/4″ IG
+
+Frostschutz-Konzentrat 10 l
+
+Dämpfungssockel 600×180×95 mm (2 Stk.) für Außeneinheit
+
+(Do not add pricing/SKUs, just the names and key specs.) 
+westech.shop
+
+6kW KOMFORT-PAKET (BESTSELLER) — “Im Paket enthalten”
+
+Same structure, but with the 6 kW unit:
+
+Wärmepumpe & Regelung
+
+CHOFU AEYC-0649ZU-CH1 – 6 kW R290 Monoblock-Wärmepumpe (Made in Japan, Inverter, bis 75 °C Vorlauf)
+
+CHOFU Steuerung CMR-4100M – Touchdisplay mit WLAN
+
+Hydraulik / Innenmodul
+
+HEIZKRAFT compact² Hydrobox (Systemtrennung + Sicherheitstechnik)
+
+1,6 m² Edelstahl-Plattenwärmetauscher (hydraulische Trennung)
+
+3 kW Heizstab integriert
+
+3-Wege-Ventil (Danfoss) Warmwasser-Umschaltung
+
+10 l Ausdehnungsgefäß, Manometer, 2 Entlüfter, 3 bar Sicherheitsventil
+
+2 Umwälzpumpen (je 4,2 m³/h)
+
+Speicher & Systemschutz
+
+HEIZKRAFT WP1 300-GR – 300 l emaillierter Wärmepumpenspeicher (4 m² Wärmetauscherfläche)
+
+Fish S4 30 – 30 l Rücklaufspeicher (Taktschutz & Abtaureserve)
+
+IVAR Dirtstop 1″ Magnetfilter
+
+Verbindungskomponenten
+
+Solarleitung DN20 (2×) inkl. Verschraubungssatz
+
+Reduzierstück 1″ AG × 3/4″ IG
+
+Frostschutz-Konzentrat 10 l
+
+Dämpfungssockel Set (2 Stk.) für Außeneinheit
+
+(Do not add pricing/SKUs.) 
+westech.shop
+
+10kW PERFORMANCE-PAKET — “Im Paket enthalten” (MOCKUP / TO BE CONFIRMED)
+
+Important: Mark this content in UI as “Mockup (wird final nach Projektcheck definiert)”.
+
+Use the same structure, but with a 10 kW unit placeholder:
+
+Wärmepumpe & Regelung
+
+CHOFU AEYC-1049ZU-CH1 – 10 kW R290 Monoblock-Wärmepumpe (Made in Japan, Inverter, bis 75 °C Vorlauf) (Mockup)
+
+CHOFU Steuerung CMR-4100M – Touchdisplay mit WLAN (Mockup)
+
+Hydraulik / Innenmodul
+
+HEIZKRAFT compact² Hydrobox (Systemtrennung + Sicherheitstechnik) (Mockup)
+(same key elements as 4/6 kW)
+
+Speicher & Systemschutz
+
+HEIZKRAFT WP1 300-GR – 300 l Wärmepumpenspeicher (4 m² WT) (Mockup)
+
+Fish S4 30 Rücklaufspeicher (Mockup)
+
+IVAR Dirtstop 1″ Magnetfilter (Mockup)
+
+Verbindungskomponenten
+
+Solarleitung DN20 (2×) inkl. Verschraubungssatz (Mockup)
+
+Reduzierstücke / Anschlussset passend zur Hydrobox (Mockup)
+
+Frostschutz-Konzentrat 10 l (Mockup)
+
+Dämpfungssockel Set für Außeneinheit (Mockup)
+
+Implementation notes
+
+Implement the accordion per card using a stable packageId (e.g. 4kw, 6kw, 10kw)
+
+Prefer a small reusable component PackageContentsAccordion
+
+Keep lists as arrays in code (easy to adjust later)
+
+No other layout changes besides adding the accordion
+
+Acceptance criteria
+
+Under each package card on /pakete, “Im Paket enthalten” exists and expands/collapses
+
+4kW and 6kW lists match the provided contents
+
+10kW list is clearly labeled “Mockup”
+
+No changes to pricing, calculator logic, CTAs, routing, or other pages
