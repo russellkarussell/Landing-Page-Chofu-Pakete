@@ -52,7 +52,7 @@ export default function Home() {
   const [isCalculating, setIsCalculating] = useState(false);
 
   // Mini Calculator State
-  const [calcData, setCalcData] = useState({ size: "140", type: "Altbau" });
+  const [calcData, setCalcData] = useState({ size: "140", type: "Saniert" });
   const [result, setResult] = useState<{
     low: string;
     high: string;
