@@ -1,0 +1,132 @@
+You are working in an existing React (Vite) project.
+Do NOT refactor the app. Do NOT change routing, calculators, HubSpot forms/chat, packages pages, or global styling.
+Only improve the CHOFU brandstory content and structure on the existing /chofu page.
+
+You may only touch:
+
+client/src/pages/chofu.tsx
+
+client/src/content/brand/chofu.de.json
+
+(optional) create one small helper component under
+client/src/components/brand/
+(only if needed for readability; prefer minimal changes)
+
+No other files may be modified.
+
+GOAL
+
+Make the /chofu page clearly answer, for end customers:
+
+Wer ist CHOFU? (Japanese manufacturer, founded 1954)
+
+Warum CHOFU? (Made in Japan, quality culture, precision, longevity)
+
+CHOFU in Europa / Proof: “> 5.000 Systeme in Betrieb” as provider statement (not an official factory claim)
+
+Österreichweiter Service: repairs, maintenance, spare parts warehouse as provider offering
+
+Tone must be: technical, calm, trustworthy, no exaggerated marketing.
+
+IMPLEMENTATION DETAILS
+1) Update content JSON (client/src/content/brand/chofu.de.json)
+
+Keep the JSON-based content approach. Improve and normalize wording.
+
+Required sections (ensure these exist, in this order):
+
+pageTitle (H1)
+
+pageIntro[] (2–3 short paragraphs max)
+
+sections[] with ids:
+
+who (Wer ist CHOFU?)
+
+why (Warum CHOFU?)
+
+technology (Technologie – neutral, avoid absolute claims if models vary)
+
+europe (CHOFU in Europa / Erfahrung im Feldbetrieb)
+
+service (Service & Ersatzteile in Österreich)
+
+Europe proof (critical wording rule):
+Any “> 5.000” statement must be phrased as provider-managed installed base, e.g.:
+
+“Als Anbieter/Partner betreuen wir über 5.000 installierte Systeme im Feldbetrieb.”
+Do NOT phrase it as: “CHOFU hat …”.
+
+Service wording (critical wording rule):
+Service, repairs, maintenance, spare parts warehouse must be stated as provider offering:
+
+“Österreichweiter Service durch unser Team/Partnernetz …”
+Not as: “CHOFU bietet …”.
+
+Optional: Add FAQ content
+Add a faq[] array with 4–6 Q/A items:
+
+“Wo werden CHOFU Geräte gefertigt?”
+
+“Was bedeutet ‘Made in Japan’ konkret?”
+
+“Wie läuft ein Servicefall in Österreich ab?”
+
+“Gibt es Ersatzteile in Österreich?”
+
+“Wer ist Vertragspartner für die Montage?”
+
+“Wie geht es nach dem Besichtigungstermin weiter?”
+
+Keep answers short (2–4 sentences each).
+
+2) Update /chofu page (client/src/pages/chofu.tsx)
+
+Keep existing layout as much as possible. Adjust only where needed to match the new JSON structure.
+
+Requirements:
+
+Exactly one H1 (use pageTitle)
+
+Render pageIntro directly under H1
+
+Render sections[] in order with H2 titles + paragraphs
+
+If FAQ exists in JSON:
+
+Render as an accordion-like list or simple expandable blocks
+
+If no accordion component exists, implement a minimal one locally on this page (no global refactor)
+
+CTA block at end (required):
+At the bottom add a calm CTA card:
+
+Title: “Kostenlosen Besichtigungstermin vereinbaren”
+
+1–2 lines explanation
+
+Button linking to the existing appointment/contact route used elsewhere (reuse existing link patterns)
+
+STYLE & UX
+
+Use existing typography and spacing classes already used on other pages
+
+Keep paragraphs short, break up long text
+
+Avoid buzzwords and superlatives
+
+Ensure mobile readability (line length, spacing)
+
+ACCEPTANCE CRITERIA
+
+/chofu clearly answers: who / why / europe proof / service
+
+“> 5.000” and “Service/Ersatzteile” are framed as provider claims, not factory claims
+
+Content is sourced from chofu.de.json (no hardcoded long texts)
+
+FAQ is present if added to JSON
+
+Bottom CTA exists and works
+
+No other pages or logic changed
