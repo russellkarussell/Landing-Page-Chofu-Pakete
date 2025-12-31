@@ -1,0 +1,138 @@
+You are working in an existing React (Vite) project.
+Do NOT refactor the app. Do NOT change routing, calculators, forms, or package logic.
+Only implement a CHOFU brandstory teaser section on the homepage.
+
+You may only touch:
+
+client/src/pages/home.tsx
+
+client/src/content/brand/chofu.de.json
+
+(optional) create one new component under
+client/src/components/brand/
+
+No other files may be modified.
+
+GOAL
+
+End customers do not know the CHOFU brand.
+Add a trust-building CHOFU brand teaser section to the homepage that:
+
+explains CHOFU briefly (Japan, quality, experience)
+
+builds confidence before package selection
+
+links to the existing /chofu page
+
+supports conversion (CTA to free on-site inspection)
+
+IMPLEMENTATION DETAILS
+1) Homepage (client/src/pages/home.tsx)
+
+Add a new section without removing any existing sections.
+
+Placement (important):
+
+Insert the section either:
+
+directly after the Hero, or
+
+after the package overview
+
+Choose the position that best fits the current layout.
+
+Section structure:
+
+H2 headline
+Example (exact wording optional):
+CHOFU – Wärmepumpentechnik aus Japan
+
+Intro text (2–3 short paragraphs)
+Content intent:
+
+CHOFU is a Japanese manufacturer (founded 1954)
+
+Made in Japan quality & engineering culture
+
+Reliable, long-lasting heat pump technology
+
+Benefit grid (4–6 items)
+Each benefit = icon + short text, e.g.:
+
+Manufacturer experience since 1954
+
+Made in Japan manufacturing
+
+Proven system technology
+
+5,000 systems in operation (provider statement)
+
+Austria-wide service & maintenance
+
+Spare parts availability in Austria
+
+CTAs (two buttons)
+
+Primary: Kostenlosen Besichtigungstermin vereinbaren
+
+Secondary: Mehr über CHOFU → link to /chofu
+
+2) Content source (client/src/content/brand/chofu.de.json)
+
+Do NOT hardcode text in JSX.
+
+Extend the existing JSON with a homepage section, e.g.:
+
+homepageTitle
+
+homepageIntro[]
+
+homepageBenefits[]
+
+homepageCtaPrimary
+
+homepageCtaSecondary
+
+The statement
+“> 5.000 installierte Systeme”
+must be phrased clearly as provider experience, not as an official CHOFU factory claim.
+
+3) Optional reusable component
+
+If the homepage file becomes too large, create one new component:
+
+client/src/components/brand/ChofuHomepageTeaser.tsx
+
+Requirements:
+
+Receives content via props
+
+No business logic
+
+Clean, simple layout
+
+Responsive
+
+DESIGN & TONE
+
+Technical, calm, trustworthy
+
+No marketing exaggeration
+
+Short paragraphs, good readability
+
+Fits existing design system (spacing, fonts, colors)
+
+ACCEPTANCE CRITERIA
+
+Homepage displays a visible CHOFU brand teaser section
+
+Content is loaded from chofu.de.json
+
+Two CTAs are present and working
+
+Link to /chofu works
+
+No other page or logic is changed
+
+Implement this step only.

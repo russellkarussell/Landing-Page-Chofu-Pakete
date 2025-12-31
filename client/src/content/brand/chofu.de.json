@@ -86,5 +86,40 @@
       "question": "Für welche Gebäude eignen sich die Systeme?",
       "answer": "Dank moderner R32 und R290 Technologie eignen sich CHOFU Wärmepumpen sowohl für den energieeffizienten Neubau als auch für die Sanierung von Bestandsgebäuden mit Heizkörpern."
     }
-  ]
+  ],
+  "homepage": {
+    "title": "CHOFU – Wärmepumpentechnik aus Japan",
+    "intro": [
+      "CHOFU wurde 1954 in Japan gegründet und steht für Ingenieurskunst auf höchstem Niveau. Als Spezialist für langlebige Haustechnik entwickelt CHOFU Wärmepumpen, die auch unter extremen Bedingungen zuverlässig arbeiten.",
+      "Entscheiden Sie sich für bewährte Qualität: Systeme von CHOFU sind weltweit im Einsatz und zeichnen sich durch robuste Bauweise, flüsterleisen Betrieb und höchste Effizienz aus."
+    ],
+    "benefits": [
+      {
+        "icon": "Award",
+        "text": "Hersteller-Erfahrung seit 1954"
+      },
+      {
+        "icon": "Globe",
+        "text": "Made in Japan Fertigung"
+      },
+      {
+        "icon": "Zap",
+        "text": "Bewährte Systemtechnik"
+      },
+      {
+        "icon": "CheckCircle",
+        "text": "> 5.000 installierte Systeme (Partner-Erfahrung)"
+      },
+      {
+        "icon": "Wrench",
+        "text": "Österreichweiter Service & Wartung"
+      },
+      {
+        "icon": "Package",
+        "text": "Ersatzteilverfügbarkeit in Österreich"
+      }
+    ],
+    "ctaPrimary": "Kostenlosen Besichtigungstermin vereinbaren",
+    "ctaSecondary": "Mehr über CHOFU"
+  }
 }

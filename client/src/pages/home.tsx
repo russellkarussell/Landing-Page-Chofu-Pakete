@@ -12,7 +12,7 @@ import { BUNDESLAENDER, PACKAGES, PARTNERS, SUBSIDIES } from "@/lib/constants";
 import heroImage from "@assets/generated_images/modern_austrian_house_with_heat_pump.png";
 import { motion } from "framer-motion";
 import ehpaLabel from "@assets/image_1767188918778.png";
-import { BrandSection } from "@/components/brand-modules";
+import { ChofuHomepageTeaser } from "@/components/brand/ChofuHomepageTeaser";
 
 export default function Home() {
   const [selectedBundesland, setSelectedBundesland] = useState<string>("Wien");
@@ -176,7 +176,7 @@ export default function Home() {
         </div>
       </section>
       {/* Brand Section (New) */}
-      <BrandSection />
+      <ChofuHomepageTeaser />
       {/* Subsidy Info Section */}
       <section className="py-16 bg-white border-b border-slate-100">
         <div className="container mx-auto px-4">
