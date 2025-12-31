@@ -180,12 +180,13 @@ export default function Product6kW() {
               </h2>
               <div className="space-y-4">
                 {[
-                  "WLAN (2.4 GHz) & Onlinezugriff über Comfy Connect CHOFU",
-                  "Heiz-/Kühlbetrieb, Umschaltung je nach Konfiguration",
-                  "Zeitprogramme für Heizen/Kühlen und Warmwasser",
-                  "Heizkurve / witterungsgeführter Betrieb für hohe Effizienz",
-                  "Low-Tarif / Nachtmodus zeitgesteuert einstellbar",
-                  "Umfassende Frostschutz- und Sicherheitsfunktionen"
+                  "Touch-Controller CMR-4100M",
+                  "WLAN-fähig (2,4 GHz) & Online-Zugriff über CHOFU Comfy Connect",
+                  "Heiz- und Kühlbetrieb",
+                  "Zeitprogramme (Heizen / Kühlen / Warmwasser)",
+                  "Witterungsgeführte Regelung (Heizkurve)",
+                  "Nachtmodus & Niedertarif-Zeitfenster",
+                  "Integrierte Frostschutz- und Sicherheitsfunktionen"
                 ].map((item, i) => (
                   <div key={i} className="flex items-start gap-3">
                     <div className="mt-1 bg-green-100 text-green-600 rounded-full p-1">
@@ -221,20 +222,28 @@ export default function Product6kW() {
             <div className="overflow-x-auto">
               <table className="w-full text-sm text-left">
                 <tbody className="divide-y divide-slate-100">
-                  <TableRow label="Typ" value="Heating & Cooling Monoblock, DC Inverter (Reverse cycle)" />
-                  <TableRow label="Netzspannung" value="1~ 230V 50Hz" />
-                  <TableRow label="Heizleistung A7/W35" value="6.0 kW" />
-                  <TableRow label="Leistungsaufnahme A7/W35" value="TBD" />
-                  <TableRow label="COP A7/W35" value="TBD" highlight />
-                  <TableRow label="Kühlleistung A35/W18" value="TBD" />
-                  <TableRow label="Leistungsaufnahme A35/W18" value="TBD" />
-                  <TableRow label="EER A35/W18" value="TBD" highlight />
-                  <TableRow label="Kältemittel" value="R290 (Propan), Füllmenge: TBD" />
-                  <TableRow label="Abmessungen (H×B×T)" value="TBD" />
-                  <TableRow label="Gewicht" value="TBD" />
-                  <TableRow label="Temperaturbereich (Außenluft)" value="Heizen TBD; Kühlen TBD" />
-                  <TableRow label="Eintritt Wassertemperatur" value="TBD (laut Herstellermanual)" />
-                  <TableRow label="Wasseranschlüsse" value="TBD" />
+                  <TableRow label="Modell" value="CHOFU AEYC-0649ZU-CH1" />
+                  <TableRow label="Typ" value="Luft/Wasser Wärmepumpe, Monoblock, DC-Inverter" />
+                  <TableRow label="Kältemittel" value="R290 (Propan), GWP ≈ 3" />
+                  <TableRow label="Netzanschluss" value="230 V / 50 Hz / 1-phasig" />
+                  <TableRow label="Heizleistung A7/W35" value="6,0 kW" />
+                  <TableRow label="Heizleistung A-7/W55" value="6,77 kW" />
+                  <TableRow label="Max. Heizleistung A-7/W35" value="7,25 kW" />
+                  <TableRow label="COP A7/W35" value="4,88" highlight />
+                  <TableRow label="SCOP (35 °C)" value="4,46" />
+                  <TableRow label="SCOP (55 °C)" value="3,43" />
+                  <TableRow label="Maximale Vorlauftemperatur" value="75 °C" />
+                  <TableRow label="Betriebsbereich Heizen (Außenluft)" value="-20 °C bis +45 °C" />
+                  <TableRow label="Kühlleistung A35/W18" value="6,0 kW" />
+                  <TableRow label="EER A35/W18" value="4,44" highlight />
+                  <TableRow label="Betriebsbereich Kühlen (Außenluft)" value="+15 °C bis +45 °C" />
+                  <TableRow label="Schalldruckpegel Nachtmodus (5 m)" value="33 dB(A)" />
+                  <TableRow label="Wasseranschlüsse" value="R 3/4&quot; (20A)" />
+                  <TableRow label="Zulässiger Wassereintritt" value="18 °C – 65 °C" />
+                  <TableRow label="Abmessungen (H × B × T)" value="886 × 1000 × 330 mm" />
+                  <TableRow label="Gewicht netto" value="82 kg" />
+                  <TableRow label="Stellfläche" value="0,33 m²" />
+                  <TableRow label="Energieeffizienzklasse" value="A+++ (35 °C) / A++ (55 °C)" highlight />
                 </tbody>
               </table>
             </div>

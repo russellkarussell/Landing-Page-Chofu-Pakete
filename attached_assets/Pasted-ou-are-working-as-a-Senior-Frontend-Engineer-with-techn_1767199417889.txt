@@ -1,0 +1,120 @@
+ou are working as a Senior Frontend Engineer with technical HVAC background.
+
+WICHTIG – SCOPE:
+⚠️ DO NOT create a new page.
+⚠️ DO NOT change routing, layout, styling, components, images, CTAs or navigation.
+👉 ONLY update the existing 6 kW product page content by replacing all TBD placeholders with real technical values.
+
+The page already exists and contains correct structure and sections.
+Your task is a content correction only.
+
+🎯 Ziel
+
+Remove all TBD, placeholder or empty technical values
+
+Replace them with verified manufacturer data for
+CHOFU AEYC-0649ZU-CH1 (6 kW, R290)
+
+Keep wording professional, technical, and consistent with the 4 kW product page
+
+🔧 TECHNISCHE DATEN – DIESE WERTE MÜSSEN EINGESETZT WERDEN
+Allgemein
+
+Modell: CHOFU AEYC-0649ZU-CH1
+
+Typ: Luft/Wasser Wärmepumpe, Monoblock, DC-Inverter
+
+Kältemittel: R290 (Propan), GWP ≈ 3
+
+Netzanschluss: 230 V / 50 Hz / 1-phasig
+
+Heizbetrieb
+
+Heizleistung A7/W35: 6,0 kW
+
+Heizleistung A-7/W55: 6,77 kW
+
+Max. Heizleistung A-7/W35: 7,25 kW
+
+COP A7/W35: 4,88
+
+SCOP (35 °C): 4,46
+
+SCOP (55 °C): 3,43
+
+Maximale Vorlauftemperatur: 75 °C
+
+Betriebsbereich Heizen (Außenluft): -20 °C bis +45 °C
+
+Kühlbetrieb
+
+Kühlleistung A35/W18: 6,0 kW
+
+EER: 4,44
+
+Betriebsbereich Kühlen (Außenluft): +15 °C bis +45 °C
+
+Schall & Komfort
+
+Schalldruckpegel Nachtmodus (5 m): 33 dB(A)
+
+Hydraulik
+
+Wasseranschlüsse: R 3/4" (20A)
+
+Zulässiger Wassereintritt: 18 °C – 65 °C
+
+Abmessungen & Gewicht
+
+Abmessungen (H × B × T): 886 × 1000 × 330 mm
+
+Gewicht netto: 82 kg
+
+Stellfläche: 0,33 m²
+
+Energieeffizienz
+
+Energieeffizienzklasse:
+
+A+++ (35 °C)
+
+A++ (55 °C)
+
+🧠 Steuerung / CMR-4100M – FALLS DORT NOCH TBD STEHT
+
+Ersetze ggf. Platzhalter durch:
+
+Touch-Controller CMR-4100M
+
+WLAN-fähig (2,4 GHz)
+
+Online-Zugriff über CHOFU Comfy Connect
+
+Heiz- und Kühlbetrieb
+
+Zeitprogramme (Heizen / Kühlen / Warmwasser)
+
+Witterungsgeführte Regelung (Heizkurve)
+
+Nachtmodus & Niedertarif-Zeitfenster
+
+Integrierte Frostschutz- und Sicherheitsfunktionen
+
+✅ AKZEPTANZKRITERIEN
+
+❌ Kein einziges TBD bleibt auf der Seite
+
+✅ Alle technischen Tabellen enthalten reale Werte
+
+✅ Texte bleiben sachlich & konsistent mit der 4 kW-Produktseite
+
+❌ Kein UI- oder Layout-Umbau
+
+❌ Keine neue Seite, keine neue Route
+
+🔍 ZUSATZ (optional, nur wenn trivial)
+
+Wenn du beim Ersetzen siehst, dass:
+
+Ein Wert doppelt oder widersprüchlich dargestellt ist
+→ korrigiere konsistent, aber nicht kreativ erweitern.
