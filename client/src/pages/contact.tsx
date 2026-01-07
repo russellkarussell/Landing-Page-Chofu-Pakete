@@ -106,7 +106,7 @@ Bitte um Beratung zu diesem Objekt.`;
             </Card>
 
             <div className="bg-primary/5 rounded-xl p-8 border border-primary/10">
-              <h3 className="font-heading font-bold text-xl mb-4 text-slate-900">Warum EcoHeat Austria?</h3>
+              <h3 className="font-heading font-bold text-xl mb-4 text-slate-900">Warum meine-waermepumpe.at?</h3>
               <ul className="space-y-3">
                 {[
                   "Geprüfte regionale Partnerbetriebe",

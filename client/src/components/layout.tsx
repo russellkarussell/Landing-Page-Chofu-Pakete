@@ -6,7 +6,7 @@ import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import headerLogo from "@assets/Heizkraft_Banner_1767187239440.png";
 
-import Heizkraft_Banner_ohne_BG from "@assets/Heizkraft Banner ohne BG.png";
+import meineWaermepumpeLogo from "@assets/meine-waermepumpe.at-logo-banner-transparent_1767782595991.png";
 
 export default function Layout({ children }: { children: React.ReactNode }) {
   const [location] = useLocation();
@@ -40,8 +40,8 @@ export default function Layout({ children }: { children: React.ReactNode }) {
           <Link href="/" className="flex flex-col items-start gap-0 group">
             <div className="h-10 w-auto">
               <img 
-                src={Heizkraft_Banner_ohne_BG} 
-                alt="Heizkraft" 
+                src={meineWaermepumpeLogo} 
+                alt="meine-waermepumpe.at" 
                 className="h-full w-auto object-contain"
               />
             </div>
@@ -104,7 +104,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
             <div className="flex items-center gap-2 mb-6">
               <Leaf className="text-primary" />
               <span className="text-2xl font-heading font-extrabold text-white uppercase tracking-tight">
-                EcoHeat<span className="text-primary">Austria</span>
+                meine-waermepumpe<span className="text-primary">.at</span>
               </span>
             </div>
             <p className="text-sm text-slate-400 max-w-sm mb-6 leading-relaxed">
@@ -133,7 +133,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
           </div>
         </div>
         <div className="container mx-auto px-4 mt-12 pt-8 border-t border-slate-800 text-center text-xs text-slate-500">
-          © {new Date().getFullYear()} EcoHeat Austria. Alle Rechte vorbehalten.
+          © {new Date().getFullYear()} meine-waermepumpe.at. Alle Rechte vorbehalten.
         </div>
       </footer>
     </div>
