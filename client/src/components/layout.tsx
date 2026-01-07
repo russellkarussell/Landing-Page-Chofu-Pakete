@@ -101,11 +101,12 @@ export default function Layout({ children }: { children: React.ReactNode }) {
       <footer className="bg-slate-900 text-slate-300 py-16 border-t border-slate-800">
         <div className="container mx-auto px-4 grid md:grid-cols-4 gap-12">
           <div className="col-span-1 md:col-span-2">
-            <div className="flex items-center gap-2 mb-6">
-              <Leaf className="text-primary" />
-              <span className="text-2xl font-heading font-extrabold text-white uppercase tracking-tight">
-                meine-waermepumpe<span className="text-primary">.at</span>
-              </span>
+            <div className="mb-6">
+              <img 
+                src={meineWaermepumpeLogo} 
+                alt="meine-waermepumpe.at" 
+                className="h-12 w-auto object-contain bg-white/90 p-2 rounded-lg"
+              />
             </div>
             <p className="text-sm text-slate-400 max-w-sm mb-6 leading-relaxed">
               Exklusiver Partner für Chofu Wärmepumpen-Systeme in Österreich. 
