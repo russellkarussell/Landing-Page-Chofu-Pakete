@@ -21,7 +21,6 @@ export default function Layout({ children }: { children: React.ReactNode }) {
   }, []);
 
   const navLinks = [
-    { href: "/", label: "Startseite", icon: Home },
     { href: "/pakete", label: "Pakete", icon: Package },
     { href: "/waermepumpen", label: "Wärmepumpen", icon: LayoutGrid },
     { href: "/rechner", label: "Heizkostenrechner", icon: Calculator },
