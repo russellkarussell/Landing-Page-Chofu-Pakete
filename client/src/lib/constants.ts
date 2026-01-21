@@ -17,11 +17,26 @@ export const SUBSIDIES = {
   maxPercentage: 0.30 // Max 30% of costs
 };
 
+// Helper Functions for Pricing
+export function formatEUR(amount: number): string {
+  return `€ ${amount.toLocaleString('de-DE', { minimumFractionDigits: 0, maximumFractionDigits: 0 })}`;
+}
+
+export function getSubsidy(price: number, includeSolar: boolean = false): number {
+  const funding = SUBSIDIES.base + (includeSolar ? SUBSIDIES.solar : 0);
+  const cap = price * SUBSIDIES.maxPercentage;
+  return Math.min(funding, cap);
+}
+
+export function getNetPrice(basePrice: number, subsidy: number): number {
+  return Math.max(0, basePrice - subsidy);
+}
+
 export const PACKAGES = [
   {
     id: "4kw",
     name: "4kW Einsteiger-Paket",
-    price: 20000,
+    price: 18290,
     kw: 4,
     description: "Perfekt für effiziente Neubauten und kleine Einfamilienhäuser.",
     details: "Chofu 4kW R290 Wärmepumpen-Komplettpaket.",
@@ -37,7 +52,7 @@ export const PACKAGES = [
   {
     id: "6kw",
     name: "6kW Komfort-Paket",
-    price: 22000,
+    price: 18990,
     kw: 6,
     description: "Der Allrounder für durchschnittliche Einfamilienhäuser.",
     details: "Chofu 6kW R290 Wärmepumpen-Komplettpaket.",
@@ -54,7 +69,7 @@ export const PACKAGES = [
   {
     id: "10kw",
     name: "10kW Performance-Paket",
-    price: 23000,
+    price: 20490,
     kw: 10,
     description: "Maximale Leistung für größere Gebäude oder Bestandsbauten.",
     details: "Leistungsstarkes 10kW Wärmepumpen-System (Mockup).",

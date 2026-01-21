@@ -1,0 +1,61 @@
+AUFGABE: Bestehendes Projekt bearbeiten (kein Neubau, keine neuen Seiten). 
+Ziel: Paketpreise + Förderlogik aktualisieren und konsistent auf der Hauptseite (/) UND auf /pakete anzeigen.
+
+WICHTIG
+- Arbeite im bestehenden Code: vorhandene Komponenten/Pages/Routes anpassen.
+- KEINE "TBD" Werte mehr. Alle Preise fix setzen wie unten.
+- Design beibehalten (Button/Typo/Spacing), nur Inhalte/Logik ändern.
+- Alle Stellen finden, wo Paketpreise, Förderhinweise oder Preis-UI gerendert werden (Startseite + /pakete + ggf. Card-Komponenten).
+
+PREISE (AB-PREIS BRUTTO)
+- 4kW Paket: 18.290 €
+- 6kW Paket: 18.990 €
+- 10kW Paket: 20.490 €
+
+FÖRDERLOGIK (Anzeige)
+1) Es soll weiterhin ein "ab Preis" sein, aber zusätzlich:
+   - "ab € XX.XXX" (Paketpreis)
+   - darunter: "abzgl. Förderung: − € Y.YYY" (Förderbetrag dynamisch)
+   - darunter: "Endpreis ab: € Z.ZZZ" (Paketpreis minus Förderung)
+2) Förderbetrag soll zentral berechnet werden und auf beiden Seiten identisch sein.
+3) Wenn die Seite bereits eine Förder-Option hat (Dropdown/Toggle/Slider/Status), benutze diese bestehende Logik.
+   - Falls es bisher nur statische Texte gab: implementiere eine einfache Standard-Förderung mit einem Default-Wert,
+     aber so, dass später leicht erweitert werden kann.
+
+FÖRDERWERTE (falls keine bestehende Logik vorhanden ist)
+- Default-Förderung pro Paket: 7.500 € (als Platzhalter NUR falls bisher gar keine Förderlogik existiert)
+- Wenn bereits eine Förderlogik existiert: NICHT überschreiben, sondern an den Stellen korrekt verwenden.
+
+DARSTELLUNG (UI)
+- Währungsformat: österreichisch/deutsch: "€ 18.290" bzw. "18.290 €" je nachdem was im Projekt bereits verwendet wird.
+- Tausenderpunkt, keine Dezimalstellen.
+- "ab" als Prefix bei Paketpreis und Endpreis.
+- Förderung immer als negativer Betrag mit Minuszeichen.
+
+UMSETZUNGSSCHRITTE
+1) Suche nach Datenquelle für Pakete (z.B. packages array, pricing config, constants, JSON, CMS mock).
+2) Lege eine zentrale Struktur an (falls noch nicht vorhanden):
+   - packages = [{ id, name, kw, basePrice }]
+   mit basePrice in Euro als Number: 18290, 18990, 20490
+3) Lege zentrale Helper-Funktionen an:
+   - formatEUR(amount:number) => string
+   - getSubsidy(packageId or kw, state?) => number (nutze bestehende Förderlogik falls vorhanden)
+   - getNetPrice(basePrice, subsidy) => number (min. 0)
+4) Aktualisiere Komponenten:
+   - Startseite: alle Paket-Cards/Sections, wo Preise stehen → neues Layout: basePrice + subsidy + netPrice
+   - /pakete: gleiche Darstellung und gleiche Berechnung (keine Duplikate; möglichst dieselbe Card-Komponente wiederverwenden)
+5) Stelle sicher, dass keine alten Preise mehr irgendwo angezeigt werden (Suche im Repo nach "20000", "22000", "23000", "TBD", "€ 20 000" etc.).
+6) Teste: Startseite + /pakete müssen identische Werte anzeigen, wenn gleiche Förder-Option gewählt ist.
+
+AKZEPTANZKRITERIEN
+- Auf / und /pakete stehen die drei Pakete mit exakt diesen Basispreisen:
+  4kW 18.290 €, 6kW 18.990 €, 10kW 20.490 €
+- Unter jedem Paketpreis steht:
+  "abzgl. Förderung: − € ...."
+  "Endpreis ab: € ...."
+- Endpreis = Basispreis − Förderung (dynamisch/identisch je nach bestehender Förderlogik)
+- Kein "TBD" im UI.
+
+LIEFERUMFANG
+- Commit/Update des bestehenden Projekts mit den Änderungen.
+- Kurze Notiz: wo im Code die zentrale Preis-/Förderlogik liegt (Dateipfade nennen).

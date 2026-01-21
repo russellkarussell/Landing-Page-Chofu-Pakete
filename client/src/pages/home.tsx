@@ -9,7 +9,7 @@ import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Check, ArrowRight, Zap, ShieldCheck, Euro, Coins, Info, Home as HomeIcon, Building, Loader2, Calculator } from "lucide-react";
-import { BUNDESLAENDER, PACKAGES, PARTNERS, SUBSIDIES } from "@/lib/constants";
+import { BUNDESLAENDER, PACKAGES, PARTNERS, SUBSIDIES, formatEUR, getSubsidy, getNetPrice } from "@/lib/constants";
 import heroImage from "@assets/R290_Premium_Black_Closeup_image_(2)_1768489993632.jpg";
 import { motion } from "framer-motion";
 import ehpaLabel from "@assets/image_1767188918778.png";
@@ -441,7 +441,11 @@ export default function Home() {
           </div>
 
           <div className="grid md:grid-cols-3 gap-8">
-            {PACKAGES.map((pkg) => (
+            {PACKAGES.map((pkg) => {
+               const subsidy = getSubsidy(pkg.price);
+               const netPrice = getNetPrice(pkg.price, subsidy);
+               
+               return (
               <Card key={pkg.id} className={`flex flex-col border border-slate-200 shadow-sm hover:shadow-xl transition-all duration-300 relative rounded-none ${pkg.highlight ? 'ring-2 ring-primary z-10' : 'bg-white'}`}>
                 {pkg.highlight && (
                   <div className="absolute top-0 right-0 bg-primary text-white px-3 py-1 text-xs font-bold uppercase tracking-widest">
@@ -451,9 +455,18 @@ export default function Home() {
                 <CardHeader className="bg-white border-b border-slate-100 pt-8 pb-6">
                   <div className="mb-2 text-primary font-mono text-sm font-bold uppercase tracking-wider">Serie {pkg.kw}KW</div>
                   <CardTitle className="text-2xl font-bold text-slate-900 uppercase tracking-tight">{pkg.name}</CardTitle>
-                  <div className="mt-6">
-                    <span className="text-4xl font-heading font-extrabold text-slate-900">€ {pkg.price.toLocaleString()}</span>
-                    <span className="text-slate-400 ml-2 text-sm font-medium">exkl. Förderung</span>
+                  <div className="mt-6 flex flex-col gap-1">
+                    <div className="flex items-baseline gap-2">
+                       <span className="text-sm text-slate-500 font-medium uppercase">ab</span>
+                       <span className="text-2xl font-bold text-slate-700">{formatEUR(pkg.price)}</span>
+                    </div>
+                    <div className="text-sm text-green-600 font-bold">
+                       abzgl. Förderung: − {formatEUR(subsidy)}
+                    </div>
+                    <div className="flex items-baseline gap-2 mt-2 pt-2 border-t border-slate-100">
+                        <span className="text-sm text-slate-500 font-bold uppercase">Endpreis ab:</span>
+                        <span className="text-4xl font-heading font-extrabold text-primary">{formatEUR(netPrice)}</span>
+                    </div>
                   </div>
                 </CardHeader>
                 <CardContent className="flex-grow pt-8 bg-slate-50/50">
@@ -474,7 +487,7 @@ export default function Home() {
                   </Button>
                 </CardFooter>
               </Card>
-            ))}
+            )})}
           </div>
         </div>
       </section>

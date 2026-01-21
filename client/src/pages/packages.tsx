@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardFooter } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Check, X, ArrowRight, Ruler, Download, Info } from "lucide-react";
-import { PACKAGES, SUBSIDIES } from "@/lib/constants";
+import { PACKAGES, SUBSIDIES, formatEUR, getSubsidy, getNetPrice } from "@/lib/constants";
 import { PackagesTrustRow } from "@/components/brand/PackagesTrustRow";
 import chofu4kw from "@assets/image_1767196454458.png";
 import chofu6kw from "@assets/image_1767196466560.png";
@@ -71,13 +71,13 @@ export default function Packages() {
         {/* Packages Grid */}
         <div className="grid lg:grid-cols-3 gap-8 mb-12">
           {PACKAGES.map((pkg) => {
-            const funding = SUBSIDIES.base + (includeSolar ? SUBSIDIES.solar : 0);
+            const subsidy = getSubsidy(pkg.price, includeSolar);
+            const netPrice = getNetPrice(pkg.price, subsidy);
+            // Check if capped for UI message (subsidy is returned as min(funding, cap))
+            const fundingPotential = SUBSIDIES.base + (includeSolar ? SUBSIDIES.solar : 0);
             const cap = pkg.price * SUBSIDIES.maxPercentage;
-            const fundingAmount = Math.min(funding, cap);
-            const isCapped = fundingAmount === cap;
+            const isCapped = subsidy === cap && cap < fundingPotential;
             
-            const effectivePrice = pkg.price - fundingAmount;
-
             return (
               <Card key={pkg.id} className={`flex flex-col border-0 shadow-xl overflow-hidden ${pkg.highlight ? 'ring-2 ring-primary relative scale-[1.02] z-10' : 'bg-white'}`}>
                 {pkg.highlight && (
@@ -102,17 +102,22 @@ export default function Packages() {
                   
                   <div className="space-y-1 mb-4">
                      <div className="flex items-baseline gap-2 text-slate-400 line-through text-lg">
-                        € {pkg.price.toLocaleString()}
+                        {formatEUR(pkg.price)}
                      </div>
                      <div className="flex items-baseline gap-2">
-                        <span className="text-4xl font-heading font-bold text-primary">€ {effectivePrice.toLocaleString()}</span>
+                        <span className="text-4xl font-heading font-bold text-primary">{formatEUR(netPrice)}</span>
                         <span className="text-slate-500 font-medium">*</span>
                      </div>
-                     <p className="text-sm text-slate-500">Effektiver Preis nach Förderung</p>
+                     <p className="text-sm text-slate-500">Endpreis ab (nach Förderung)</p>
                   </div>
                   
-                  <div className="bg-green-100/50 text-green-800 text-xs font-bold px-3 py-2 rounded-lg inline-block border border-green-200">
-                    - € {fundingAmount.toLocaleString()} Förderung {includeSolar && "+ Solarbonus"} abgezogen
+                  <div className="bg-green-100/50 text-green-800 text-xs font-bold px-3 py-2 rounded-lg inline-block border border-green-200 w-full">
+                    <div className="flex justify-between items-center w-full">
+                       <span>Abzgl. Förderung:</span>
+                       <span>− {formatEUR(subsidy)}</span>
+                    </div>
+                    {includeSolar && <div className="text-[10px] text-green-700 font-normal mt-0.5">(inkl. Solarbonus)</div>}
+
                     {isCapped && (
                       <div className="text-amber-700 font-normal mt-1 border-t border-green-200 pt-1 flex items-start gap-1">
                         <span className="text-[10px] leading-tight">Maximal 30% der Investitionskosten förderbar.</span>
