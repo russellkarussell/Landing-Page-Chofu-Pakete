@@ -172,16 +172,6 @@ export default function Home() {
               </Button>
             </div>
             
-            <div className="pt-8 flex items-center gap-8 text-sm text-slate-500 font-bold uppercase tracking-wider">
-              <div className="flex items-center gap-2">
-                <Check className="text-primary" size={20} strokeWidth={3} />
-                <span>R290 Kältemittel</span>
-              </div>
-              <div className="flex items-center gap-2">
-                <Check className="text-primary" size={20} strokeWidth={3} />
-                <span>Bis 75°C Vorlauf</span>
-              </div>
-            </div>
           </div>
 
           {/* Right: Technical Stats / Calc */}
