@@ -1,5 +1,5 @@
 
-import { Switch, Route } from "wouter";
+import { Switch, Route, useLocation } from "wouter";
 import { queryClient } from "./lib/queryClient";
 import { QueryClientProvider } from "@tanstack/react-query";
 import { Toaster } from "@/components/ui/toaster";
@@ -15,10 +15,22 @@ import HeatPumpOverview from "@/pages/waermepumpen";
 import Contact from "@/pages/contact";
 import Heizkostenrechner from "@/pages/calculator";
 import ChofuBrandPage from "@/pages/chofu";
+import { useEffect } from "react";
+
+function ScrollToTop() {
+  const [pathname] = useLocation();
+
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [pathname]);
+
+  return null;
+}
 
 function Router() {
   return (
     <Layout>
+      <ScrollToTop />
       <Switch>
         <Route path="/" component={Home} />
         <Route path="/pakete" component={Packages} />
