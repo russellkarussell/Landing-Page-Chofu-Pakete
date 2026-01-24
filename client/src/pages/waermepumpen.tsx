@@ -15,7 +15,7 @@ import {
 } from "lucide-react";
 import heroImage4kW from "@assets/image_1767196454458.png";
 import heroImage6kW from "@assets/PXL_20250803_105021980-Photoroom_1767199080674.jpg";
-import heroImage10kW from "@assets/IMG_5250-Photoroom_1767200015073.jpg";
+import heroImage10kW from "@/assets/chofu-10kw.png";
 import { useEffect } from "react";
 
 export default function HeatPumpOverview() {
