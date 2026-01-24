@@ -15,7 +15,7 @@ import {
   ShieldCheck,
   Zap
 } from "lucide-react";
-import heroImage from "@/assets/chofu-10kw.png";
+import heroImage from "@/assets/chofu-10kw-product.jpg";
 import closeupImage from "@assets/R290_Premium_Black_Closeup_image_(1)_1767199976441.jpg";
 import controllerImage from "@assets/CMR-4100M_Display_(1)_1767199982916.jpg";
 import { useEffect } from "react";
