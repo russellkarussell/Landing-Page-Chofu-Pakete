@@ -86,7 +86,7 @@ export default function Packages() {
                   </div>
                 )}
                 {/* Product Image Area */}
-                <div className="h-44 w-full relative overflow-hidden bg-slate-100 border-b border-slate-100">
+                <div className="h-64 w-full relative overflow-hidden bg-slate-100 border-b border-slate-100">
                   <img 
                     src={getPackageImage(pkg.kw)} 
                     alt={`CHOFU Wärmepumpe Außeneinheit – ${pkg.kw} kW Paket`}
