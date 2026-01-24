@@ -38,8 +38,7 @@ export async function registerRoutes(
               phone: validatedData.phone,
               state: validatedData.bundesland,
               hs_lead_status: "NEW",
-              website: LEAD_SOURCE,
-              notes_last_updated: new Date().toISOString(),
+              lead_source: LEAD_SOURCE,
             },
             associations: []
           });
@@ -62,7 +61,7 @@ export async function registerRoutes(
                   phone: validatedData.phone,
                   state: validatedData.bundesland,
                   hs_lead_status: "NEW",
-                  website: LEAD_SOURCE,
+                  lead_source: LEAD_SOURCE,
                 }
               });
               await storage.updateContactRequestHubspotId(contactRequest.id, existingContactId);
