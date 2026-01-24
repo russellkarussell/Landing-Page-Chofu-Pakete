@@ -9,7 +9,9 @@ import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Check, ArrowRight, Zap, ShieldCheck, Euro, Coins, Info, Home as HomeIcon, Building, Loader2, Calculator } from "lucide-react";
-import { BUNDESLAENDER, PACKAGES, PARTNERS, SUBSIDIES, formatEUR, getSubsidy, getNetPrice } from "@/lib/constants";
+import { BUNDESLAENDER, PACKAGES, SUBSIDIES, formatEUR, getSubsidy, getNetPrice } from "@/lib/constants";
+import { useQuery } from "@tanstack/react-query";
+import type { Partner } from "@shared/schema";
 import heroImage from "@/assets/hero-modern-house-bg.png";
 import { motion } from "framer-motion";
 import ehpaLabel from "@assets/image_1767188918778.png";
@@ -48,6 +50,12 @@ const IconNeubau = ({ className }: { className?: string }) => (
 
 export default function Home() {
   const [selectedBundesland, setSelectedBundesland] = useState<string>("Wien");
+  
+  const { data: allPartners = [] } = useQuery<Partner[]>({
+    queryKey: ["/api/partners"],
+  });
+  
+  const partnersForBundesland = allPartners.filter(p => p.bundesland === selectedBundesland);
   const [calcStep, setCalcStep] = useState(1);
   const [isCalculating, setIsCalculating] = useState(false);
 
@@ -528,21 +536,26 @@ export default function Home() {
                   </div>
 
                   <div className="space-y-3 pt-4">
-                    {PARTNERS[selectedBundesland as keyof typeof PARTNERS]?.map((partner, i) => (
-                      <motion.div 
-                        key={partner.name}
-                        initial={{ opacity: 0, x: -10 }}
-                        animate={{ opacity: 1, x: 0 }}
-                        transition={{ delay: i * 0.1 }}
-                        className="flex items-center justify-between p-4 bg-white/5 border border-white/10 hover:bg-white/10 transition-colors cursor-default"
-                      >
-                        <div>
-                          <p className="font-bold text-white text-sm">{partner.name}</p>
-                          <p className="text-xs text-slate-400">{partner.desc}</p>
-                        </div>
-                        <ArrowRight size={16} className="text-primary" />
-                      </motion.div>
-                    ))}
+                    {partnersForBundesland.length > 0 ? (
+                      partnersForBundesland.map((partner, i) => (
+                        <Link key={partner.id} href={`/partner/${partner.slug}`}>
+                          <motion.div 
+                            initial={{ opacity: 0, x: -10 }}
+                            animate={{ opacity: 1, x: 0 }}
+                            transition={{ delay: i * 0.1 }}
+                            className="flex items-center justify-between p-4 bg-white/5 border border-white/10 hover:bg-white/10 transition-colors cursor-pointer"
+                          >
+                            <div>
+                              <p className="font-bold text-white text-sm">{partner.name}</p>
+                              <p className="text-xs text-slate-400">{partner.description}</p>
+                            </div>
+                            <ArrowRight size={16} className="text-primary" />
+                          </motion.div>
+                        </Link>
+                      ))
+                    ) : (
+                      <p className="text-slate-400 text-sm py-4">Noch keine Partner in {selectedBundesland} vorhanden.</p>
+                    )}
                   </div>
                 </div>
               </div>
