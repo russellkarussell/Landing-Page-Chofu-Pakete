@@ -10,6 +10,7 @@ import chofu4kw from "@assets/image_1767196454458.png";
 import chofu6kw from "@assets/image_1767196466560.png";
 import chofu10kw from "@/assets/chofu-10kw.png";
 import { PackageContentsAccordion } from "@/components/packages/PackageContentsAccordion";
+import { PriceDisclaimer } from "@/components/price-disclaimer";
 
 export default function Packages() {
   const includeSolar = false;
@@ -176,6 +177,8 @@ export default function Packages() {
             );
           })}
         </div>
+        
+        <PriceDisclaimer />
 
         {/* Trust Row (Funding + CHOFU) */}
         <PackagesTrustRow />

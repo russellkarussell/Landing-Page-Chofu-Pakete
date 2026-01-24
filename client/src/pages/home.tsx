@@ -17,6 +17,7 @@ import { motion } from "framer-motion";
 import ehpaLabel from "@assets/image_1767188918778.png";
 import { ChofuHomepageTeaser } from "@/components/brand/ChofuHomepageTeaser";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
+import { PriceDisclaimer } from "@/components/price-disclaimer";
 
 // Custom Icons for Building Types
 const IconAltbau = ({ className }: { className?: string }) => (
@@ -487,6 +488,7 @@ export default function Home() {
               </Card>
             )})}
           </div>
+          <PriceDisclaimer />
         </div>
       </section>
       {/* Partners Section (Redesigned) */}
@@ -511,8 +513,8 @@ export default function Home() {
                    <p className="text-sm text-slate-500">Ausgewählte Partner mit langjähriger Erfahrung.</p>
                 </div>
                 <div className="p-4 border border-slate-200 bg-slate-50">
-                   <h4 className="font-bold text-slate-900 mb-2 uppercase text-sm">Fixpreis</h4>
-                   <p className="text-sm text-slate-500">Garantierte Kosten für Material und Arbeit.</p>
+                   <h4 className="font-bold text-slate-900 mb-2 uppercase text-sm">Faire Preise</h4>
+                   <p className="text-sm text-slate-500">Transparente Kosten für Material und Arbeit.</p>
                 </div>
               </div>
             </div>
