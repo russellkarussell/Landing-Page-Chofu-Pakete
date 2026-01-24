@@ -1,13 +1,28 @@
 import type { Express } from "express";
 import { createServer, type Server } from "http";
 import { storage } from "./storage";
-import { insertContactRequestSchema } from "@shared/schema";
+import { insertContactRequestSchema, insertPartnerSchema, insertPartnerReferenceSchema } from "@shared/schema";
 import { z } from "zod";
 import { getUncachableHubSpotClient } from "./hubspot";
 import { getUncachableResendClient } from "./resend";
+import { uploadFile, deleteFile } from "./supabase";
+import multer from "multer";
+
+const upload = multer({ storage: multer.memoryStorage(), limits: { fileSize: 5 * 1024 * 1024 } });
 
 const NOTIFICATION_EMAIL = "office@westech-solar.at";
 const LEAD_SOURCE = "meine-waermepumpe.at";
+
+function generateSlug(name: string): string {
+  return name
+    .toLowerCase()
+    .replace(/[äÄ]/g, 'ae')
+    .replace(/[öÖ]/g, 'oe')
+    .replace(/[üÜ]/g, 'ue')
+    .replace(/ß/g, 'ss')
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/^-|-$/g, '');
+}
 
 export async function registerRoutes(
   httpServer: Server,
@@ -135,6 +150,162 @@ export async function registerRoutes(
           message: "Ein Fehler ist aufgetreten. Bitte versuchen Sie es erneut." 
         });
       }
+    }
+  });
+
+  // Partner Routes - Public
+  app.get("/api/partners", async (req, res) => {
+    try {
+      const partners = await storage.getAllPartners();
+      res.json(partners);
+    } catch (error) {
+      console.error("Error fetching partners:", error);
+      res.status(500).json({ success: false, message: "Fehler beim Laden der Partner" });
+    }
+  });
+
+  app.get("/api/partners/bundesland/:bundesland", async (req, res) => {
+    try {
+      const partners = await storage.getPartnersByBundesland(req.params.bundesland);
+      res.json(partners);
+    } catch (error) {
+      console.error("Error fetching partners by bundesland:", error);
+      res.status(500).json({ success: false, message: "Fehler beim Laden der Partner" });
+    }
+  });
+
+  app.get("/api/partners/:slug", async (req, res) => {
+    try {
+      const partner = await storage.getPartnerBySlug(req.params.slug);
+      if (!partner) {
+        return res.status(404).json({ success: false, message: "Partner nicht gefunden" });
+      }
+      const references = await storage.getPartnerReferences(partner.id);
+      res.json({ ...partner, references });
+    } catch (error) {
+      console.error("Error fetching partner:", error);
+      res.status(500).json({ success: false, message: "Fehler beim Laden des Partners" });
+    }
+  });
+
+  // Partner Routes - Admin
+  app.post("/api/admin/partners", async (req, res) => {
+    try {
+      const data = insertPartnerSchema.parse({
+        ...req.body,
+        slug: generateSlug(req.body.name)
+      });
+      const partner = await storage.createPartner(data);
+      res.status(201).json(partner);
+    } catch (error) {
+      if (error instanceof z.ZodError) {
+        res.status(400).json({ success: false, message: "Validierungsfehler", errors: error.errors });
+      } else {
+        console.error("Error creating partner:", error);
+        res.status(500).json({ success: false, message: "Fehler beim Erstellen des Partners" });
+      }
+    }
+  });
+
+  app.put("/api/admin/partners/:id", async (req, res) => {
+    try {
+      const updateData = { ...req.body };
+      if (req.body.name) {
+        updateData.slug = generateSlug(req.body.name);
+      }
+      const partner = await storage.updatePartner(req.params.id, updateData);
+      if (!partner) {
+        return res.status(404).json({ success: false, message: "Partner nicht gefunden" });
+      }
+      res.json(partner);
+    } catch (error) {
+      console.error("Error updating partner:", error);
+      res.status(500).json({ success: false, message: "Fehler beim Aktualisieren des Partners" });
+    }
+  });
+
+  app.delete("/api/admin/partners/:id", async (req, res) => {
+    try {
+      const success = await storage.deletePartner(req.params.id);
+      if (!success) {
+        return res.status(404).json({ success: false, message: "Partner nicht gefunden" });
+      }
+      res.json({ success: true });
+    } catch (error) {
+      console.error("Error deleting partner:", error);
+      res.status(500).json({ success: false, message: "Fehler beim Löschen des Partners" });
+    }
+  });
+
+  // File Upload - Logo
+  app.post("/api/admin/partners/:id/logo", upload.single('logo'), async (req, res) => {
+    try {
+      if (!req.file) {
+        return res.status(400).json({ success: false, message: "Keine Datei hochgeladen" });
+      }
+
+      const partner = await storage.getPartnerById(req.params.id);
+      if (!partner) {
+        return res.status(404).json({ success: false, message: "Partner nicht gefunden" });
+      }
+
+      const fileName = `logos/${partner.slug}-${Date.now()}.${req.file.originalname.split('.').pop()}`;
+      const publicUrl = await uploadFile(req.file.buffer, fileName, req.file.mimetype);
+
+      if (!publicUrl) {
+        return res.status(500).json({ success: false, message: "Fehler beim Hochladen" });
+      }
+
+      const updatedPartner = await storage.updatePartner(req.params.id, { logoUrl: publicUrl });
+      res.json(updatedPartner);
+    } catch (error) {
+      console.error("Error uploading logo:", error);
+      res.status(500).json({ success: false, message: "Fehler beim Hochladen des Logos" });
+    }
+  });
+
+  // File Upload - Reference Photos
+  app.post("/api/admin/partners/:id/references", upload.single('image'), async (req, res) => {
+    try {
+      if (!req.file) {
+        return res.status(400).json({ success: false, message: "Keine Datei hochgeladen" });
+      }
+
+      const partner = await storage.getPartnerById(req.params.id);
+      if (!partner) {
+        return res.status(404).json({ success: false, message: "Partner nicht gefunden" });
+      }
+
+      const fileName = `references/${partner.slug}-${Date.now()}.${req.file.originalname.split('.').pop()}`;
+      const publicUrl = await uploadFile(req.file.buffer, fileName, req.file.mimetype);
+
+      if (!publicUrl) {
+        return res.status(500).json({ success: false, message: "Fehler beim Hochladen" });
+      }
+
+      const reference = await storage.createPartnerReference({
+        partnerId: partner.id,
+        imageUrl: publicUrl,
+        caption: req.body.caption || null,
+        sortOrder: parseInt(req.body.sortOrder) || 0
+      });
+      res.status(201).json(reference);
+    } catch (error) {
+      console.error("Error uploading reference:", error);
+      res.status(500).json({ success: false, message: "Fehler beim Hochladen der Referenz" });
+    }
+  });
+
+  app.delete("/api/admin/references/:id", async (req, res) => {
+    try {
+      const success = await storage.deletePartnerReference(req.params.id);
+      if (!success) {
+        return res.status(404).json({ success: false, message: "Referenz nicht gefunden" });
+      }
+      res.json({ success: true });
+    } catch (error) {
+      console.error("Error deleting reference:", error);
+      res.status(500).json({ success: false, message: "Fehler beim Löschen der Referenz" });
     }
   });
 

@@ -18,6 +18,9 @@ import ChofuBrandPage from "@/pages/chofu";
 import Impressum from "@/pages/impressum";
 import Datenschutz from "@/pages/datenschutz";
 import AGB from "@/pages/agb";
+import Fachpartner from "@/pages/fachpartner";
+import PartnerProfile from "@/pages/partner";
+import AdminPartners from "@/pages/admin/partners";
 import { useEffect } from "react";
 
 function ScrollToTop() {
@@ -47,6 +50,9 @@ function Router() {
         <Route path="/impressum" component={Impressum} />
         <Route path="/datenschutz" component={Datenschutz} />
         <Route path="/agb" component={AGB} />
+        <Route path="/fachpartner" component={Fachpartner} />
+        <Route path="/partner/:slug" component={PartnerProfile} />
+        <Route path="/admin/partners" component={AdminPartners} />
         <Route component={NotFound} />
       </Switch>
     </Layout>
