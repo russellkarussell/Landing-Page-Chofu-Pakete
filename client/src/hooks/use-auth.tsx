@@ -28,6 +28,13 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       
       supabaseRef.current = supabase;
 
+      // Handle URL hash tokens from magic link
+      const hashParams = new URLSearchParams(window.location.hash.substring(1));
+      if (hashParams.get('access_token')) {
+        // Clear hash from URL
+        window.history.replaceState(null, '', window.location.pathname);
+      }
+
       const { data: { session } } = await supabase.auth.getSession();
       if (mounted) {
         setSession(session);
