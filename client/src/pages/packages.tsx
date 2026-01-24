@@ -58,7 +58,7 @@ export default function Packages() {
         {/* Header */}
         <div className="text-center max-w-3xl mx-auto mb-12">
           <Badge className="mb-4 bg-primary/10 text-primary hover:bg-primary/20 border-none px-4 py-1 text-sm font-medium">
-            Fixpreis-Garantie
+            Faire Paketpreise
           </Badge>
           <h1 className="text-4xl md:text-5xl font-heading font-bold text-slate-900 mb-6">
             Transparente Pakete für jedes Haus
