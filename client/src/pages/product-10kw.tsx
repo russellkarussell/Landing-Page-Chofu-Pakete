@@ -95,12 +95,12 @@ export default function Product10kW() {
             </div>
 
             {/* Right Image */}
-            <div className="relative">
+            <div className="relative h-[600px]">
               <div className="absolute inset-0 bg-gradient-to-tr from-primary/5 to-transparent rounded-3xl transform rotate-3 scale-105" />
               <img 
                 src={heroImage} 
                 alt="CHOFU R290 Monoblock Wärmepumpe 10kW im Außenbereich" 
-                className="relative rounded-3xl shadow-2xl w-full object-cover aspect-[4/3] z-10 object-top"
+                className="relative rounded-3xl shadow-2xl w-full h-full object-contain z-10 p-4"
               />
             </div>
           </div>
