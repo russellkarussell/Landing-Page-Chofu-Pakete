@@ -11,7 +11,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Check, ArrowRight, Zap, ShieldCheck, Euro, Coins, Info, Home as HomeIcon, Building, Loader2, Calculator } from "lucide-react";
 import { BUNDESLAENDER, PACKAGES, PARTNERS, SUBSIDIES, formatEUR, getSubsidy, getNetPrice } from "@/lib/constants";
 import heroImage from "@/assets/hero-modern-house-bg.png";
-import chofuUnit from "@assets/Design_ohne_Titel_(1)_1769253976212.png";
+import chofuUnit from "@/assets/chofu-heatpump.png";
 import { motion } from "framer-motion";
 import ehpaLabel from "@assets/image_1767188918778.png";
 import { ChofuHomepageTeaser } from "@/components/brand/ChofuHomepageTeaser";
@@ -141,7 +141,7 @@ export default function Home() {
             className="w-full h-full object-cover object-center grayscale-[10%]"
           />
            {/* Product Placement - Scaled ~1m x 0.8m relative to scene */}
-          <div className="absolute bottom-[5%] right-[10%] w-[35%] max-w-[600px] z-0 hidden lg:block animate-in fade-in slide-in-from-right duration-1000 delay-300">
+          <div className="absolute bottom-[5%] right-[10%] w-[35%] max-w-[600px] z-10 hidden lg:block animate-in fade-in slide-in-from-right duration-1000 delay-300">
              <img 
               src={chofuUnit} 
               alt="CHOFU R290 Monoblock Wärmepumpe" 
