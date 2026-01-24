@@ -59,9 +59,9 @@ export default function Product10kW() {
       {/* A) Hero Section */}
       <section className="relative bg-slate-50 pt-12 pb-20 overflow-hidden">
         <div className="container mx-auto px-4">
-          <div className="grid lg:grid-cols-2 gap-12 items-center">
+          <div className="grid lg:grid-cols-2 gap-16 lg:gap-24 items-center">
             {/* Left Content */}
-            <div className="space-y-6 z-10">
+            <div className="space-y-6 z-20 relative">
               <Badge className="bg-[#E60012]/10 text-[#E60012] hover:bg-[#E60012]/20 border-none px-4 py-1 text-sm font-bold uppercase tracking-wider">
                 Made in Japan
               </Badge>
@@ -95,12 +95,12 @@ export default function Product10kW() {
             </div>
 
             {/* Right Image */}
-            <div className="relative h-[600px]">
-              <div className="absolute inset-0 bg-gradient-to-tr from-primary/5 to-transparent rounded-3xl transform rotate-3 scale-105" />
+            <div className="relative h-[500px] lg:h-[600px] w-full z-10">
+              <div className="absolute inset-0 bg-gradient-to-tr from-primary/5 to-transparent rounded-3xl transform rotate-2" />
               <img 
                 src={heroImage} 
                 alt="CHOFU R290 Monoblock Wärmepumpe 10kW im Außenbereich" 
-                className="relative rounded-3xl shadow-2xl w-full h-full object-contain z-10 p-4"
+                className="relative rounded-3xl shadow-xl w-full h-full object-contain p-4"
               />
             </div>
           </div>
