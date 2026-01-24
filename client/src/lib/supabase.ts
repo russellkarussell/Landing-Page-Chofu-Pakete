@@ -9,7 +9,13 @@ async function initSupabase(): Promise<SupabaseClient> {
   const response = await fetch('/api/config/supabase');
   const { url, anonKey } = await response.json();
   
-  supabaseInstance = createClient(url, anonKey);
+  supabaseInstance = createClient(url, anonKey, {
+    auth: {
+      autoRefreshToken: true,
+      persistSession: true,
+      detectSessionInUrl: true,
+    }
+  });
   return supabaseInstance;
 }
 
