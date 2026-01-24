@@ -10,8 +10,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Check, ArrowRight, Zap, ShieldCheck, Euro, Coins, Info, Home as HomeIcon, Building, Loader2, Calculator } from "lucide-react";
 import { BUNDESLAENDER, PACKAGES, PARTNERS, SUBSIDIES, formatEUR, getSubsidy, getNetPrice } from "@/lib/constants";
-import heroImage from "@/assets/hero-house-empty.png";
-import chofuUnit from "@assets/Design_ohne_Titel_(1)_1769253458604.png";
+import heroImage from "@/assets/hero-heatpump.png";
 import { motion } from "framer-motion";
 import ehpaLabel from "@assets/image_1767188918778.png";
 import { ChofuHomepageTeaser } from "@/components/brand/ChofuHomepageTeaser";
@@ -137,18 +136,9 @@ export default function Home() {
            <div className="absolute inset-0 bg-gradient-to-r from-slate-50 via-slate-50/90 to-transparent z-10" />
            <img 
             src={heroImage} 
-            alt="Moderne Wärmepumpe Österreich Hintergrund" 
+            alt="Moderne Wärmepumpe Österreich" 
             className="w-full h-full object-cover object-center grayscale-[10%]"
           />
-          {/* Product Placement */}
-          <div className="absolute bottom-0 right-[5%] w-[45%] max-w-[800px] z-0 hidden lg:block animate-in fade-in slide-in-from-right duration-1000 delay-300">
-             <img 
-              src={chofuUnit} 
-              alt="CHOFU R290 Monoblock Wärmepumpe" 
-              className="w-full h-auto object-contain drop-shadow-2xl"
-              style={{ filter: "drop-shadow(0 20px 40px rgba(0,0,0,0.3))" }}
-            />
-          </div>
         </div>
 
         <div className="container mx-auto px-4 relative z-10 grid lg:grid-cols-2 gap-12 items-center pt-20">
