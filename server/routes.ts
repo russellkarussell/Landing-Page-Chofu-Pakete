@@ -79,7 +79,7 @@ export async function registerRoutes(
         const { client: resendClient } = await getUncachableResendClient();
         
         await resendClient.emails.send({
-          from: "meine-waermepumpe.at <onboarding@resend.dev>",
+          from: "meine-waermepumpe.at <anfrage@meine-waermepumpe.at>",
           to: NOTIFICATION_EMAIL,
           subject: `Neue Wärmepumpen-Anfrage von ${validatedData.name}`,
           html: `
