@@ -68,7 +68,7 @@ export default function PartnerProfile() {
               </h1>
               <div className="flex items-center gap-2 text-slate-600 mb-4">
                 <MapPin className="w-5 h-5 text-primary" />
-                <span className="text-lg">{partner.bundesland}</span>
+                <span className="text-lg">{partner.bundeslaender?.join(", ")}</span>
               </div>
               <p className="text-lg text-slate-600 max-w-2xl" data-testid="text-partner-description">
                 {partner.description}

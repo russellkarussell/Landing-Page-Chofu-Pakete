@@ -17,10 +17,10 @@ export default function Fachpartner() {
 
   const filteredPartners = selectedBundesland === "all" 
     ? partners 
-    : partners.filter(p => p.bundesland === selectedBundesland);
+    : partners.filter(p => p.bundeslaender?.includes(selectedBundesland));
 
   const partnersByBundesland = BUNDESLAENDER.reduce((acc, bl) => {
-    acc[bl] = filteredPartners.filter(p => p.bundesland === bl);
+    acc[bl] = filteredPartners.filter(p => p.bundeslaender?.includes(bl));
     return acc;
   }, {} as Record<string, Partner[]>);
 
@@ -139,7 +139,7 @@ function PartnerCard({ partner }: { partner: Partner }) {
             </h3>
             <p className="text-sm text-slate-500 flex items-center gap-1">
               <MapPin className="w-3 h-3" />
-              {partner.bundesland}
+              {partner.bundeslaender?.join(", ")}
             </p>
           </div>
         </div>

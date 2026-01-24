@@ -55,7 +55,7 @@ export default function Home() {
     queryKey: ["/api/partners"],
   });
   
-  const partnersForBundesland = allPartners.filter(p => p.bundesland === selectedBundesland);
+  const partnersForBundesland = allPartners.filter(p => p.bundeslaender?.includes(selectedBundesland));
   const [calcStep, setCalcStep] = useState(1);
   const [isCalculating, setIsCalculating] = useState(false);
 
