@@ -10,7 +10,7 @@ import {
   partnerReferences
 } from "@shared/schema";
 import { db } from "../db";
-import { eq, asc } from "drizzle-orm";
+import { eq, asc, arrayContains } from "drizzle-orm";
 
 export interface IStorage {
   // Contact Requests
@@ -51,7 +51,7 @@ export class DbStorage implements IStorage {
 
   // Partners
   async getAllPartners(): Promise<Partner[]> {
-    return db.select().from(partners).orderBy(asc(partners.bundesland), asc(partners.name));
+    return db.select().from(partners).orderBy(asc(partners.name));
   }
 
   async getPartnerById(id: string): Promise<Partner | null> {
@@ -65,7 +65,7 @@ export class DbStorage implements IStorage {
   }
 
   async getPartnersByBundesland(bundesland: string): Promise<Partner[]> {
-    return db.select().from(partners).where(eq(partners.bundesland, bundesland)).orderBy(asc(partners.name));
+    return db.select().from(partners).where(arrayContains(partners.bundeslaender, [bundesland])).orderBy(asc(partners.name));
   }
 
   async createPartner(partner: InsertPartner): Promise<Partner> {

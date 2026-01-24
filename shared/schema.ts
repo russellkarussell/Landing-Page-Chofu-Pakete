@@ -9,7 +9,7 @@ export const partners = pgTable("partners", {
   slug: varchar("slug").notNull().unique(),
   name: text("name").notNull(),
   description: text("description").notNull(),
-  bundesland: text("bundesland").notNull(),
+  bundeslaender: text("bundeslaender").array().notNull(),
   website: text("website"),
   logoUrl: text("logo_url"),
   phone: text("phone"),

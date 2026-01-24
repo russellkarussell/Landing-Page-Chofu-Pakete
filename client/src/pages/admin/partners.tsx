@@ -1,13 +1,13 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { useLocation } from "wouter";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { Label } from "@/components/ui/label";
+import { Checkbox } from "@/components/ui/checkbox";
 import { useToast } from "@/hooks/use-toast";
 import { useAuth } from "@/hooks/use-auth";
 import { BUNDESLAENDER } from "@/lib/constants";
@@ -28,6 +28,15 @@ export default function AdminPartners() {
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [editingPartner, setEditingPartner] = useState<Partner | null>(null);
   const [selectedPartner, setSelectedPartner] = useState<PartnerWithRefs | null>(null);
+  const [selectedBundeslaender, setSelectedBundeslaender] = useState<string[]>([]);
+
+  useEffect(() => {
+    if (editingPartner) {
+      setSelectedBundeslaender(editingPartner.bundeslaender || []);
+    } else {
+      setSelectedBundeslaender([]);
+    }
+  }, [editingPartner]);
 
   if (loading) {
     return (
@@ -164,11 +173,15 @@ export default function AdminPartners() {
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    if (selectedBundeslaender.length === 0) {
+      toast({ title: "Fehler", description: "Bitte wählen Sie mindestens ein Bundesland aus.", variant: "destructive" });
+      return;
+    }
     const formData = new FormData(e.currentTarget);
     const data = {
       name: formData.get("name") as string,
       description: formData.get("description") as string,
-      bundesland: formData.get("bundesland") as string,
+      bundeslaender: selectedBundeslaender,
       website: formData.get("website") as string || null,
       phone: formData.get("phone") as string || null,
       services: (formData.get("services") as string)?.split(",").map(s => s.trim()).filter(Boolean) || [],
@@ -179,6 +192,14 @@ export default function AdminPartners() {
     } else {
       createPartner.mutate(data);
     }
+  };
+
+  const toggleBundesland = (bl: string) => {
+    setSelectedBundeslaender(prev => 
+      prev.includes(bl) 
+        ? prev.filter(b => b !== bl) 
+        : [...prev, bl]
+    );
   };
 
   const handleLogoUpload = (partnerId: string, e: React.ChangeEvent<HTMLInputElement>) => {
@@ -215,7 +236,10 @@ export default function AdminPartners() {
           </Button>
           <Dialog open={isDialogOpen} onOpenChange={(open) => {
           setIsDialogOpen(open);
-          if (!open) setEditingPartner(null);
+          if (!open) {
+            setEditingPartner(null);
+            setSelectedBundeslaender([]);
+          }
         }}>
           <DialogTrigger asChild>
             <Button data-testid="button-add-partner">
@@ -233,17 +257,23 @@ export default function AdminPartners() {
                 <Input id="name" name="name" defaultValue={editingPartner?.name} required data-testid="input-partner-name" />
               </div>
               <div>
-                <Label htmlFor="bundesland">Bundesland *</Label>
-                <Select name="bundesland" defaultValue={editingPartner?.bundesland} required>
-                  <SelectTrigger data-testid="select-bundesland">
-                    <SelectValue placeholder="Bundesland wählen" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    {BUNDESLAENDER.map((bl) => (
-                      <SelectItem key={bl} value={bl}>{bl}</SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
+                <Label>Bundesländer * <span className="text-sm font-normal text-slate-500">(mehrere möglich)</span></Label>
+                <div className="grid grid-cols-2 gap-2 mt-2 p-3 border rounded-lg max-h-48 overflow-y-auto">
+                  {BUNDESLAENDER.map((bl) => (
+                    <div key={bl} className="flex items-center space-x-2">
+                      <Checkbox
+                        id={`bl-${bl}`}
+                        checked={selectedBundeslaender.includes(bl)}
+                        onCheckedChange={() => toggleBundesland(bl)}
+                        data-testid={`checkbox-${bl}`}
+                      />
+                      <label htmlFor={`bl-${bl}`} className="text-sm cursor-pointer">{bl}</label>
+                    </div>
+                  ))}
+                </div>
+                {selectedBundeslaender.length > 0 && (
+                  <p className="text-xs text-slate-500 mt-1">Ausgewählt: {selectedBundeslaender.join(", ")}</p>
+                )}
               </div>
               <div>
                 <Label htmlFor="description">Beschreibung *</Label>
@@ -285,7 +315,7 @@ export default function AdminPartners() {
                   )}
                   <div>
                     <CardTitle className="text-lg">{partner.name}</CardTitle>
-                    <p className="text-sm text-slate-500">{partner.bundesland}</p>
+                    <p className="text-sm text-slate-500">{partner.bundeslaender?.join(", ")}</p>
                   </div>
                 </div>
               </div>
