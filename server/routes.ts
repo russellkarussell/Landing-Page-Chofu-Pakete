@@ -5,7 +5,7 @@ import { insertContactRequestSchema, insertPartnerSchema, insertPartnerReference
 import { z } from "zod";
 import { getUncachableHubSpotClient } from "./hubspot";
 import { getUncachableResendClient } from "./resend";
-import { uploadFile, deleteFile } from "./supabase";
+import { uploadFile, deleteFile, requireAuth } from "./supabase";
 import multer from "multer";
 
 const upload = multer({ storage: multer.memoryStorage(), limits: { fileSize: 5 * 1024 * 1024 } });
@@ -195,8 +195,8 @@ export async function registerRoutes(
     }
   });
 
-  // Partner Routes - Admin
-  app.post("/api/admin/partners", async (req, res) => {
+  // Partner Routes - Admin (protected)
+  app.post("/api/admin/partners", requireAuth, async (req, res) => {
     try {
       const data = insertPartnerSchema.parse({
         ...req.body,
@@ -214,7 +214,7 @@ export async function registerRoutes(
     }
   });
 
-  app.put("/api/admin/partners/:id", async (req, res) => {
+  app.put("/api/admin/partners/:id", requireAuth, async (req, res) => {
     try {
       const updateData = { ...req.body };
       if (req.body.name) {
@@ -231,7 +231,7 @@ export async function registerRoutes(
     }
   });
 
-  app.delete("/api/admin/partners/:id", async (req, res) => {
+  app.delete("/api/admin/partners/:id", requireAuth, async (req, res) => {
     try {
       const success = await storage.deletePartner(req.params.id);
       if (!success) {
@@ -244,8 +244,8 @@ export async function registerRoutes(
     }
   });
 
-  // File Upload - Logo
-  app.post("/api/admin/partners/:id/logo", upload.single('logo'), async (req, res) => {
+  // File Upload - Logo (protected)
+  app.post("/api/admin/partners/:id/logo", requireAuth, upload.single('logo'), async (req, res) => {
     try {
       if (!req.file) {
         return res.status(400).json({ success: false, message: "Keine Datei hochgeladen" });
@@ -271,8 +271,8 @@ export async function registerRoutes(
     }
   });
 
-  // File Upload - Reference Photos
-  app.post("/api/admin/partners/:id/references", upload.single('image'), async (req, res) => {
+  // File Upload - Reference Photos (protected)
+  app.post("/api/admin/partners/:id/references", requireAuth, upload.single('image'), async (req, res) => {
     try {
       if (!req.file) {
         return res.status(400).json({ success: false, message: "Keine Datei hochgeladen" });
@@ -303,7 +303,7 @@ export async function registerRoutes(
     }
   });
 
-  app.delete("/api/admin/references/:id", async (req, res) => {
+  app.delete("/api/admin/references/:id", requireAuth, async (req, res) => {
     try {
       const success = await storage.deletePartnerReference(req.params.id);
       if (!success) {

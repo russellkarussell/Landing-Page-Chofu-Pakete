@@ -94,6 +94,7 @@ Preferred communication style: Simple, everyday language.
 - `DATABASE_URL` - Supabase PostgreSQL connection string (required)
 - `SUPABASE_URL` - Supabase project URL (required)
 - `SUPABASE_ANON_KEY` - Supabase anon/public API key (required)
+- `ADMIN_EMAILS` - Comma-separated list of admin email addresses (required for admin access)
 - HubSpot connection managed automatically via Replit connector (no manual token needed)
 
 ### Key NPM Dependencies
@@ -129,10 +130,25 @@ Preferred communication style: Simple, everyday language.
 - ✅ Public partner overview page at `/fachpartner`
 - ✅ Individual partner profile pages at `/partner/:slug`
 - ✅ Image upload for logos and reference photos
+- ✅ Admin authentication with Supabase Magic Link
 
 **Important:** Before using image uploads, create a Storage Bucket named `partner-assets` in Supabase Console and set it to public.
 
-**Admin Routes (currently unprotected):**
+### Admin Authentication
+- **Method:** Supabase Auth with Magic Link (passwordless email login)
+- **Authorization:** Only emails listed in `ADMIN_EMAILS` environment variable can access admin APIs
+- **Protected Routes:** 
+  - Frontend: `/admin/partners` (redirects to `/admin/login` if not authenticated)
+  - Backend: All `/api/admin/*` routes require Bearer token + admin email check
+- **Auth Flow:**
+  1. User visits `/admin/partners`
+  2. If not logged in, redirected to `/admin/login`
+  3. User enters email, receives magic link via email
+  4. Clicking link authenticates user and redirects to admin panel
+  5. Session stored in browser, token sent with API requests
+  6. Server validates token AND checks email against ADMIN_EMAILS allowlist
+
+**Admin Routes (protected with Bearer token):**
 - `POST /api/admin/partners` - Create partner
 - `PUT /api/admin/partners/:id` - Update partner
 - `DELETE /api/admin/partners/:id` - Delete partner

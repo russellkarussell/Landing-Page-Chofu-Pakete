@@ -19,8 +19,12 @@ type PartnerWithRefs = Partner & { references?: PartnerReference[] };
 export default function AdminPartners() {
   const { toast } = useToast();
   const queryClient = useQueryClient();
-  const { user, loading, signOut } = useAuth();
+  const { user, session, loading, signOut } = useAuth();
   const [, navigate] = useLocation();
+  
+  const getAuthHeaders = () => ({
+    "Authorization": `Bearer ${session?.access_token}`,
+  });
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [editingPartner, setEditingPartner] = useState<Partner | null>(null);
   const [selectedPartner, setSelectedPartner] = useState<PartnerWithRefs | null>(null);
@@ -46,7 +50,7 @@ export default function AdminPartners() {
     mutationFn: async (data: Partial<Partner>) => {
       const res = await fetch("/api/admin/partners", {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers: { "Content-Type": "application/json", ...getAuthHeaders() },
         body: JSON.stringify(data),
       });
       if (!res.ok) throw new Error("Fehler beim Erstellen");
@@ -63,7 +67,7 @@ export default function AdminPartners() {
     mutationFn: async ({ id, data }: { id: string; data: Partial<Partner> }) => {
       const res = await fetch(`/api/admin/partners/${id}`, {
         method: "PUT",
-        headers: { "Content-Type": "application/json" },
+        headers: { "Content-Type": "application/json", ...getAuthHeaders() },
         body: JSON.stringify(data),
       });
       if (!res.ok) throw new Error("Fehler beim Aktualisieren");
@@ -79,7 +83,10 @@ export default function AdminPartners() {
 
   const deletePartner = useMutation({
     mutationFn: async (id: string) => {
-      const res = await fetch(`/api/admin/partners/${id}`, { method: "DELETE" });
+      const res = await fetch(`/api/admin/partners/${id}`, { 
+        method: "DELETE",
+        headers: getAuthHeaders(),
+      });
       if (!res.ok) throw new Error("Fehler beim Löschen");
       return res.json();
     },
@@ -95,6 +102,7 @@ export default function AdminPartners() {
       formData.append("logo", file);
       const res = await fetch(`/api/admin/partners/${id}/logo`, {
         method: "POST",
+        headers: getAuthHeaders(),
         body: formData,
       });
       if (!res.ok) throw new Error("Fehler beim Hochladen");
@@ -113,6 +121,7 @@ export default function AdminPartners() {
       if (caption) formData.append("caption", caption);
       const res = await fetch(`/api/admin/partners/${id}/references`, {
         method: "POST",
+        headers: getAuthHeaders(),
         body: formData,
       });
       if (!res.ok) throw new Error("Fehler beim Hochladen");
@@ -128,7 +137,10 @@ export default function AdminPartners() {
 
   const deleteReference = useMutation({
     mutationFn: async (id: string) => {
-      const res = await fetch(`/api/admin/references/${id}`, { method: "DELETE" });
+      const res = await fetch(`/api/admin/references/${id}`, { 
+        method: "DELETE",
+        headers: getAuthHeaders(),
+      });
       if (!res.ok) throw new Error("Fehler beim Löschen");
       return res.json();
     },
