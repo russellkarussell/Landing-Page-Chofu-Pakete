@@ -9,7 +9,7 @@ export const contactRequests = pgTable("contact_requests", {
   email: text("email").notNull(),
   phone: text("phone").notNull(),
   bundesland: text("bundesland").notNull(),
-  message: text("message"),
+  message: text("message").default(""),
   createdAt: timestamp("created_at").notNull().defaultNow(),
   hubspotContactId: text("hubspot_contact_id"),
 });

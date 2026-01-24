@@ -3,7 +3,8 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { useLocation } from "wouter";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
+import { useMutation } from "@tanstack/react-query";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
@@ -13,27 +14,41 @@ import { BUNDESLAENDER } from "@/lib/constants";
 import { useToast } from "@/hooks/use-toast";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Phone, Mail, MapPin, CheckCircle2 } from "lucide-react";
-
-const formSchema = z.object({
-  name: z.string().min(2, "Name muss mindestens 2 Zeichen lang sein."),
-  email: z.string().email("Ungültige E-Mail-Adresse."),
-  phone: z.string().min(6, "Bitte geben Sie eine gültige Telefonnummer an."),
-  bundesland: z.string().min(1, "Bitte wählen Sie ein Bundesland."),
-  message: z.string().optional(),
-});
+import { submitContactRequest } from "@/lib/api";
+import { insertContactRequestSchema } from "@shared/schema";
 
 export default function Contact() {
   const { toast } = useToast();
   const [location] = useLocation();
+  const [isSubmitted, setIsSubmitted] = useState(false);
 
-  const form = useForm<z.infer<typeof formSchema>>({
-    resolver: zodResolver(formSchema),
+  const form = useForm<z.infer<typeof insertContactRequestSchema>>({
+    resolver: zodResolver(insertContactRequestSchema),
     defaultValues: {
       name: "",
       email: "",
       phone: "",
       bundesland: "",
       message: "",
+    },
+  });
+
+  const mutation = useMutation({
+    mutationFn: submitContactRequest,
+    onSuccess: () => {
+      setIsSubmitted(true);
+      toast({
+        title: "Anfrage gesendet!",
+        description: "Wir haben Ihre Anfrage erhalten und melden uns in Kürze.",
+      });
+      form.reset();
+    },
+    onError: (error: Error) => {
+      toast({
+        title: "Fehler",
+        description: error.message,
+        variant: "destructive",
+      });
     },
   });
 
@@ -55,13 +70,8 @@ Bitte um Beratung zu diesem Objekt.`;
     }
   }, [form]);
 
-  function onSubmit(values: z.infer<typeof formSchema>) {
-    console.log(values);
-    toast({
-      title: "Anfrage gesendet!",
-      description: "Wir haben Ihre Anfrage erhalten und melden uns in Kürze.",
-    });
-    form.reset();
+  function onSubmit(values: z.infer<typeof insertContactRequestSchema>) {
+    mutation.mutate(values);
   }
 
   return (
@@ -216,8 +226,13 @@ Bitte um Beratung zu diesem Objekt.`;
                     )}
                   />
 
-                  <Button type="submit" className="w-full h-12 text-lg font-bold shadow-lg hover:shadow-xl transition-all">
-                    Termin anfragen
+                  <Button 
+                    type="submit" 
+                    className="w-full h-12 text-lg font-bold shadow-lg hover:shadow-xl transition-all"
+                    disabled={mutation.isPending}
+                    data-testid="button-submit-contact"
+                  >
+                    {mutation.isPending ? "Wird gesendet..." : "Termin anfragen"}
                   </Button>
                   <p className="text-xs text-center text-muted-foreground">
                     Mit dem Absenden stimmen Sie zu, dass wir Ihre Daten an einen Partner in Ihrer Region weiterleiten.
