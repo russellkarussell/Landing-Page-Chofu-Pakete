@@ -59,6 +59,22 @@ Preferred communication style: Simple, everyday language.
   - createdAt (timestamp, auto-generated)
   - hubspotContactId (text, set after HubSpot sync)
 
+- `partners` table: stores installation partner information
+  - id (varchar, UUID primary key)
+  - slug (varchar, unique, URL-friendly name)
+  - name, description, bundesland (text, required)
+  - website, logoUrl, phone (text, optional)
+  - services (text array, optional)
+  - createdAt (timestamp, auto-generated)
+
+- `partner_references` table: stores reference photos for partners
+  - id (varchar, UUID primary key)
+  - partnerId (varchar, foreign key to partners, cascade delete)
+  - imageUrl (text, required)
+  - caption (text, optional)
+  - sortOrder (integer, default 0)
+  - createdAt (timestamp, auto-generated)
+
 ### Authentication & Authorization
 - No user authentication implemented
 - Public-facing lead generation site
@@ -105,6 +121,29 @@ Preferred communication style: Simple, everyday language.
 - Schema managed in `shared/schema.ts`, pushed via `npm run db:push`
 
 ## Recent Changes (January 24, 2026)
+
+### Partner Management System
+- ✅ Database schema for partners and reference photos
+- ✅ Supabase Storage integration for logos and reference photos
+- ✅ Admin interface at `/admin/partners` for partner CRUD
+- ✅ Public partner overview page at `/fachpartner`
+- ✅ Individual partner profile pages at `/partner/:slug`
+- ✅ Image upload for logos and reference photos
+
+**Important:** Before using image uploads, create a Storage Bucket named `partner-assets` in Supabase Console and set it to public.
+
+**Admin Routes (currently unprotected):**
+- `POST /api/admin/partners` - Create partner
+- `PUT /api/admin/partners/:id` - Update partner
+- `DELETE /api/admin/partners/:id` - Delete partner
+- `POST /api/admin/partners/:id/logo` - Upload logo
+- `POST /api/admin/partners/:id/references` - Upload reference photo
+- `DELETE /api/admin/references/:id` - Delete reference photo
+
+**Public Routes:**
+- `GET /api/partners` - List all partners
+- `GET /api/partners/bundesland/:bundesland` - Filter by state
+- `GET /api/partners/:slug` - Get partner with references
 
 ### Full-Stack Implementation Completed
 - ✅ Converted from frontend prototype to full-stack application
