@@ -11,7 +11,6 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Check, ArrowRight, Zap, ShieldCheck, Euro, Coins, Info, Home as HomeIcon, Building, Loader2, Calculator } from "lucide-react";
 import { BUNDESLAENDER, PACKAGES, PARTNERS, SUBSIDIES, formatEUR, getSubsidy, getNetPrice } from "@/lib/constants";
 import heroImage from "@/assets/hero-modern-house-bg.png";
-import chofuUnit from "@/assets/chofu-heatpump.png";
 import { motion } from "framer-motion";
 import ehpaLabel from "@assets/image_1767188918778.png";
 import { ChofuHomepageTeaser } from "@/components/brand/ChofuHomepageTeaser";
@@ -140,15 +139,6 @@ export default function Home() {
             alt="Moderne Wärmepumpe Österreich Hintergrund" 
             className="w-full h-full object-cover object-center grayscale-[10%]"
           />
-           {/* Product Placement - Scaled ~1m x 0.8m relative to scene */}
-          <div className="absolute bottom-[5%] right-[10%] w-[35%] max-w-[600px] z-10 hidden lg:block animate-in fade-in slide-in-from-right duration-1000 delay-300">
-             <img 
-              src={chofuUnit} 
-              alt="CHOFU R290 Monoblock Wärmepumpe" 
-              className="w-full h-auto object-contain drop-shadow-2xl"
-              style={{ filter: "drop-shadow(-20px 20px 30px rgba(0,0,0,0.4))" }}
-            />
-          </div>
         </div>
 
         <div className="container mx-auto px-4 relative z-10 grid lg:grid-cols-2 gap-12 items-center pt-20">
