@@ -45,13 +45,19 @@ Preferred communication style: Simple, everyday language.
 - `POST /api/contact` - Submit contact form (stores in DB, syncs to HubSpot)
 
 ### Data Storage
-- **Database:** PostgreSQL via Drizzle ORM
+- **Database:** Supabase PostgreSQL (EU servers) via Drizzle ORM
 - **Schema Location:** `shared/schema.ts`
-- **Migrations:** Drizzle Kit (`drizzle-kit push`)
-- **Connection:** Uses `DATABASE_URL` environment variable
+- **Migrations:** Drizzle Kit (`npm run db:push`)
+- **Connection:** Uses `DATABASE_URL` environment variable (Supabase connection string)
+- **ORM:** Drizzle ORM with `postgres-js` driver
 
 **Current Schema:**
 - `contact_requests` table: stores lead submissions with HubSpot sync tracking
+  - id (varchar, UUID primary key)
+  - name, email, phone, bundesland (text fields)
+  - message (text, optional)
+  - createdAt (timestamp, auto-generated)
+  - hubspotContactId (text, set after HubSpot sync)
 
 ### Authentication & Authorization
 - No user authentication implemented
@@ -59,22 +65,31 @@ Preferred communication style: Simple, everyday language.
 - API endpoints are open (rate limiting recommended for production)
 
 ### Third-Party Integrations
-- **HubSpot CRM:** Contact form submissions create CRM contacts via HubSpot API (`HUBSPOT_ACCESS_TOKEN` env var)
+- **Supabase:** PostgreSQL database hosted on EU servers for GDPR compliance
+- **HubSpot CRM:** Contact form submissions create CRM contacts via official `@hubspot/api-client`
+  - Uses Replit HubSpot connector for automatic OAuth token management
+  - Creates contacts with properties: firstname, lastname, email, phone, state, hs_lead_status
+  - Links HubSpot contact ID back to Supabase record
 - **Fonts:** Google Fonts (Inter, Manrope)
 
 ## External Dependencies
 
 ### Required Environment Variables
-- `DATABASE_URL` - PostgreSQL connection string (required)
-- `HUBSPOT_ACCESS_TOKEN` - HubSpot API token for CRM integration (optional, graceful fallback)
+- `DATABASE_URL` - Supabase PostgreSQL connection string (required)
+- `SUPABASE_URL` - Supabase project URL (required)
+- `SUPABASE_ANON_KEY` - Supabase anon/public API key (required)
+- HubSpot connection managed automatically via Replit connector (no manual token needed)
 
 ### Key NPM Dependencies
 - `drizzle-orm` + `drizzle-zod` - Database ORM with Zod schema generation
+- `postgres` - PostgreSQL driver for Drizzle (postgres-js)
+- `@hubspot/api-client` - Official HubSpot CRM client
 - `@tanstack/react-query` - Server state management
 - `wouter` - Client-side routing
 - `framer-motion` - Animations
 - `zod` - Runtime validation
 - `express` - HTTP server
+- `react-hook-form` - Form state management
 - Radix UI primitives - Accessible UI components
 
 ### Build & Development
@@ -82,7 +97,27 @@ Preferred communication style: Simple, everyday language.
 - `tsx` - TypeScript execution for development
 - `esbuild` - Production server bundling
 - `tailwindcss` - Utility-first CSS
+- `drizzle-kit` - Database migrations
 
 ### Database
-- PostgreSQL (configured via Drizzle, connection via `postgres` package)
+- Supabase PostgreSQL (EU region for GDPR compliance)
+- Connected via Drizzle ORM with `postgres-js` driver
 - Schema managed in `shared/schema.ts`, pushed via `npm run db:push`
+
+## Recent Changes (January 24, 2026)
+
+### Full-Stack Implementation Completed
+- ✅ Converted from frontend prototype to full-stack application
+- ✅ Supabase PostgreSQL database integration (EU servers)
+- ✅ Contact form backend API with validation
+- ✅ HubSpot CRM integration for automatic lead capture
+- ✅ End-to-end testing completed successfully
+
+### Contact Form Flow
+1. User fills form at `/kontakt`
+2. Frontend validates with Zod schema
+3. POST to `/api/contact` endpoint
+4. Backend saves to Supabase `contact_requests` table
+5. Backend creates HubSpot contact via official API client
+6. HubSpot contact ID linked back to database record
+7. Success response to frontend with toast notification
