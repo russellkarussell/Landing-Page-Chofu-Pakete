@@ -8,7 +8,7 @@ import { PACKAGES, SUBSIDIES, formatEUR, getSubsidy, getNetPrice } from "@/lib/c
 import { PackagesTrustRow } from "@/components/brand/PackagesTrustRow";
 import chofu4kw from "@assets/image_1767196454458.png";
 import chofu6kw from "@assets/image_1767196466560.png";
-import chofu10kw from "@assets/image_1767196476462.png";
+import chofu10kw from "@/assets/chofu-10kw.png";
 import { PackageContentsAccordion } from "@/components/packages/PackageContentsAccordion";
 
 export default function Packages() {
