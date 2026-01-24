@@ -95,8 +95,8 @@ export default function Product10kW() {
             </div>
 
             {/* Right Image */}
-            <div className="relative h-[500px] lg:h-[600px] w-full z-10">
-              <div className="absolute inset-0 bg-gradient-to-tr from-primary/5 to-transparent rounded-3xl transform rotate-2" />
+            <div className="relative h-[500px] lg:h-[600px] w-full lg:w-[90%] lg:ml-auto z-10">
+              <div className="absolute inset-0 bg-gradient-to-tr from-primary/5 to-transparent rounded-3xl" />
               <img 
                 src={heroImage} 
                 alt="CHOFU R290 Monoblock Wärmepumpe 10kW im Außenbereich" 
