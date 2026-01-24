@@ -21,6 +21,8 @@ import AGB from "@/pages/agb";
 import Fachpartner from "@/pages/fachpartner";
 import PartnerProfile from "@/pages/partner";
 import AdminPartners from "@/pages/admin/partners";
+import AdminLogin from "@/pages/admin/login";
+import { AuthProvider } from "@/hooks/use-auth";
 import { useEffect } from "react";
 
 function ScrollToTop() {
@@ -52,6 +54,7 @@ function Router() {
         <Route path="/agb" component={AGB} />
         <Route path="/fachpartner" component={Fachpartner} />
         <Route path="/partner/:slug" component={PartnerProfile} />
+        <Route path="/admin/login" component={AdminLogin} />
         <Route path="/admin/partners" component={AdminPartners} />
         <Route component={NotFound} />
       </Switch>
@@ -62,10 +65,12 @@ function Router() {
 function App() {
   return (
     <QueryClientProvider client={queryClient}>
-      <TooltipProvider>
-        <Toaster />
-        <Router />
-      </TooltipProvider>
+      <AuthProvider>
+        <TooltipProvider>
+          <Toaster />
+          <Router />
+        </TooltipProvider>
+      </AuthProvider>
     </QueryClientProvider>
   );
 }

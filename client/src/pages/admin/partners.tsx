@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import { useLocation } from "wouter";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
@@ -8,8 +9,9 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { Label } from "@/components/ui/label";
 import { useToast } from "@/hooks/use-toast";
+import { useAuth } from "@/hooks/use-auth";
 import { BUNDESLAENDER } from "@/lib/constants";
-import { Plus, Pencil, Trash2, Upload, Image, ExternalLink } from "lucide-react";
+import { Plus, Pencil, Trash2, Upload, Image, ExternalLink, LogOut, Loader2 } from "lucide-react";
 import type { Partner, PartnerReference } from "@shared/schema";
 
 type PartnerWithRefs = Partner & { references?: PartnerReference[] };
@@ -17,9 +19,24 @@ type PartnerWithRefs = Partner & { references?: PartnerReference[] };
 export default function AdminPartners() {
   const { toast } = useToast();
   const queryClient = useQueryClient();
+  const { user, loading, signOut } = useAuth();
+  const [, navigate] = useLocation();
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [editingPartner, setEditingPartner] = useState<Partner | null>(null);
   const [selectedPartner, setSelectedPartner] = useState<PartnerWithRefs | null>(null);
+
+  if (loading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <Loader2 className="w-8 h-8 animate-spin text-primary" />
+      </div>
+    );
+  }
+
+  if (!user) {
+    navigate('/admin/login');
+    return null;
+  }
 
   const { data: partners = [], isLoading } = useQuery<Partner[]>({
     queryKey: ["/api/partners"],
@@ -175,8 +192,16 @@ export default function AdminPartners() {
   return (
     <div className="container mx-auto py-8 px-4">
       <div className="flex justify-between items-center mb-8">
-        <h1 className="text-3xl font-bold">Fachpartner verwalten</h1>
-        <Dialog open={isDialogOpen} onOpenChange={(open) => {
+        <div>
+          <h1 className="text-3xl font-bold">Fachpartner verwalten</h1>
+          <p className="text-sm text-slate-500">Angemeldet als {user.email}</p>
+        </div>
+        <div className="flex gap-3">
+          <Button variant="outline" onClick={signOut} data-testid="button-logout">
+            <LogOut className="w-4 h-4 mr-2" />
+            Abmelden
+          </Button>
+          <Dialog open={isDialogOpen} onOpenChange={(open) => {
           setIsDialogOpen(open);
           if (!open) setEditingPartner(null);
         }}>
@@ -230,6 +255,7 @@ export default function AdminPartners() {
             </form>
           </DialogContent>
         </Dialog>
+        </div>
       </div>
 
       <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
