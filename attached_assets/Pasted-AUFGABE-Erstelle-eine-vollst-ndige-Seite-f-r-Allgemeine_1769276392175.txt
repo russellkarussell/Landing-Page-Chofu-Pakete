@@ -1,0 +1,177 @@
+AUFGABE: Erstelle eine vollständige Seite für Allgemeine Geschäftsbedingungen (AGB) im bestehenden Projekt.
+Arbeite im bestehenden Code (kein neues Projekt, keine neue Struktur). Die Seite soll professionell formuliert, rechtlich sinnvoll und für eine Vermittlungsplattform in Österreich geeignet sein.
+
+========================
+SEITENANFORDERUNG
+========================
+- Neue Route / Seite erstellen:
+  /agb
+- Seite muss über Footer oder Navigation erreichbar sein (Link "AGB").
+- Layout soll dem bestehenden Seitenstil entsprechen (Wrapper, Typografie, Abstände).
+- Fokus: gut lesbarer Text, klare Überschriftenstruktur (h1, h2, h3).
+- Keine Platzhaltertexte, keine „TBD“.
+- Mobile und Desktop gut lesbar.
+
+========================
+INHALT DER AGB-SEITE
+========================
+
+Titel:
+Allgemeine Geschäftsbedingungen (AGB)
+
+---
+
+1. Geltungsbereich
+
+Diese Allgemeinen Geschäftsbedingungen gelten für die Nutzung der Website und Plattform meine-waermepumpe.at, betrieben durch:
+
+Westech Solar e.U. (FN 389408 i)  
+Inhaber: Alexander Oprisan  
+Wienersdorfer Straße 20–24 M37  
+2514 Traiskirchen  
+Österreich  
+
+Mit der Nutzung der Plattform erklären sich Nutzer mit diesen AGB einverstanden.
+
+---
+
+2. Leistungsbeschreibung der Plattform
+
+Die Plattform meine-waermepumpe.at dient der Information von Endkunden rund um das Thema Wärmepumpen sowie der Vermittlung von Kontakten zu regionalen Installations- und Fachbetrieben.
+
+Die Plattform bietet insbesondere:
+- Informationen zu Wärmepumpensystemen und Lösungen  
+- Online-Tools wie Rechner und Entscheidungs-Checks  
+- Kontaktformulare zur Anfrage eines Projektchecks  
+- Vermittlung an ausgewählte Partnerbetriebe  
+
+Es handelt sich ausdrücklich nicht um einen Online-Shop.
+
+---
+
+3. Rolle der Plattform / Abgrenzung
+
+Die Plattform tritt nicht als Verkäufer, Auftragnehmer oder Ausführender von Installationsleistungen auf.
+
+Insbesondere gilt:
+- Es kommt kein Kauf- oder Werkvertrag mit dem Plattformbetreiber zustande.  
+- Verträge über Lieferung, Montage, Beratung oder sonstige Leistungen entstehen ausschließlich zwischen dem Nutzer und dem jeweiligen Installations- oder Fachbetrieb.  
+- Die Abrechnung erfolgt direkt zwischen Nutzer und Partnerbetrieb.  
+
+Der Plattformbetreiber ist ausschließlich als Vermittler tätig.
+
+---
+
+4. Nutzung der Plattform
+
+Die Nutzung der Plattform ist grundsätzlich kostenlos und unverbindlich.
+
+Die Nutzung von Rechnern, Checks und Informationen dient der Orientierung und ersetzt keine individuelle technische Planung oder Beratung durch einen Fachbetrieb.
+
+Ein Anspruch auf Vermittlung oder Kontaktaufnahme durch einen Partnerbetrieb besteht nicht.
+
+---
+
+5. Angebote, Preise und Förderinformationen
+
+Alle auf der Website dargestellten Informationen zu Preisen, Förderungen oder Kosten stellen unverbindliche Richtwerte dar.
+
+Insbesondere gilt:
+- Preise können je nach Objekt, Region und technischer Situation erheblich abweichen.  
+- Förderungen sind abhängig von individuellen Voraussetzungen und behördlichen Entscheidungen.  
+- Es besteht kein Anspruch auf eine bestimmte Preisgestaltung oder Förderzusage.  
+
+Verbindliche Angebote werden ausschließlich durch den jeweiligen Fachbetrieb erstellt.
+
+---
+
+6. Vermittlung an Partnerbetriebe
+
+Wenn Nutzer eine Anfrage oder einen Projektcheck absenden, können die angegebenen Daten an ausgewählte Installations- und Vertriebspartner weitergeleitet werden.
+
+Die Weitergabe erfolgt ausschließlich zum Zweck:
+- der Kontaktaufnahme  
+- der Erstberatung  
+- der Angebotserstellung  
+
+Der Plattformbetreiber übernimmt keine Haftung für:
+- Preisgestaltung  
+- Terminvereinbarungen  
+- Ausführung der Arbeiten  
+- Qualität der Leistungen  
+- Gewährleistung oder Garantie  
+
+Ansprüche aus Werk- oder Kaufverträgen sind direkt gegenüber dem jeweiligen Fachbetrieb geltend zu machen.
+
+---
+
+7. Haftung für Inhalte und Tools
+
+Die bereitgestellten Inhalte, Rechner und Checks wurden mit größter Sorgfalt erstellt, dienen jedoch ausschließlich der allgemeinen Information.
+
+Es wird keine Haftung übernommen für:
+- Richtigkeit oder Vollständigkeit der Inhalte  
+- Ergebnisse von Rechnern oder Checks  
+- Entscheidungen, die Nutzer auf Grundlage dieser Informationen treffen  
+
+Technische Auslegungen und verbindliche Planungen erfolgen ausschließlich durch den Fachbetrieb.
+
+---
+
+8. Verfügbarkeit der Plattform
+
+Der Plattformbetreiber bemüht sich um eine möglichst unterbrechungsfreie Verfügbarkeit, übernimmt jedoch keine Garantie für die ständige Erreichbarkeit der Website.
+
+Wartungen, technische Störungen oder Ausfälle können jederzeit auftreten.
+
+---
+
+9. Urheberrecht
+
+Alle Inhalte dieser Website (Texte, Bilder, Grafiken, Logos, Struktur) unterliegen dem Urheberrecht.
+
+Eine Verwendung außerhalb der Plattform ist ohne ausdrückliche Zustimmung des Plattformbetreibers nicht gestattet.
+
+---
+
+10. Datenschutz
+
+Informationen zur Verarbeitung personenbezogener Daten finden sich in der Datenschutzerklärung unter:
+https://meine-waermepumpe.at/datenschutz
+
+---
+
+11. Anwendbares Recht und Gerichtsstand
+
+Es gilt österreichisches Recht unter Ausschluss des UN-Kaufrechts.
+
+Gerichtsstand, soweit gesetzlich zulässig, ist der Sitz des Plattformbetreibers.
+
+---
+
+12. Salvatorische Klausel
+
+Sollten einzelne Bestimmungen dieser AGB unwirksam sein oder werden, bleibt die Wirksamkeit der übrigen Bestimmungen unberührt.
+
+---
+
+13. Stand der AGB
+
+Diese AGB gelten in der aktuellen Fassung mit Stand:
+März 2026
+
+========================
+TECHNISCHE UMSETZUNG
+========================
+- Seite als neue Page/Route (/agb) implementieren.
+- Saubere semantische Struktur mit h1 / h2 / p / ul.
+- Keine Platzhalter.
+- Footer-Link "AGB" hinzufügen, falls noch nicht vorhanden.
+
+========================
+ZIEL
+========================
+Nach Umsetzung soll erreichbar sein:
+https://meine-waermepumpe.at/agb
+
+Die Seite soll professionell lesbar, juristisch sinnvoll und optisch konsistent mit dem Rest der Website sein.

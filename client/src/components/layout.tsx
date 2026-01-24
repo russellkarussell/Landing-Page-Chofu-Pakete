@@ -128,7 +128,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
             <ul className="space-y-2 text-sm">
               <li><a href="/impressum" className="hover:text-primary transition-colors">Impressum</a></li>
               <li><a href="/datenschutz" className="hover:text-primary transition-colors">Datenschutz</a></li>
-              <li><a href="#" className="hover:text-primary transition-colors">AGB</a></li>
+              <li><a href="/agb" className="hover:text-primary transition-colors">AGB</a></li>
             </ul>
           </div>
         </div>

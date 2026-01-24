@@ -17,6 +17,7 @@ import Heizkostenrechner from "@/pages/calculator";
 import ChofuBrandPage from "@/pages/chofu";
 import Impressum from "@/pages/impressum";
 import Datenschutz from "@/pages/datenschutz";
+import AGB from "@/pages/agb";
 import { useEffect } from "react";
 
 function ScrollToTop() {
@@ -45,6 +46,7 @@ function Router() {
         <Route path="/chofu" component={ChofuBrandPage} />
         <Route path="/impressum" component={Impressum} />
         <Route path="/datenschutz" component={Datenschutz} />
+        <Route path="/agb" component={AGB} />
         <Route component={NotFound} />
       </Switch>
     </Layout>

@@ -1,0 +1,220 @@
+import { Link } from "wouter";
+
+export default function AGB() {
+  return (
+    <div className="min-h-screen bg-slate-50 py-16">
+      <div className="container mx-auto px-4 max-w-3xl">
+        <h1 className="text-4xl font-heading font-bold text-slate-900 mb-8">Allgemeine Geschäftsbedingungen (AGB)</h1>
+        
+        <div className="bg-white rounded-lg shadow-sm border border-slate-200 p-8 space-y-10">
+          
+          <section>
+            <h2 className="text-2xl font-semibold text-slate-900 mb-4">1. Geltungsbereich</h2>
+            <div className="text-slate-700 space-y-4 leading-relaxed">
+              <p>
+                Diese Allgemeinen Geschäftsbedingungen gelten für die Nutzung der Website und Plattform meine-waermepumpe.at, betrieben durch:
+              </p>
+              <div className="pl-4 border-l-2 border-primary">
+                <p className="font-semibold">Westech Solar e.U.</p>
+                <p>Firmenbuchnummer: FN 389408 i</p>
+                <p>Inhaber: Alexander Oprisan</p>
+                <p>Wienersdorfer Straße 20–24 M37</p>
+                <p>2514 Traiskirchen, Österreich</p>
+              </div>
+              <p>
+                Mit der Nutzung der Plattform erklären sich Nutzer mit diesen AGB einverstanden.
+              </p>
+            </div>
+          </section>
+
+          <section>
+            <h2 className="text-2xl font-semibold text-slate-900 mb-4">2. Leistungsbeschreibung der Plattform</h2>
+            <div className="text-slate-700 space-y-4 leading-relaxed">
+              <p>
+                Die Plattform meine-waermepumpe.at dient der Information von Endkunden rund um das Thema Wärmepumpen sowie der Vermittlung von Kontakten zu regionalen Installations- und Fachbetrieben.
+              </p>
+              <p>Die Plattform bietet insbesondere:</p>
+              <ul className="list-disc list-inside space-y-1 ml-4">
+                <li>Informationen zu Wärmepumpensystemen und Lösungen</li>
+                <li>Online-Tools wie Rechner und Entscheidungs-Checks</li>
+                <li>Kontaktformulare zur Anfrage eines Projektchecks</li>
+                <li>Vermittlung an ausgewählte Partnerbetriebe</li>
+              </ul>
+              <p className="font-medium">
+                Es handelt sich ausdrücklich nicht um einen Online-Shop.
+              </p>
+            </div>
+          </section>
+
+          <section>
+            <h2 className="text-2xl font-semibold text-slate-900 mb-4">3. Rolle der Plattform / Abgrenzung</h2>
+            <div className="text-slate-700 space-y-4 leading-relaxed">
+              <p>
+                Die Plattform tritt nicht als Verkäufer, Auftragnehmer oder Ausführender von Installationsleistungen auf.
+              </p>
+              <p>Insbesondere gilt:</p>
+              <ul className="list-disc list-inside space-y-2 ml-4">
+                <li>Es kommt kein Kauf- oder Werkvertrag mit dem Plattformbetreiber zustande.</li>
+                <li>Verträge über Lieferung, Montage, Beratung oder sonstige Leistungen entstehen ausschließlich zwischen dem Nutzer und dem jeweiligen Installations- oder Fachbetrieb.</li>
+                <li>Die Abrechnung erfolgt direkt zwischen Nutzer und Partnerbetrieb.</li>
+              </ul>
+              <p className="font-medium mt-4">
+                Der Plattformbetreiber ist ausschließlich als Vermittler tätig.
+              </p>
+            </div>
+          </section>
+
+          <section>
+            <h2 className="text-2xl font-semibold text-slate-900 mb-4">4. Nutzung der Plattform</h2>
+            <div className="text-slate-700 space-y-4 leading-relaxed">
+              <p>
+                Die Nutzung der Plattform ist grundsätzlich kostenlos und unverbindlich.
+              </p>
+              <p>
+                Die Nutzung von Rechnern, Checks und Informationen dient der Orientierung und ersetzt keine individuelle technische Planung oder Beratung durch einen Fachbetrieb.
+              </p>
+              <p>
+                Ein Anspruch auf Vermittlung oder Kontaktaufnahme durch einen Partnerbetrieb besteht nicht.
+              </p>
+            </div>
+          </section>
+
+          <section>
+            <h2 className="text-2xl font-semibold text-slate-900 mb-4">5. Angebote, Preise und Förderinformationen</h2>
+            <div className="text-slate-700 space-y-4 leading-relaxed">
+              <p>
+                Alle auf der Website dargestellten Informationen zu Preisen, Förderungen oder Kosten stellen unverbindliche Richtwerte dar.
+              </p>
+              <p>Insbesondere gilt:</p>
+              <ul className="list-disc list-inside space-y-2 ml-4">
+                <li>Preise können je nach Objekt, Region und technischer Situation erheblich abweichen.</li>
+                <li>Förderungen sind abhängig von individuellen Voraussetzungen und behördlichen Entscheidungen.</li>
+                <li>Es besteht kein Anspruch auf eine bestimmte Preisgestaltung oder Förderzusage.</li>
+              </ul>
+              <p className="font-medium mt-4">
+                Verbindliche Angebote werden ausschließlich durch den jeweiligen Fachbetrieb erstellt.
+              </p>
+            </div>
+          </section>
+
+          <section>
+            <h2 className="text-2xl font-semibold text-slate-900 mb-4">6. Vermittlung an Partnerbetriebe</h2>
+            <div className="text-slate-700 space-y-4 leading-relaxed">
+              <p>
+                Wenn Nutzer eine Anfrage oder einen Projektcheck absenden, können die angegebenen Daten an ausgewählte Installations- und Vertriebspartner weitergeleitet werden.
+              </p>
+              <p>Die Weitergabe erfolgt ausschließlich zum Zweck:</p>
+              <ul className="list-disc list-inside space-y-1 ml-4">
+                <li>der Kontaktaufnahme</li>
+                <li>der Erstberatung</li>
+                <li>der Angebotserstellung</li>
+              </ul>
+              <p className="mt-4">Der Plattformbetreiber übernimmt keine Haftung für:</p>
+              <ul className="list-disc list-inside space-y-1 ml-4">
+                <li>Preisgestaltung</li>
+                <li>Terminvereinbarungen</li>
+                <li>Ausführung der Arbeiten</li>
+                <li>Qualität der Leistungen</li>
+                <li>Gewährleistung oder Garantie</li>
+              </ul>
+              <p className="mt-4">
+                Ansprüche aus Werk- oder Kaufverträgen sind direkt gegenüber dem jeweiligen Fachbetrieb geltend zu machen.
+              </p>
+            </div>
+          </section>
+
+          <section>
+            <h2 className="text-2xl font-semibold text-slate-900 mb-4">7. Haftung für Inhalte und Tools</h2>
+            <div className="text-slate-700 space-y-4 leading-relaxed">
+              <p>
+                Die bereitgestellten Inhalte, Rechner und Checks wurden mit größter Sorgfalt erstellt, dienen jedoch ausschließlich der allgemeinen Information.
+              </p>
+              <p>Es wird keine Haftung übernommen für:</p>
+              <ul className="list-disc list-inside space-y-1 ml-4">
+                <li>Richtigkeit oder Vollständigkeit der Inhalte</li>
+                <li>Ergebnisse von Rechnern oder Checks</li>
+                <li>Entscheidungen, die Nutzer auf Grundlage dieser Informationen treffen</li>
+              </ul>
+              <p className="mt-4">
+                Technische Auslegungen und verbindliche Planungen erfolgen ausschließlich durch den Fachbetrieb.
+              </p>
+            </div>
+          </section>
+
+          <section>
+            <h2 className="text-2xl font-semibold text-slate-900 mb-4">8. Verfügbarkeit der Plattform</h2>
+            <div className="text-slate-700 space-y-4 leading-relaxed">
+              <p>
+                Der Plattformbetreiber bemüht sich um eine möglichst unterbrechungsfreie Verfügbarkeit, übernimmt jedoch keine Garantie für die ständige Erreichbarkeit der Website.
+              </p>
+              <p>
+                Wartungen, technische Störungen oder Ausfälle können jederzeit auftreten.
+              </p>
+            </div>
+          </section>
+
+          <section>
+            <h2 className="text-2xl font-semibold text-slate-900 mb-4">9. Urheberrecht</h2>
+            <div className="text-slate-700 space-y-4 leading-relaxed">
+              <p>
+                Alle Inhalte dieser Website (Texte, Bilder, Grafiken, Logos, Struktur) unterliegen dem Urheberrecht.
+              </p>
+              <p>
+                Eine Verwendung außerhalb der Plattform ist ohne ausdrückliche Zustimmung des Plattformbetreibers nicht gestattet.
+              </p>
+            </div>
+          </section>
+
+          <section>
+            <h2 className="text-2xl font-semibold text-slate-900 mb-4">10. Datenschutz</h2>
+            <div className="text-slate-700 space-y-4 leading-relaxed">
+              <p>
+                Informationen zur Verarbeitung personenbezogener Daten finden sich in unserer Datenschutzerklärung:
+              </p>
+              <p>
+                <Link href="/datenschutz" className="text-primary hover:underline font-medium">
+                  meine-waermepumpe.at/datenschutz
+                </Link>
+              </p>
+            </div>
+          </section>
+
+          <section>
+            <h2 className="text-2xl font-semibold text-slate-900 mb-4">11. Anwendbares Recht und Gerichtsstand</h2>
+            <div className="text-slate-700 space-y-4 leading-relaxed">
+              <p>
+                Es gilt österreichisches Recht unter Ausschluss des UN-Kaufrechts.
+              </p>
+              <p>
+                Gerichtsstand, soweit gesetzlich zulässig, ist der Sitz des Plattformbetreibers.
+              </p>
+            </div>
+          </section>
+
+          <section>
+            <h2 className="text-2xl font-semibold text-slate-900 mb-4">12. Salvatorische Klausel</h2>
+            <div className="text-slate-700 space-y-4 leading-relaxed">
+              <p>
+                Sollten einzelne Bestimmungen dieser AGB unwirksam sein oder werden, bleibt die Wirksamkeit der übrigen Bestimmungen unberührt.
+              </p>
+            </div>
+          </section>
+
+          <section>
+            <h2 className="text-2xl font-semibold text-slate-900 mb-4">13. Stand der AGB</h2>
+            <div className="text-slate-700 space-y-4 leading-relaxed">
+              <p>
+                Diese AGB gelten in der aktuellen Fassung mit Stand: März 2026
+              </p>
+            </div>
+          </section>
+
+        </div>
+
+        <p className="text-center text-slate-500 text-sm mt-8">
+          Stand: März 2026
+        </p>
+      </div>
+    </div>
+  );
+}
