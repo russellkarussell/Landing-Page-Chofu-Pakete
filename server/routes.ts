@@ -3,6 +3,7 @@ import { createServer, type Server } from "http";
 import { storage } from "./storage";
 import { insertContactRequestSchema } from "@shared/schema";
 import { z } from "zod";
+import { getUncachableHubSpotClient } from "./hubspot";
 
 export async function registerRoutes(
   httpServer: Server,
@@ -15,37 +16,31 @@ export async function registerRoutes(
       
       const contactRequest = await storage.createContactRequest(validatedData);
       
-      if (process.env.HUBSPOT_ACCESS_TOKEN) {
-        try {
-          const hubspotResponse = await fetch("https://api.hubapi.com/crm/v3/objects/contacts", {
-            method: "POST",
-            headers: {
-              "Authorization": `Bearer ${process.env.HUBSPOT_ACCESS_TOKEN}`,
-              "Content-Type": "application/json"
-            },
-            body: JSON.stringify({
-              properties: {
-                firstname: validatedData.name.split(" ")[0],
-                lastname: validatedData.name.split(" ").slice(1).join(" ") || validatedData.name.split(" ")[0],
-                email: validatedData.email,
-                phone: validatedData.phone,
-                state: validatedData.bundesland,
-                message: validatedData.message || "",
-                hs_lead_status: "NEW"
-              }
-            })
-          });
+      try {
+        const hubspotClient = await getUncachableHubSpotClient();
+        
+        const nameParts = validatedData.name.split(" ");
+        const firstname = nameParts[0];
+        const lastname = nameParts.slice(1).join(" ") || firstname;
+        
+        const response = await hubspotClient.crm.contacts.basicApi.create({
+          properties: {
+            firstname,
+            lastname,
+            email: validatedData.email,
+            phone: validatedData.phone,
+            state: validatedData.bundesland,
+            hs_lead_status: "NEW",
+          },
+          associations: []
+        });
 
-          if (hubspotResponse.ok) {
-            const hubspotData = await hubspotResponse.json();
-            await storage.updateContactRequestHubspotId(contactRequest.id, hubspotData.id);
-            console.log(`HubSpot contact created: ${hubspotData.id}`);
-          } else {
-            console.error("Failed to create HubSpot contact:", await hubspotResponse.text());
-          }
-        } catch (hubspotError) {
-          console.error("HubSpot API error:", hubspotError);
+        if (response && response.id) {
+          await storage.updateContactRequestHubspotId(contactRequest.id, response.id);
+          console.log(`HubSpot contact created: ${response.id}`);
         }
+      } catch (hubspotError: any) {
+        console.error("HubSpot API error:", hubspotError.message || hubspotError);
       }
 
       res.status(201).json({ 
