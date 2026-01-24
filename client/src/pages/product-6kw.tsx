@@ -16,7 +16,7 @@ import {
   Zap
 } from "lucide-react";
 import heroImage from "@assets/PXL_20250803_105021980-Photoroom_1767199080674.jpg";
-import closeupImage from "@assets/R290_Premium_Black_Closeup_image_(1)_1767199051174.jpg";
+import closeupImage from "@/assets/made-in-japan-badge.png";
 import controllerImage from "@assets/CMR-4100M_Display_(1)_1767199043612.jpg";
 import { useEffect } from "react";
 
