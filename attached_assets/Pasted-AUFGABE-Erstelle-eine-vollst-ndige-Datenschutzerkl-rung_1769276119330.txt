@@ -1,0 +1,187 @@
+AUFGABE: Erstelle eine vollständige Datenschutzerklärung als neue Seite im bestehenden Projekt.
+Arbeite im bestehenden Code (kein neues Projekt, keine neue Struktur). Die Seite soll rechtlich solide und professionell formuliert sein (Österreich / DSGVO).
+
+========================
+SEITENANFORDERUNG
+========================
+- Neue Route / Seite erstellen:
+  /datenschutz
+- Seite muss über Footer oder Navigation erreichbar sein (Link "Datenschutz").
+- Layout soll dem bestehenden Seitenstil entsprechen (gleicher Wrapper, Schrift, Abstände).
+- Nur Textinhalt + saubere Struktur (keine fancy Widgets notwendig).
+- Mobile und Desktop gut lesbar.
+
+========================
+INHALT DER DATENSCHUTZSEITE
+========================
+Erstelle eine vollständige Datenschutzerklärung mit folgenden Abschnitten und Inhalten.
+
+Titel:
+Datenschutzerklärung
+
+---
+
+1. Verantwortlicher
+
+Westech Solar e.U. (FN 389408 i)  
+Inhaber: Alexander Oprisan  
+Wienersdorfer Straße 20–24 M37  
+2514 Traiskirchen  
+Österreich  
+
+E-Mail: office@westech-solar.at  
+Telefon: +43 (0)660 120 91 09  
+Website: westech-solar.at  
+UID-Nummer: ATU 676 183 49  
+
+---
+
+2. Allgemeines zur Datenverarbeitung
+
+Formuliere einen professionellen Absatz mit folgendem Inhalt:
+- Wir verarbeiten personenbezogene Daten nur im Einklang mit der DSGVO.
+- Daten werden nur verarbeitet, wenn dies erforderlich oder rechtlich zulässig ist.
+- Zweckbindung und Datensparsamkeit werden eingehalten.
+
+---
+
+3. Zugriffsdaten / Server-Logs
+
+Erkläre, dass beim Besuch automatisch folgende Daten verarbeitet werden:
+- IP-Adresse (gekürzt/anonymisiert, sofern möglich)
+- Datum und Uhrzeit
+- Browsertyp und Version
+- Betriebssystem
+- Referrer-URL
+- Besuchte Seiten
+
+Zweck:
+- technische Sicherheit
+- Stabilität der Website
+- Fehleranalyse
+
+Rechtsgrundlage: berechtigtes Interesse gemäß Art. 6 Abs. 1 lit. f DSGVO.
+
+---
+
+4. Kontaktaufnahme und Formulare
+
+Erkläre:
+- Wenn Nutzer per Formular, Terminbuchung oder E-Mail Kontakt aufnehmen, werden die angegebenen Daten (z. B. Name, E-Mail, Telefonnummer, Nachricht) verarbeitet.
+- Zweck ist die Bearbeitung der Anfrage und Kontaktaufnahme.
+- Speicherung erfolgt nur so lange wie notwendig.
+
+---
+
+5. Weitergabe an Installations- und Vertriebspartner
+
+Wichtiger Abschnitt – bitte professionell formulieren:
+
+- Wenn Nutzer ein Formular absenden oder einen Projektcheck anfragen, können die Daten an ausgewählte Installations- und Vertriebspartner weitergegeben werden.
+- Zweck: Kontaktaufnahme, Erstberatung und Angebotserstellung.
+- Weitergabe erfolgt ausschließlich zweckgebunden.
+- Partner sind vertraglich zur Einhaltung der DSGVO verpflichtet.
+- Es erfolgt keine Weitergabe zu Werbezwecken an unbeteiligte Dritte.
+
+---
+
+6. Effizienz-Check / Rechner
+
+Erkläre:
+- Eingaben in Rechner oder Effizienz-Checks (z. B. Wohnfläche, Gebäudetyp) dienen nur der Orientierung.
+- Diese Daten sind grundsätzlich anonym.
+- Personenbezogene Daten werden nur verarbeitet, wenn Nutzer freiwillig Kontakt aufnehmen.
+
+---
+
+7. Cookies
+
+Erkläre:
+- Technisch notwendige Cookies werden eingesetzt.
+- Analyse- und Marketing-Cookies nur nach aktiver Einwilligung.
+- Einwilligung kann jederzeit widerrufen werden.
+
+---
+
+8. Einsatz von Google Analytics und Google Ads
+
+Professionelle DSGVO-konforme Beschreibung:
+- Verwendung von Google Analytics (mit IP-Anonymisierung).
+- Zweck: Analyse der Website-Nutzung und Optimierung.
+- Datenübertragung an Google-Server möglich.
+- Verarbeitung erfolgt nur mit Einwilligung (Cookie-Banner).
+- Rechtsgrundlage: Art. 6 Abs. 1 lit. a DSGVO.
+
+---
+
+9. Einsatz des Meta Pixels (Facebook / Instagram)
+
+Erkläre:
+- Meta Pixel wird eingesetzt, um Kampagnen zu analysieren und zu optimieren.
+- Es kann nicht ausgeschlossen werden, dass Meta Daten in Drittländer überträgt.
+- Nutzung nur nach Einwilligung.
+- Rechtsgrundlage: Art. 6 Abs. 1 lit. a DSGVO.
+
+---
+
+10. Hosting der Website
+
+Formuliere neutral:
+- Website wird bei einem professionellen Hostinganbieter betrieben.
+- Hosting dient der sicheren und effizienten Bereitstellung.
+- Es besteht ein Auftragsverarbeitungsvertrag gemäß Art. 28 DSGVO.
+
+---
+
+11. Rechte der betroffenen Personen
+
+Liste sauber auf:
+- Recht auf Auskunft
+- Recht auf Berichtigung
+- Recht auf Löschung
+- Recht auf Einschränkung
+- Recht auf Datenübertragbarkeit
+- Recht auf Widerruf einer Einwilligung
+- Beschwerderecht bei der Datenschutzbehörde
+
+Mit Angabe:
+Österreichische Datenschutzbehörde  
+Barichgasse 40–42  
+1030 Wien  
+https://www.dsb.gv.at
+
+---
+
+12. Datensicherheit
+
+Kurzer Abschnitt:
+- SSL-Verschlüsselung
+- technische und organisatorische Maßnahmen
+- Zugriff nur durch berechtigte Personen
+
+---
+
+13. Aktualität
+
+Abschluss:
+- Diese Datenschutzerklärung hat den Stand [Monat Jahr].
+- Wir behalten uns Anpassungen vor.
+
+Verwende z. B.:
+Stand: März 2026
+
+========================
+TECHNISCHE UMSETZUNG
+========================
+- Seite als React-Komponente (oder passend zur Projektstruktur)
+- Saubere Überschriftenstruktur (h1, h2, h3)
+- Gut lesbare Absätze
+- Keine Lorem-Ipsum-Texte
+- Keine Platzhalter wie "TBD"
+
+========================
+ZIEL
+========================
+Am Ende soll ich unter:
+https://meine-waermepumpe.at/datenschutz  
+eine vollständige, saubere Datenschutzerklärung lesen können.
