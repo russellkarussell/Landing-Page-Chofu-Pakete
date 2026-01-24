@@ -318,7 +318,7 @@ export default function Product4kW() {
              </div>
              <div className="flex items-center gap-3">
                 <div className="bg-primary/20 p-2 rounded-full text-primary"><Check /></div>
-                <span>Fixpreisangebot vom Fachpartner</span>
+                <span>Verbindliches Angebot vom Fachpartner</span>
              </div>
           </div>
 

@@ -325,7 +325,7 @@ export default function Product6kW() {
              </div>
              <div className="flex items-center gap-3">
                 <div className="bg-primary/20 p-2 rounded-full text-primary"><Check /></div>
-                <span>Fixpreisangebot über Installationspartner</span>
+                <span>Verbindliches Angebot vom Installationspartner</span>
              </div>
           </div>
 

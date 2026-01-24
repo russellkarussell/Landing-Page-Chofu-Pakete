@@ -100,7 +100,7 @@ Bitte um Beratung zu diesem Objekt.`;
                 {[
                   { title: "Anfrage senden", desc: "Füllen Sie das Formular aus." },
                   { title: "Partner-Match", desc: "Wir suchen den passenden Installateur in Ihrem Bundesland." },
-                  { title: "Besichtigung & Angebot", desc: "Kostenloser Termin vor Ort und finaler Fixpreis." }
+                  { title: "Besichtigung & Angebot", desc: "Kostenloser Termin vor Ort und verbindliches Angebot." }
                 ].map((step, i) => (
                   <div key={i} className="flex gap-4">
                     <div className="flex-shrink-0 w-8 h-8 rounded-full bg-primary/10 text-primary flex items-center justify-center font-bold">
@@ -120,7 +120,7 @@ Bitte um Beratung zu diesem Objekt.`;
               <ul className="space-y-3">
                 {[
                   "Geprüfte regionale Partnerbetriebe",
-                  "Transparente Fixpreise",
+                  "Transparente Paketpreise",
                   "Schnelle Verfügbarkeit",
                   "Unabhängige Beratung"
                 ].map((item, i) => (

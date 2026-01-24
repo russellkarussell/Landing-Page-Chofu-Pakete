@@ -25,7 +25,7 @@ export default function Product10kW() {
     document.title = "CHOFU AEYC-1049ZU-CH1 (10 kW) R290 Wärmepumpe | Heizkraft";
     const metaDesc = document.querySelector('meta[name="description"]');
     if (metaDesc) {
-      metaDesc.setAttribute("content", "10 kW CHOFU R290 Luft/Wasser-Wärmepumpe, Made in Japan, bis 75 °C Vorlauf, leise im Nachtmodus. Beratung & Fixpreis-Pakete.");
+      metaDesc.setAttribute("content", "10 kW CHOFU R290 Luft/Wasser-Wärmepumpe, Made in Japan, bis 75 °C Vorlauf, leise im Nachtmodus. Beratung & Paketangebote vom Fachpartner.");
     }
   }, []);
 
@@ -326,7 +326,7 @@ export default function Product10kW() {
              </div>
              <div className="flex items-center gap-3">
                 <div className="bg-primary/20 p-2 rounded-full text-primary"><Check /></div>
-                <span>Fixpreisangebot über Installationspartner</span>
+                <span>Verbindliches Angebot vom Installationspartner</span>
              </div>
           </div>
 

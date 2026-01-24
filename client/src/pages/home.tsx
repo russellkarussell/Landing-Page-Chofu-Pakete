@@ -161,7 +161,7 @@ export default function Home() {
             
             <h1 className="text-5xl md:text-6xl lg:text-7xl font-heading font-extrabold leading-[1.1] tracking-tight text-[#e5232b]">
               <span className="font-black">CHOFU</span> Wärmepumpen. <br/>
-              <span className="text-primary">Präzision zum Fixpreis.</span>
+              <span className="text-primary">Japanische Präzision.</span>
             </h1>
             
             <p className="text-xl text-slate-600 max-w-xl leading-relaxed">
