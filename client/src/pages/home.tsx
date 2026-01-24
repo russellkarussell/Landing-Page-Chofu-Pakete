@@ -10,7 +10,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Check, ArrowRight, Zap, ShieldCheck, Euro, Coins, Info, Home as HomeIcon, Building, Loader2, Calculator } from "lucide-react";
 import { BUNDESLAENDER, PACKAGES, PARTNERS, SUBSIDIES, formatEUR, getSubsidy, getNetPrice } from "@/lib/constants";
-import heroImage from "@assets/R290_Premium_Black_Closeup_image_(2)_1768489993632.jpg";
+import heroImage from "@assets/hero-heatpump.png";
 import { motion } from "framer-motion";
 import ehpaLabel from "@assets/image_1767188918778.png";
 import { ChofuHomepageTeaser } from "@/components/brand/ChofuHomepageTeaser";
@@ -132,12 +132,12 @@ export default function Home() {
         <div className="absolute inset-0 z-0 bg-grid-pattern opacity-[0.03] pointer-events-none" />
         
         {/* Background Image with Overlay */}
-        <div className="absolute right-0 top-0 bottom-0 w-1/2 z-0 hidden lg:block">
-           <div className="absolute inset-0 bg-gradient-to-r from-slate-50 via-slate-50/50 to-transparent z-10" />
+        <div className="absolute inset-0 z-0">
+           <div className="absolute inset-0 bg-gradient-to-r from-slate-50 via-slate-50/90 to-transparent z-10" />
            <img 
             src={heroImage} 
             alt="Moderne Wärmepumpe Österreich" 
-            className="w-full h-full object-cover object-center grayscale-[30%] contrast-[1.1]"
+            className="w-full h-full object-cover object-center grayscale-[10%]"
           />
         </div>
 
