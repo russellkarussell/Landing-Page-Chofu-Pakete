@@ -25,9 +25,9 @@ export default function Impressum() {
               Anschrift
             </h2>
             <address className="not-italic text-slate-700">
-              Wienersdorfer Strasse 20-24 M37<br />
+              Wienersdorfer Straße 20-24 M37<br />
               2514 Traiskirchen<br />
-              Osterreich
+              Österreich
             </address>
           </section>
 
@@ -68,15 +68,15 @@ export default function Impressum() {
             <div className="space-y-2 text-slate-700">
               <p><span className="font-medium">UID-Nummer:</span> ATU 676 183 49</p>
               <p><span className="font-medium">Firmenbuchgericht:</span> Landesgericht Wiener Neustadt</p>
-              <p><span className="font-medium">Unternehmensgegenstand:</span> Handel mit Photovoltaik- und Warmepumpensystemen</p>
-              <p><span className="font-medium">Mitglied der WKO:</span> Wirtschaftskammer Niederosterreich</p>
+              <p><span className="font-medium">Unternehmensgegenstand:</span> Handel mit Photovoltaik- und Wärmepumpensystemen</p>
+              <p><span className="font-medium">Mitglied der WKO:</span> Wirtschaftskammer Niederösterreich</p>
             </div>
           </section>
 
           <section>
             <h2 className="text-xl font-semibold text-slate-900 mb-4">Streitbeilegung</h2>
             <p className="text-slate-700 leading-relaxed">
-              Die Europaische Kommission stellt eine Plattform zur Online-Streitbeilegung (OS) bereit: 
+              Die Europäische Kommission stellt eine Plattform zur Online-Streitbeilegung (OS) bereit: 
               <a 
                 href="https://ec.europa.eu/consumers/odr" 
                 target="_blank" 
@@ -97,19 +97,19 @@ export default function Impressum() {
               <div>
                 <h3 className="font-medium text-slate-900 mb-1">Haftung für Inhalte</h3>
                 <p>
-                  Die Inhalte unserer Seiten wurden mit grosster Sorgfalt erstellt. Für die Richtigkeit, Vollstandigkeit und Aktualitat der Inhalte konnen wir jedoch keine Gewahr ubernehmen.
+                  Die Inhalte unserer Seiten wurden mit größter Sorgfalt erstellt. Für die Richtigkeit, Vollständigkeit und Aktualität der Inhalte können wir jedoch keine Gewähr übernehmen.
                 </p>
               </div>
               <div>
                 <h3 className="font-medium text-slate-900 mb-1">Haftung für Links</h3>
                 <p>
-                  Unser Angebot enthalt Links zu externen Webseiten Dritter, auf deren Inhalte wir keinen Einfluss haben. Für die Inhalte der verlinkten Seiten ist stets der jeweilige Anbieter oder Betreiber der Seiten verantwortlich.
+                  Unser Angebot enthält Links zu externen Webseiten Dritter, auf deren Inhalte wir keinen Einfluss haben. Für die Inhalte der verlinkten Seiten ist stets der jeweilige Anbieter oder Betreiber der Seiten verantwortlich.
                 </p>
               </div>
               <div>
                 <h3 className="font-medium text-slate-900 mb-1">Urheberrecht</h3>
                 <p>
-                  Die durch die Seitenbetreiber erstellten Inhalte und Werke auf diesen Seiten unterliegen dem osterreichischen Urheberrecht. Die Vervielfaltigung, Bearbeitung, Verbreitung und jede Art der Verwertung ausserhalb der Grenzen des Urheberrechtes bedürfen der schriftlichen Zustimmung des jeweiligen Autors bzw. Erstellers.
+                  Die durch die Seitenbetreiber erstellten Inhalte und Werke auf diesen Seiten unterliegen dem österreichischen Urheberrecht. Die Vervielfältigung, Bearbeitung, Verbreitung und jede Art der Verwertung außerhalb der Grenzen des Urheberrechtes bedürfen der schriftlichen Zustimmung des jeweiligen Autors bzw. Erstellers.
                 </p>
               </div>
             </div>
