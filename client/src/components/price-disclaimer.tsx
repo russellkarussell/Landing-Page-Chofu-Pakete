@@ -1,10 +1,11 @@
-import { Info } from "lucide-react";
-
 export function PriceDisclaimer() {
   return (
-    <div className="flex items-center justify-center gap-2 text-slate-500 text-sm mt-6 mb-4 px-4">
-      <Info className="w-4 h-4 flex-shrink-0" />
-      <p>Preise dienen als Orientierung. Verbindliches Angebot durch den ausführenden Fachbetrieb.</p>
+    <div className="text-center text-slate-500 text-sm mt-6 mb-4 px-4 max-w-2xl mx-auto">
+      <p className="font-medium text-slate-600 mb-1">Preishinweis</p>
+      <p>
+        Bei den dargestellten Preisen handelt es sich um unverbindliche Preisempfehlungen (UVP).
+        Die endgültige Preisgestaltung erfolgt individuell durch den ausführenden Fachbetrieb im Rahmen der Projektplanung.
+      </p>
     </div>
   );
 }
