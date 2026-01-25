@@ -180,18 +180,27 @@ Preferred communication style: Simple, everyday language.
 ## Recent Changes (January 25, 2026)
 
 ### CHOFU Capacity Module (client/src/lib/chofuCapacity.ts)
-- **New module** for CHOFU R290 heat pump capacity calculations
-- Bilinear interpolation on capacity data grid (air temp -7 to 15°C, water temp 35-55°C)
-- Model recommendation based on heat load and design temperatures
-- Returns model ID, label, capacity, and margin percentage
-- Handles "exceeds_10kw_package" status for large buildings
+- **Module** for CHOFU R290 heat pump capacity calculations
+- Bilinear interpolation on capacity data grid (air temp -20 to 7°C, water temp 35-55°C)
+- Model recommendation with **3-status logic**:
+  - `ok`: Model capacity ≥ requiredW (with 5% safety factor) → suitable
+  - `borderline`: Capacity ≥ nominalW but < requiredW → project review recommended
+  - `exceeds_10kw_package`: Capacity < nominalW → 16kW model required
+- Default designAirTemp = -2°C (typical cold, not extreme)
+- Returns model ID, label, capacity, nominalW, requiredW, marginPct, message
 
-### Effizienz-Check (home.tsx) - Redesigned
-- **3 building type tiles** instead of dropdown: Altbau, Teilsaniert, Neubau
-- Each type has internal parameters:
+### Effizienz-Check (home.tsx) - Suitability Check
+- Uses **A-2 temperature** (typical cold conditions) for suitability assessment
+- **3 building type tiles**: Altbau, Teilsaniert, Neubau
+- Each type has internal parameters (hidden from user):
   - Altbau: 100 W/m², designWaterTemp=55°C
   - Teilsaniert: 70 W/m², designWaterTemp=45°C
   - Neubau: 40 W/m², designWaterTemp=35°C
+- **3 result statuses with distinct UI**:
+  - Green "Geeignet": CHOFU package is suitable
+  - Amber "Projekt prüfen (Grenzbereich)": Borderline, site inspection recommended
+  - Red "Über Paketbereich": 16kW model required (not in package)
+- No A/W technical values displayed to end users
 - Heat load calculation: heizlastKw = (area × specificHeatLoad) / 1000
 - Range display: ±15% around calculated heat load
 - **Result tiles**: Heizlast (range), Empfehlung (model), Gebäude (building type)
