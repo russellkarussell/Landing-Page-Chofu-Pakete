@@ -168,17 +168,18 @@ export default function Home() {
   return (
     <div className="flex flex-col gap-0">
       {/* Hero Section */}
-      <section className="relative min-h-[90vh] flex items-center bg-slate-50 overflow-hidden">
+      <section className="relative min-h-[70vh] md:min-h-[90vh] flex items-center bg-slate-50 overflow-hidden">
         {/* Technical Grid Background */}
         <div className="absolute inset-0 z-0 bg-grid-pattern opacity-[0.03] pointer-events-none" />
         
-        {/* Background Image with Overlay */}
+        {/* Background Image with Overlay - hidden on mobile */}
         <div className="absolute inset-0 z-0">
-           <div className="absolute inset-0 bg-gradient-to-r from-slate-50 via-slate-50/90 to-transparent z-10" />
+           <div className="absolute inset-0 bg-gradient-to-r from-slate-50 via-slate-50/90 to-transparent z-10 hidden md:block" />
+           <div className="absolute inset-0 bg-slate-50 md:hidden" />
            <img 
             src={heroImage} 
             alt="Moderne Wärmepumpe Österreich Hintergrund" 
-            className="w-full h-full object-cover object-center grayscale-[10%]"
+            className="hidden md:block w-full h-full object-cover object-center grayscale-[10%]"
           />
         </div>
 
