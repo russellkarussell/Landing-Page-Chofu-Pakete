@@ -1,6 +1,6 @@
 import { type InsertContactRequest } from "@shared/schema";
 
-export async function submitContactRequest(data: InsertContactRequest) {
+export async function submitContactRequest(data: InsertContactRequest & { turnstileToken?: string }) {
   const response = await fetch("/api/contact", {
     method: "POST",
     headers: {

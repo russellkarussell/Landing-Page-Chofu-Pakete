@@ -13,6 +13,31 @@ const upload = multer({ storage: multer.memoryStorage(), limits: { fileSize: 5 *
 const NOTIFICATION_EMAIL = "office@westech-solar.at";
 const LEAD_SOURCE = "meine-waermepumpe.at";
 
+async function verifyTurnstileToken(token: string): Promise<boolean> {
+  const secretKey = process.env.TURNSTILE_SECRET_KEY;
+  if (!secretKey) {
+    console.warn("TURNSTILE_SECRET_KEY not set, skipping verification");
+    return true;
+  }
+  
+  try {
+    const response = await fetch("https://challenges.cloudflare.com/turnstile/v0/siteverify", {
+      method: "POST",
+      headers: { "Content-Type": "application/x-www-form-urlencoded" },
+      body: new URLSearchParams({
+        secret: secretKey,
+        response: token,
+      }),
+    });
+    
+    const data = await response.json() as { success: boolean };
+    return data.success === true;
+  } catch (error) {
+    console.error("Turnstile verification error:", error);
+    return false;
+  }
+}
+
 function generateSlug(name: string): string {
   return name
     .toLowerCase()
@@ -38,7 +63,20 @@ export async function registerRoutes(
   
   app.post("/api/contact", async (req, res) => {
     try {
-      const validatedData = insertContactRequestSchema.parse(req.body);
+      const { turnstileToken, ...formData } = req.body;
+      
+      if (!turnstileToken) {
+        res.status(400).json({ message: "Sicherheitsprüfung erforderlich" });
+        return;
+      }
+      
+      const isValidToken = await verifyTurnstileToken(turnstileToken);
+      if (!isValidToken) {
+        res.status(400).json({ message: "Sicherheitsprüfung fehlgeschlagen. Bitte versuchen Sie es erneut." });
+        return;
+      }
+      
+      const validatedData = insertContactRequestSchema.parse(formData);
       
       const contactRequest = await storage.createContactRequest(validatedData);
       
@@ -163,6 +201,7 @@ export async function registerRoutes(
   // Heizkostenrechner Lead Capture
   const heizkostenLeadSchema = z.object({
     email: z.string().email("Ungültige E-Mail-Adresse"),
+    turnstileToken: z.string().optional(),
     consent: z.object({
       accepted: z.literal(true),
       timestamp: z.string(),
@@ -207,6 +246,18 @@ export async function registerRoutes(
   app.post("/api/heizkosten-lead", async (req, res) => {
     try {
       const validatedData = heizkostenLeadSchema.parse(req.body);
+      
+      // Verify Turnstile token
+      if (validatedData.turnstileToken) {
+        const isValidToken = await verifyTurnstileToken(validatedData.turnstileToken);
+        if (!isValidToken) {
+          res.status(400).json({ message: "Sicherheitsprüfung fehlgeschlagen. Bitte versuchen Sie es erneut." });
+          return;
+        }
+      } else if (process.env.TURNSTILE_SECRET_KEY) {
+        res.status(400).json({ message: "Sicherheitsprüfung erforderlich" });
+        return;
+      }
       
       // Create HubSpot contact
       try {

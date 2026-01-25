@@ -16,11 +16,13 @@ import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/com
 import { Phone, Mail, MapPin, CheckCircle2 } from "lucide-react";
 import { submitContactRequest } from "@/lib/api";
 import { insertContactRequestSchema } from "@shared/schema";
+import { useTurnstile } from "@/hooks/useTurnstile";
 
 export default function Contact() {
   const { toast } = useToast();
   const [location] = useLocation();
   const [isSubmitted, setIsSubmitted] = useState(false);
+  const { containerRef: turnstileRef, token: turnstileToken, reset: resetTurnstile } = useTurnstile();
 
   const form = useForm<z.infer<typeof insertContactRequestSchema>>({
     resolver: zodResolver(insertContactRequestSchema),
@@ -71,7 +73,19 @@ Bitte um Beratung zu diesem Objekt.`;
   }, [form]);
 
   function onSubmit(values: z.infer<typeof insertContactRequestSchema>) {
-    mutation.mutate(values);
+    if (!turnstileToken) {
+      toast({
+        title: "Sicherheitsprüfung erforderlich",
+        description: "Bitte warten Sie, bis die Sicherheitsprüfung abgeschlossen ist.",
+        variant: "destructive",
+      });
+      return;
+    }
+    mutation.mutate({ ...values, turnstileToken }, {
+      onSuccess: () => {
+        resetTurnstile();
+      }
+    });
   }
 
   return (
@@ -226,10 +240,12 @@ Bitte um Beratung zu diesem Objekt.`;
                     )}
                   />
 
+                  <div ref={turnstileRef} className="flex justify-center" />
+                  
                   <Button 
                     type="submit" 
                     className="w-full h-12 text-lg font-bold shadow-lg hover:shadow-xl transition-all"
-                    disabled={mutation.isPending}
+                    disabled={mutation.isPending || !turnstileToken}
                     data-testid="button-submit-contact"
                   >
                     {mutation.isPending ? "Wird gesendet..." : "Termin anfragen"}

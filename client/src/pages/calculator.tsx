@@ -1,4 +1,5 @@
-import { useState, useEffect, useMemo, useRef } from "react";
+import { useState, useEffect, useMemo, useRef, useCallback } from "react";
+import { useTurnstile } from "@/hooks/useTurnstile";
 import { motion, AnimatePresence } from "framer-motion";
 import { 
   ArrowRight, 
@@ -229,10 +230,13 @@ export default function Heizkostenrechner() {
   const [leadSubmitting, setLeadSubmitting] = useState(false);
   const [leadSubmitted, setLeadSubmitted] = useState(false);
   const [leadError, setLeadError] = useState<string | null>(null);
+  
+  // Turnstile for spam protection
+  const { containerRef: turnstileRef, token: turnstileToken, reset: resetTurnstile } = useTurnstile();
 
   // Email validation
   const isValidEmail = (email: string) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
-  const canSubmitLead = isValidEmail(leadEmail) && leadConsent && !leadSubmitting;
+  const canSubmitLead = isValidEmail(leadEmail) && leadConsent && !leadSubmitting && !!turnstileToken;
 
   // Submit lead
   const submitLead = async () => {
@@ -244,6 +248,7 @@ export default function Heizkostenrechner() {
     try {
       const payload = {
         email: leadEmail,
+        turnstileToken,
         consent: {
           accepted: true,
           timestamp: new Date().toISOString(),
@@ -296,8 +301,10 @@ export default function Heizkostenrechner() {
       }
       
       setLeadSubmitted(true);
+      resetTurnstile();
     } catch (err) {
       setLeadError("Senden fehlgeschlagen – bitte versuchen Sie es erneut.");
+      resetTurnstile();
     } finally {
       setLeadSubmitting(false);
     }
@@ -1004,6 +1011,11 @@ export default function Heizkostenrechner() {
                     className="space-y-8 flex-grow"
                   >
                     <StepHeader step={4} title={isNewBuildMode ? "Ihre Wärmepumpen-Lösung" : "Ihr Sparpotenzial"} />
+
+                    {/* Turnstile captcha - shared widget for both form variants */}
+                    {!leadSubmitted && (
+                      <div ref={turnstileRef} className="flex justify-center" />
+                    )}
 
                     {/* Recommended Solution Section - only show when a package is selected */}
                     {derivedPackage.package && productImages[derivedPackage.package] && (
