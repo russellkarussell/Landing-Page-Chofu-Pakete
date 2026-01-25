@@ -290,7 +290,7 @@ export async function registerRoutes(
           <!-- Logo -->
           <tr>
             <td style="background-color: #ffffff; padding: 24px; text-align: center;">
-              <img src="https://meine-waermepumpe.at/email-logo.png" alt="meine-waermepumpe.at" width="250" style="max-width: 250px; height: auto;" />
+              <img src="https://yeaxuexfornuxvcldtux.supabase.co/storage/v1/object/public/image/meine-waermepumpe.at-logo-banner-transparent.png" alt="meine-waermepumpe.at" width="250" style="max-width: 250px; height: auto;" />
             </td>
           </tr>
           
