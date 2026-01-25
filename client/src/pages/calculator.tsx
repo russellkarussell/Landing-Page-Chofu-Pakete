@@ -24,6 +24,48 @@ import { cn } from "@/lib/utils";
 import { Link } from "wouter";
 import { getCapacityAt, type ChofuModelId } from "@/lib/chofuCapacity";
 
+// Product images for results page
+import chofu4kwProduct from "@/assets/chofu-4kw-product.webp";
+import chofu6kwProduct from "@/assets/chofu-6kw-product.webp";
+import chofu10kwProduct from "@/assets/chofu-10kw-product.webp";
+
+// USP icons
+import uspJapan from "@/assets/usp-japan.png";
+import uspSchallpegel from "@/assets/usp-schallpegel.png";
+import uspFussabdruck from "@/assets/usp-fussabdruck.png";
+import uspHeizleistung from "@/assets/usp-heizleistung.png";
+
+// Product image mapping
+const productImages: Record<string, string> = {
+  "4kW": chofu4kwProduct,
+  "6kW": chofu6kwProduct,
+  "10kW": chofu10kwProduct,
+};
+
+// USP data
+const uspItems = [
+  {
+    icon: uspJapan,
+    title: "Made in Japan",
+    text: "Japanische Qualität für langlebigen, zuverlässigen Betrieb."
+  },
+  {
+    icon: uspSchallpegel,
+    title: "31 dB(A) im Nachtmodus",
+    text: "Besonders leiser Betrieb – ideal auch in dicht bebauten Gebieten."
+  },
+  {
+    icon: uspFussabdruck,
+    title: "Minimale Stellfläche",
+    text: "Kompaktes Außengerät – passt auch bei wenig Platz."
+  },
+  {
+    icon: uspHeizleistung,
+    title: "100% Leistung bei −5 °C",
+    text: "Volle Nennleistung auch bei Kälte – ohne elektrische Zusatzheizung."
+  }
+];
+
 // --- Configuration & Constants ---
 
 const CONFIG = {
@@ -934,6 +976,43 @@ export default function Heizkostenrechner() {
                     className="space-y-8 flex-grow"
                   >
                     <StepHeader step={4} title={isNewBuildMode ? "Ihre Wärmepumpen-Lösung" : "Ihr Sparpotenzial"} />
+
+                    {/* Recommended Solution Section - only show when a package is selected */}
+                    {derivedPackage.package && productImages[derivedPackage.package] && (
+                      <div className="bg-white border border-slate-200 rounded-xl p-6 shadow-sm mb-6">
+                        <h3 className="text-lg font-bold text-slate-900 mb-6">Ihre empfohlene CHOFU Wärmepumpe</h3>
+                        
+                        <div className="grid md:grid-cols-2 gap-8">
+                          {/* Product Image */}
+                          <div className="flex items-center justify-center">
+                            <img 
+                              src={productImages[derivedPackage.package]} 
+                              alt={`CHOFU Wärmepumpe ${derivedPackage.package} – Made in Japan`}
+                              className="rounded-xl shadow-lg max-h-[280px] object-contain"
+                            />
+                          </div>
+                          
+                          {/* USP Grid */}
+                          <div className="grid grid-cols-2 gap-4">
+                            {uspItems.map((usp, index) => (
+                              <div key={index} className="flex flex-col items-center text-center p-3 bg-slate-50 rounded-lg">
+                                <img 
+                                  src={usp.icon} 
+                                  alt={usp.title}
+                                  className="w-12 h-12 object-contain mb-2"
+                                />
+                                <h4 className="font-semibold text-sm text-slate-900 mb-1">{usp.title}</h4>
+                                <p className="text-xs text-slate-600 leading-relaxed">{usp.text}</p>
+                              </div>
+                            ))}
+                          </div>
+                        </div>
+                        
+                        <p className="text-center text-sm text-slate-500 mt-6">
+                          Empfohlen basierend auf Ihrem Wärmebedarf von {results.nutzwaermeBedarf?.toLocaleString()} kWh/Jahr
+                        </p>
+                      </div>
+                    )}
 
                     {isNewBuildMode ? (
                       /* Standalone Mode: New Build / No existing system */

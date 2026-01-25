@@ -1,0 +1,107 @@
+ROLE: Senior Frontend Engineer (React/TypeScript) + UX
+PROJECT: meine-waermepumpe.at
+TASK: Improve the Heizkostenrechner results page (Step 4/4) so it feels less technical and more “product + solution”.
+Add a recommended heat pump photo + a compact USP block using the provided icons.
+
+WHERE:
+client/src/pages/calculator.tsx (Step 4 / Ergebnis UI)
+(and any shared components used by the results screen)
+
+========================
+A) GOAL / UX INTENT
+========================
+- The results page currently looks too technical (numbers only).
+- Add a “recommended solution” visual block:
+  - product image of the recommended CHOFU unit
+  - 4 key USPs with icons
+- Keep existing numeric results, but move them into a secondary role.
+
+========================
+B) WHAT TO ADD (NEW SECTION)
+========================
+Add a new section near the top of Step 4 (above the detailed KPI table/cards),
+titled:
+
+"Ihre empfohlene CHOFU Wärmepumpe"
+
+This section contains a 2-column layout on desktop:
+LEFT: Product image (photo)
+RIGHT: USP list (4 items) + optional short line of reassurance
+
+On mobile: stack image first, then USPs.
+
+========================
+C) PRODUCT IMAGE (DYNAMIC PER PACKAGE)
+========================
+Use the calculator’s selected package/model (already computed earlier) to choose the correct image:
+
+- If selectedPackage === "4kW": show image for model AEYC-0449ZU-CH1
+- If selectedPackage === "6kW": show image for model AEYC-0649ZU-CH1
+- If selectedPackage === "10kW": show image for model AEYC-1049ZU-CH1
+
+Implementation:
+- Add three image assets (the planning agent will provide the actual files/paths).
+- Use a mapping object:
+  const modelImage = { "4kW": "...", "6kW": "...", "10kW": "..." }
+- If selectedPackage is null (oversized case / 16kW inquiry), do NOT show the product image section.
+
+Image styling:
+- rounded-xl
+- subtle shadow
+- maintain aspect ratio
+- not overly large; keep it “premium” and calm
+
+Alt text example:
+"CHOFU Wärmepumpe – empfohlenes Modell (Made in Japan)"
+
+========================
+D) USP BLOCK (WITH PROVIDED ICONS)
+========================
+Show 4 USP tiles (or a clean list with icons). Use the icons provided:
+- Japan icon (Japan.png)
+- Noise icon (Schallpegel.png)
+- Footprint icon (Fussabdruck.png)
+- Heating performance icon (Heizleistung.png)
+
+USP copy (German, concise, non-technical tone):
+1) Icon: Japan.png
+   Title: "Made in Japan"
+   Text: "Japanische Qualität für langlebigen, zuverlässigen Betrieb."
+
+2) Icon: Schallpegel.png
+   Title: "31 dB(A) im Nachtmodus"
+   Text: "Besonders leiser Betrieb – ideal auch in dicht bebauten Gebieten."
+
+3) Icon: Fussabdruck.png
+   Title: "Minimale Stellfläche"
+   Text: "Kompaktes Außengerät – passt auch bei wenig Platz."
+
+4) Icon: Heizleistung.png
+   Title: "100% Leistung bei −5 °C (ohne Heizstab)"
+   Text: "Volle Nennleistung auch bei Kälte – ohne elektrische Zusatzheizung."
+
+IMPORTANT:
+- No exaggerated promises beyond these statements.
+- Keep typography premium: short titles, one supporting line each.
+
+Layout:
+- Desktop: 2x2 grid of USP items on the right OR vertical list (preferred: 2x2 grid for balance).
+- Mobile: vertical list or 2-column grid with good spacing.
+
+========================
+E) REORDER RESULTS (LESS TECHNICAL FEEL)
+========================
+After adding the new section, keep the existing numeric results but:
+- place the main KPI band below the “recommended solution” section
+- keep the explanatory note (new build mode etc.) below KPIs as currently
+
+Do NOT remove existing calculations.
+
+========================
+F) ACCEPTANCE CRITERIA
+========================
+1) Step 4 starts with a “recommended solution” block including product image + 4 USPs.
+2) The product image changes depending on the selected package (4/6/10 kW).
+3) The 4 icons are displayed next to their USP.
+4) Mobile layout is clean and does not look cramped.
+5) In oversized/16kW inquiry state (selectedPackage null), this block is hidden.
