@@ -270,7 +270,7 @@ export async function registerRoutes(
         const isComparisonMode = inputs.currentHeatingSystem !== "keine";
 
         await resendClient.emails.send({
-          from: fromEmail || "meine-waermepumpe.at <anfrage@meine-waermepumpe.at>",
+          from: "meine-waermepumpe.at <anfrage@meine-waermepumpe.at>",
           to: validatedData.email,
           subject: "Ihre Heizkostenrechner-Ergebnisse – CHOFU Wärmepumpe",
           html: `
