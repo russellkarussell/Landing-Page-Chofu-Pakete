@@ -313,23 +313,18 @@ export async function registerRoutes(
               <div style="background-color: #f8fafc; border-radius: 12px; padding: 24px; margin-bottom: 24px; border: 1px solid #e2e8f0;">
                 <h2 style="margin: 0 0 16px; font-size: 18px; font-weight: 600; color: #0f766e; text-align: center;">Ihre empfohlene CHOFU Wärmepumpe</h2>
                 
-                <!-- Product Image -->
-                <table width="100%" cellpadding="0" cellspacing="0">
+                <!-- Top Row: Product Image (left) + 2 USPs (right) -->
+                <table width="100%" cellpadding="0" cellspacing="0" style="margin-bottom: 16px;">
                   <tr>
-                    <td align="center" style="padding-bottom: 20px;">
-                      <img src="https://meine-waermepumpe.at/email-chofu-${derived.selectedPackage.replace('kW', 'kw')}.webp" alt="CHOFU Wärmepumpe ${derived.selectedPackage}" width="280" style="max-width: 280px; height: auto; border-radius: 8px;" />
+                    <td width="50%" style="vertical-align: middle; padding: 8px;">
+                      <img src="https://meine-waermepumpe.at/email-chofu-${derived.selectedPackage.replace('kW', 'kw')}.webp" alt="CHOFU Wärmepumpe ${derived.selectedPackage}" width="220" style="max-width: 220px; height: auto; border-radius: 8px; display: block; margin: 0 auto;" />
                     </td>
-                  </tr>
-                </table>
-                
-                <!-- USP Grid -->
-                <table width="100%" cellpadding="8" cellspacing="0">
-                  <tr>
                     <td width="50%" style="vertical-align: top; padding: 8px;">
-                      <table cellpadding="0" cellspacing="0" style="background-color: #ffffff; border-radius: 8px; padding: 12px; width: 100%;">
+                      <!-- USP 1: Made in Japan -->
+                      <table cellpadding="0" cellspacing="0" style="background-color: #ffffff; border-radius: 8px; padding: 12px; width: 100%; margin-bottom: 8px;">
                         <tr>
-                          <td width="48" style="vertical-align: top;">
-                            <img src="https://meine-waermepumpe.at/email-usp-japan.png" alt="Made in Japan" width="40" height="40" style="display: block;" />
+                          <td width="44" style="vertical-align: top;">
+                            <img src="https://meine-waermepumpe.at/email-usp-japan.png" alt="Made in Japan" width="36" height="36" style="display: block;" />
                           </td>
                           <td style="padding-left: 10px; vertical-align: top;">
                             <strong style="font-size: 13px; color: #1e293b;">Made in Japan</strong><br/>
@@ -337,12 +332,11 @@ export async function registerRoutes(
                           </td>
                         </tr>
                       </table>
-                    </td>
-                    <td width="50%" style="vertical-align: top; padding: 8px;">
+                      <!-- USP 2: 31 dB(A) -->
                       <table cellpadding="0" cellspacing="0" style="background-color: #ffffff; border-radius: 8px; padding: 12px; width: 100%;">
                         <tr>
-                          <td width="48" style="vertical-align: top;">
-                            <img src="https://meine-waermepumpe.at/email-usp-schallpegel.png" alt="31 dB(A)" width="40" height="40" style="display: block;" />
+                          <td width="44" style="vertical-align: top;">
+                            <img src="https://meine-waermepumpe.at/email-usp-schallpegel.png" alt="31 dB(A)" width="36" height="36" style="display: block;" />
                           </td>
                           <td style="padding-left: 10px; vertical-align: top;">
                             <strong style="font-size: 13px; color: #1e293b;">31 dB(A) Nachtmodus</strong><br/>
@@ -352,12 +346,26 @@ export async function registerRoutes(
                       </table>
                     </td>
                   </tr>
+                </table>
+                
+                <!-- Bottom Row: Package contents (left) + 2 more USPs (right) -->
+                <table width="100%" cellpadding="0" cellspacing="0" style="border-top: 1px solid #e2e8f0; padding-top: 16px;">
                   <tr>
                     <td width="50%" style="vertical-align: top; padding: 8px;">
-                      <table cellpadding="0" cellspacing="0" style="background-color: #ffffff; border-radius: 8px; padding: 12px; width: 100%;">
+                      <h3 style="margin: 0 0 12px; font-size: 16px; font-weight: 700; color: #0f766e;">CHOFU ${derived.selectedPackage} Paket</h3>
+                      <table cellpadding="0" cellspacing="0" style="font-size: 13px; color: #334155;">
+                        <tr><td style="padding: 4px 0;">✓ ${derived.selectedPackage} CHOFU Wärmepumpe</td></tr>
+                        <tr><td style="padding: 4px 0;">✓ ${derived.selectedPackage === '10kW' ? '500l' : '300l'} Heizkraft Wärmepumpenspeicher</td></tr>
+                        <tr><td style="padding: 4px 0;">✓ Hydroboxinneneinheit & Zubehör</td></tr>
+                        <tr><td style="padding: 4px 0;">✓ Installation & Inbetriebnahme</td></tr>
+                      </table>
+                    </td>
+                    <td width="50%" style="vertical-align: top; padding: 8px;">
+                      <!-- USP 3: Minimale Stellfläche -->
+                      <table cellpadding="0" cellspacing="0" style="background-color: #ffffff; border-radius: 8px; padding: 12px; width: 100%; margin-bottom: 8px;">
                         <tr>
-                          <td width="48" style="vertical-align: top;">
-                            <img src="https://meine-waermepumpe.at/email-usp-fussabdruck.png" alt="Kompakt" width="40" height="40" style="display: block;" />
+                          <td width="44" style="vertical-align: top;">
+                            <img src="https://meine-waermepumpe.at/email-usp-fussabdruck.png" alt="Kompakt" width="36" height="36" style="display: block;" />
                           </td>
                           <td style="padding-left: 10px; vertical-align: top;">
                             <strong style="font-size: 13px; color: #1e293b;">Minimale Stellfläche</strong><br/>
@@ -365,12 +373,11 @@ export async function registerRoutes(
                           </td>
                         </tr>
                       </table>
-                    </td>
-                    <td width="50%" style="vertical-align: top; padding: 8px;">
+                      <!-- USP 4: 100% bei -5°C -->
                       <table cellpadding="0" cellspacing="0" style="background-color: #ffffff; border-radius: 8px; padding: 12px; width: 100%;">
                         <tr>
-                          <td width="48" style="vertical-align: top;">
-                            <img src="https://meine-waermepumpe.at/email-usp-heizleistung.png" alt="100%" width="40" height="40" style="display: block;" />
+                          <td width="44" style="vertical-align: top;">
+                            <img src="https://meine-waermepumpe.at/email-usp-heizleistung.png" alt="100%" width="36" height="36" style="display: block;" />
                           </td>
                           <td style="padding-left: 10px; vertical-align: top;">
                             <strong style="font-size: 13px; color: #1e293b;">100% bei −5 °C</strong><br/>
@@ -382,8 +389,8 @@ export async function registerRoutes(
                   </tr>
                 </table>
                 
-                <p style="margin: 16px 0 0; text-align: center; font-size: 13px; color: #64748b;">
-                  Empfohlen: <strong style="color: #0f766e;">CHOFU ${derived.selectedPackage} Paket</strong>
+                <p style="margin: 16px 0 0; text-align: center; font-size: 12px; color: #94a3b8;">
+                  Empfohlen basierend auf Ihrem Wärmebedarf
                 </p>
               </div>
               ` : ''}
