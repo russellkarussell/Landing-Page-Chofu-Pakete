@@ -29,11 +29,9 @@ import chofu4kwProduct from "@/assets/chofu-4kw-product.webp";
 import chofu6kwProduct from "@/assets/chofu-6kw-product.webp";
 import chofu10kwProduct from "@/assets/chofu-10kw-product.webp";
 
-// USP icons
+// USP icons (only using top 2 for recommendation section)
 import uspJapan from "@/assets/usp-japan.png";
 import uspSchallpegel from "@/assets/usp-schallpegel.png";
-import uspFussabdruck from "@/assets/usp-fussabdruck.png";
-import uspHeizleistung from "@/assets/usp-heizleistung.png";
 
 // Product image mapping
 const productImages: Record<string, string> = {
@@ -42,8 +40,8 @@ const productImages: Record<string, string> = {
   "10kW": chofu10kwProduct,
 };
 
-// USP data
-const uspItems = [
+// USP data - only top 2 for recommendation section
+const topUsps = [
   {
     icon: uspJapan,
     title: "Made in Japan",
@@ -53,18 +51,30 @@ const uspItems = [
     icon: uspSchallpegel,
     title: "31 dB(A) im Nachtmodus",
     text: "Besonders leiser Betrieb – ideal auch in dicht bebauten Gebieten."
-  },
-  {
-    icon: uspFussabdruck,
-    title: "Minimale Stellfläche",
-    text: "Kompaktes Außengerät – passt auch bei wenig Platz."
-  },
-  {
-    icon: uspHeizleistung,
-    title: "100% Leistung bei −5 °C",
-    text: "Volle Nennleistung auch bei Kälte – ohne elektrische Zusatzheizung."
   }
 ];
+
+// Package contents for each size
+const packageContents: Record<string, string[]> = {
+  "4kW": [
+    "4kW CHOFU Wärmepumpe",
+    "300l Heizkraft Wärmepumpenspeicher",
+    "Hydroboxinneneinheit & Zubehör",
+    "Installation & Inbetriebnahme"
+  ],
+  "6kW": [
+    "6kW CHOFU Wärmepumpe",
+    "300l Heizkraft Wärmepumpenspeicher",
+    "Hydroboxinneneinheit & Zubehör",
+    "Installation & Inbetriebnahme"
+  ],
+  "10kW": [
+    "10kW CHOFU Wärmepumpe",
+    "500l Heizkraft Wärmepumpenspeicher",
+    "Hydroboxinneneinheit & Zubehör",
+    "Installation & Inbetriebnahme"
+  ]
+};
 
 // --- Configuration & Constants ---
 
@@ -985,33 +995,51 @@ export default function Heizkostenrechner() {
                       <div className="bg-white border border-slate-200 rounded-xl p-6 shadow-sm mb-6">
                         <h3 className="text-lg font-bold text-slate-900 mb-6">Ihre empfohlene CHOFU Wärmepumpe</h3>
                         
-                        <div className="grid md:grid-cols-2 gap-8">
+                        {/* Top Row: Image + 2 USPs side by side */}
+                        <div className="grid md:grid-cols-2 gap-6 mb-6">
                           {/* Product Image */}
                           <div className="flex items-center justify-center">
                             <img 
                               src={productImages[derivedPackage.package]} 
                               alt={`CHOFU Wärmepumpe ${derivedPackage.package} – Made in Japan`}
-                              className="rounded-xl shadow-lg max-h-[280px] object-contain"
+                              className="rounded-xl shadow-lg max-h-[220px] object-contain"
                             />
                           </div>
                           
-                          {/* USP Grid */}
-                          <div className="grid grid-cols-2 gap-4">
-                            {uspItems.map((usp, index) => (
-                              <div key={index} className="flex flex-col items-center text-center p-3 bg-slate-50 rounded-lg">
+                          {/* 2 USPs stacked vertically */}
+                          <div className="flex flex-col gap-4 justify-center">
+                            {topUsps.map((usp, index) => (
+                              <div key={index} className="flex items-start gap-4 p-4 bg-slate-50 rounded-lg">
                                 <img 
                                   src={usp.icon} 
                                   alt={usp.title}
-                                  className="w-12 h-12 object-contain mb-2"
+                                  className="w-12 h-12 object-contain flex-shrink-0"
                                 />
-                                <h4 className="font-semibold text-sm text-slate-900 mb-1">{usp.title}</h4>
-                                <p className="text-xs text-slate-600 leading-relaxed">{usp.text}</p>
+                                <div>
+                                  <h4 className="font-semibold text-sm text-slate-900 mb-1">{usp.title}</h4>
+                                  <p className="text-xs text-slate-600 leading-relaxed">{usp.text}</p>
+                                </div>
                               </div>
                             ))}
                           </div>
                         </div>
                         
-                        <p className="text-center text-sm text-slate-500 mt-6">
+                        {/* Package Name */}
+                        <div className="border-t border-slate-200 pt-5">
+                          <h4 className="text-lg font-bold text-primary mb-3">CHOFU {derivedPackage.package} Paket</h4>
+                          
+                          {/* Package Contents as bullet list */}
+                          <ul className="space-y-2">
+                            {packageContents[derivedPackage.package]?.map((item, index) => (
+                              <li key={index} className="flex items-center gap-2 text-sm text-slate-700">
+                                <Check size={16} className="text-primary flex-shrink-0" />
+                                {item}
+                              </li>
+                            ))}
+                          </ul>
+                        </div>
+                        
+                        <p className="text-center text-xs text-slate-400 mt-5 pt-4 border-t border-slate-100">
                           Empfohlen basierend auf Ihrem Wärmebedarf von {results.nutzwaermeBedarf?.toLocaleString()} kWh/Jahr
                         </p>
                       </div>
