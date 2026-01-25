@@ -1,0 +1,110 @@
+ROLE: Senior Full-Stack Engineer + HVAC Planner
+PROJECT: meine-waermepumpe.at (React/TypeScript)
+TASK: Fix ONLY Step 3 (Investitionskosten/Förderung) in Heizkostenrechner so that:
+- The customer cannot choose a package manually.
+- The package is auto-derived from Step 1 + Step 2 inputs (building class + area + Vorlauf + FBH share).
+- Investment costs use the GROSS package prices (before subsidy), then subsidy is calculated from that amount.
+- Update package prices as specified.
+
+WHERE: client/src/pages/calculator.tsx (Step 3 of 4 + underlying calculation state)
+
+========================
+A) PACKAGE PRICES (GROSS, BEFORE SUBSIDY)
+========================
+Use these base package prices (EUR):
+- 4kW package: 18290
+- 6kW package: 18990
+- 10kW package: 20490
+
+IMPORTANT:
+- These are the investment costs BEFORE subsidy.
+- Subsidy amount must be calculated from this base price (and any add-ons if you have them).
+
+========================
+B) NO PACKAGE SELECTION UI FOR CUSTOMER
+========================
+- REMOVE any UI control that lets the user choose 4/6/10 kW packages in Step 3.
+- Step 3 should show the automatically selected package name as informational text only, e.g.:
+  "Investitionskosten (automatisch): 6kW Paket"
+
+========================
+C) AUTO-PACKAGE SELECTION LOGIC (FROM STEP 1 + STEP 2)
+========================
+Goal: Decide which package is relevant for the user based on the same sizing logic used in the Effizienz-Check:
+- Use A-2 for the Eignungs-/Sizing check in this funnel.
+- Use water temp based on the user-selected Vorlauf in Step 2 (or the computed effective Vorlauf if you already apply FBH to reduce it).
+- Use the CHOFU capacity engine for AEYC-0449ZU-CH1 / 0649 / 1049.
+- Pick the smallest package that satisfies the requirement.
+
+Implementation details:
+
+1) Compute nominal heat load (same as Step 1 approach):
+- specificHeatLoad depends on building class (same mapping already implemented in Step 1):
+  alt_unsaniert=100, alt_teilsaniert=70, alt_saniert=50, neubau=40, niedrigenergie=30 (W/m²)
+- nominalKw = area_m2 * specificHeatLoad / 1000
+
+2) Determine sizing air temp for package selection:
+- sizingAirTemp = -2 (A-2)
+
+3) Determine sizing water temp:
+- Use the Step 2 Vorlauf slider value (preferred).
+- If you already compute eff_vorlauf based on FBH share, use eff_vorlauf for sizing (recommended).
+- Clamp within [35..55] for the model engine.
+
+4) Required capacity:
+- requiredW = nominalKw * 1000 * 1.05 (5% reserve)
+
+5) Evaluate packages in ascending order using getCapacityAt(model, sizingAirTemp, sizingWaterTemp):
+- 4kW package -> model AEYC-0449ZU-CH1
+- 6kW package -> model AEYC-0649ZU-CH1
+- 10kW package -> model AEYC-1049ZU-CH1
+Select the smallest model where capacityW >= requiredW.
+
+6) If none fits:
+- Set package = null (or "16kW inquiry" state)
+- In Step 3, show a message:
+  "Der Wärmebedarf liegt über dem 10-kW-Paketbereich. Bitte 16-kW Modell anfragen."
+- In this case, investment cost should NOT be set to 10kW price; instead show CTA.
+
+========================
+D) SET INVESTMENT COST FROM AUTO-PACKAGE
+========================
+Once package is selected automatically:
+- Set investition = packageBasePrice (18290 / 18990 / 20490)
+- Show label in Step 3:
+  "Investitionskosten (<packageName> Paket): <investition> €"
+
+User may still adjust investition manually if you want, BUT the default must come from the derived package.
+If you keep manual adjust:
+- Track investManuell flag to prevent auto-overwriting after user changes it.
+- BUT on first entry into Step 3 (with investManuell false), always preload the computed package price.
+
+========================
+E) SUBSIDY MUST BE CALCULATED FROM BASE INVESTMENT (BEFORE SUBSIDY)
+========================
+Fix subsidy computation so it uses the gross investition amount:
+- foerderung = min(investition * 0.30, 7500) + (solarSelected ? 2500 : 0)  // keep your existing business rule if already in place
+- investNetto = max(0, investition - foerderung)
+
+IMPORTANT:
+- Previously you used reduced “after subsidy” numbers (e.g., 12803). That is incorrect for investment input.
+- Step 3 must start from the gross package price, then compute subsidy.
+
+========================
+F) UI OUTPUT IN STEP 3
+========================
+- Display the auto-selected package as read-only info (no selector):
+  "Automatisch gewählt: 4kW / 6kW / 10kW Paket"
+- Display investition gross (before subsidy) prominently.
+- Below, show computed subsidy deduction and resulting net investment.
+
+========================
+G) ACCEPTANCE CRITERIA
+========================
+1) Customer cannot choose a package in Step 3.
+2) Package is derived automatically from Step 1 + Step 2 using CHOFU capacity engine at A-2.
+3) Investment defaults are gross:
+   4kW=18290, 6kW=18990, 10kW=20490.
+4) Subsidy is computed as a % of the gross investment amount (plus solar add-on rule if applicable).
+5) Net investment is gross - subsidy (never negative).
+6) If sizing exceeds 10kW package, Step 3 shows 16kW inquiry message + CTA, not a forced 10kW price.

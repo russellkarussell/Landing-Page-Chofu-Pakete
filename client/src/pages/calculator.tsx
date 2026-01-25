@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { 
   ArrowRight, 
@@ -8,7 +8,9 @@ import {
   Zap, 
   Leaf, 
   Check, 
-  Download
+  Download,
+  AlertTriangle,
+  Info
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
@@ -16,6 +18,7 @@ import { Slider } from "@/components/ui/slider";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { cn } from "@/lib/utils";
+import { getCapacityAt, type ChofuModelId } from "@/lib/chofuCapacity";
 
 // --- Configuration & Constants ---
 
@@ -84,12 +87,21 @@ const ResultRow = ({ label, value, unit, highlight = false, negative = false }: 
 
 // --- Main Component ---
 
-// Package investment presets
+// Package investment presets (GROSS prices before subsidy)
 const PACKAGE_PRESETS = {
-  "4kW": 12803,
-  "6kW": 13293,
-  "10kW": 14343,
+  "4kW": 18290,
+  "6kW": 18990,
+  "10kW": 20490,
 };
+
+// CHOFU models for auto-package selection
+const PACKAGE_MODELS: Record<keyof typeof PACKAGE_PRESETS, ChofuModelId> = {
+  "4kW": "AEYC-0449ZU-CH1",
+  "6kW": "AEYC-0649ZU-CH1",
+  "10kW": "AEYC-1049ZU-CH1",
+};
+
+type PackageKey = keyof typeof PACKAGE_PRESETS | null;
 
 // Defaults for Step 2 based on building class
 const STEP2_DEFAULTS: Record<string, { vorlauf: number; fbh: number }> = {
@@ -123,10 +135,9 @@ export default function Heizkostenrechner() {
     solarArea: 4,
     hasFans: false,
     
-    // Step 3
-    selectedPackage: "6kW" as keyof typeof PACKAGE_PRESETS,
-    investition: 13293,
-    foerderung: 4000,
+    // Step 3 - investment is auto-calculated from derived package
+    investition: 18990,
+    foerderung: 5697,
     wartungAlt: 150,
     wartungNeu: 250,
   });
@@ -190,11 +201,50 @@ export default function Heizkostenrechner() {
     setData(prev => ({ ...prev, ...updates }));
   };
 
-  // Update investment based on selected package (only when not manually modified)
+  // Auto-derive package from Step 1 + Step 2 inputs using CHOFU capacity engine
+  const derivedPackage = useMemo((): { package: PackageKey; label: string; exceeds10kw: boolean } => {
+    // Calculate nominal heat load
+    const specLoad = CONFIG.specificHeatLoad[data.gebaeudeklasse as keyof typeof CONFIG.specificHeatLoad] || 50;
+    const nominalKw = (data.flaeche * specLoad) / 1000;
+    
+    // Required capacity with 5% safety factor
+    const requiredW = nominalKw * 1000 * 1.05;
+    
+    // Sizing conditions: A-2 for air temp, effective Vorlauf for water temp
+    const sizingAirTemp = -2;
+    
+    // Calculate effective flow temp based on FBH share (same as SCOP calculation)
+    const deltaT = (data.anteilFussboden / 100) * 5;
+    let effVorlauf = Math.max(30, Math.min(70, data.vorlaufTemp - deltaT));
+    if (data.hasFans) {
+      effVorlauf = Math.max(30, effVorlauf - CONFIG.heizkoerperventilatorEffekt);
+    }
+    
+    // Clamp water temp to [35, 55] for model engine
+    const sizingWaterTemp = Math.max(35, Math.min(55, effVorlauf));
+    
+    // Evaluate packages in ascending order
+    const packageOrder: (keyof typeof PACKAGE_PRESETS)[] = ["4kW", "6kW", "10kW"];
+    
+    for (const pkg of packageOrder) {
+      const modelId = PACKAGE_MODELS[pkg];
+      const capacityW = getCapacityAt(modelId, sizingAirTemp, sizingWaterTemp);
+      
+      if (capacityW >= requiredW) {
+        return { package: pkg, label: `${pkg} Paket`, exceeds10kw: false };
+      }
+    }
+    
+    // None fits - exceeds 10kW package
+    return { package: null, label: "16kW Modell erforderlich", exceeds10kw: true };
+  }, [data.flaeche, data.gebaeudeklasse, data.vorlaufTemp, data.anteilFussboden, data.hasFans]);
+
+  // Update investment based on derived package (only when not manually modified)
   useEffect(() => {
-    if (!hasUserModifiedInvest) {
-       const suggestedInvest = PACKAGE_PRESETS[data.selectedPackage];
+    if (!hasUserModifiedInvest && derivedPackage.package) {
+       const suggestedInvest = PACKAGE_PRESETS[derivedPackage.package];
        
+       // Subsidy: 30% of gross investment, capped at 7500, plus solar bonus
        const calculatedPercentage = suggestedInvest * 0.30;
        let suggestedSubsidy = Math.min(calculatedPercentage, 7500);
        
@@ -203,10 +253,10 @@ export default function Heizkostenrechner() {
        setData(prev => ({
          ...prev,
          investition: suggestedInvest,
-         foerderung: Math.round(suggestedSubsidy / 100) * 100
+         foerderung: Math.round(suggestedSubsidy)
        }));
     }
-  }, [data.selectedPackage, data.hasSolarthermie, hasUserModifiedInvest]);
+  }, [derivedPackage.package, data.hasSolarthermie, hasUserModifiedInvest]);
 
   const calculateResults = () => {
     let nutzwaermeBedarf = 0;
@@ -648,46 +698,47 @@ export default function Heizkostenrechner() {
                 >
                   <StepHeader step={3} title="Investition & Wartung" />
                   
-                  <div className="bg-slate-50 p-6 rounded-xl border border-slate-100 space-y-8">
-                     {/* Package Selector */}
-                     <div className="space-y-4">
-                        <Label>Wärmepumpen-Paket wählen</Label>
-                        <div className="grid grid-cols-3 gap-2">
-                          {(Object.keys(PACKAGE_PRESETS) as Array<keyof typeof PACKAGE_PRESETS>).map((pkg) => (
-                            <button
-                              key={pkg}
-                              onClick={() => {
-                                const newInvest = PACKAGE_PRESETS[pkg];
-                                const calculatedPercentage = newInvest * 0.30;
-                                let newSubsidy = Math.min(calculatedPercentage, 7500);
-                                if (data.hasSolarthermie) newSubsidy += 2500;
-                                
-                                setHasUserModifiedInvest(false);
-                                setData(prev => ({
-                                  ...prev,
-                                  selectedPackage: pkg,
-                                  investition: newInvest,
-                                  foerderung: Math.round(newSubsidy / 100) * 100
-                                }));
-                              }}
-                              data-testid={`package-${pkg}`}
-                              className={cn(
-                                "p-4 text-center border-2 rounded-xl transition-all font-medium",
-                                data.selectedPackage === pkg 
-                                  ? "border-primary bg-primary/5 text-primary" 
-                                  : "border-slate-200 text-slate-600 hover:border-slate-300"
-                              )}
-                            >
-                              <div className="font-bold text-lg">{pkg}</div>
-                              <div className="text-xs text-slate-500 mt-1">{PACKAGE_PRESETS[pkg].toLocaleString()} €</div>
-                            </button>
-                          ))}
+                  {/* 16kW Inquiry Message */}
+                  {derivedPackage.exceeds10kw ? (
+                    <div className="bg-amber-50 border-2 border-amber-200 rounded-xl p-6 space-y-4">
+                      <div className="flex items-start gap-3">
+                        <AlertTriangle className="text-amber-600 flex-shrink-0 mt-1" size={24} />
+                        <div>
+                          <h3 className="font-bold text-lg text-amber-800">Größerer Wärmebedarf</h3>
+                          <p className="text-amber-700 mt-2">
+                            Der Wärmebedarf liegt über dem 10-kW-Paketbereich. 
+                            Für Ihr Gebäude empfehlen wir das CHOFU 16kW Modell.
+                          </p>
+                          <p className="text-sm text-amber-600 mt-2">
+                            Bitte kontaktieren Sie uns für ein individuelles Angebot.
+                          </p>
                         </div>
-                     </div>
+                      </div>
+                      <Button 
+                        className="w-full mt-4"
+                        onClick={() => window.location.href = "/kontakt"}
+                      >
+                        16kW Modell anfragen
+                      </Button>
+                    </div>
+                  ) : (
+                    <div className="bg-slate-50 p-6 rounded-xl border border-slate-100 space-y-8">
+                      {/* Auto-derived Package Display (read-only) */}
+                      <div className="bg-primary/5 border border-primary/20 rounded-xl p-4">
+                        <div className="flex items-center gap-3">
+                          <Info className="text-primary flex-shrink-0" size={20} />
+                          <div>
+                            <span className="text-sm text-slate-600">Automatisch gewählt basierend auf Ihren Angaben:</span>
+                            <div className="font-bold text-lg text-primary mt-1">
+                              {derivedPackage.label}
+                            </div>
+                          </div>
+                        </div>
+                      </div>
 
-                     <div className="space-y-4">
+                      <div className="space-y-4">
                         <div className="flex justify-between">
-                           <Label>Investitionskosten – {data.selectedPackage} Paket</Label>
+                           <Label>Investitionskosten ({derivedPackage.package} Paket)</Label>
                            <span className="font-bold text-primary">{data.investition.toLocaleString()} €</span>
                         </div>
                         <Slider 
@@ -696,25 +747,28 @@ export default function Heizkostenrechner() {
                              setHasUserModifiedInvest(true);
                              
                              const newInvest = val[0];
+                             // Subsidy: 30% of gross, capped at 7500, plus solar bonus
                              const calculatedPercentage = newInvest * 0.30;
-                             let maxCap = 7500;
-                             let newSubsidy = Math.min(calculatedPercentage, maxCap);
+                             let newSubsidy = Math.min(calculatedPercentage, 7500);
                              
                              if (data.hasSolarthermie) newSubsidy += 2500;
                              
                              setData(prev => ({ 
                                ...prev, 
                                investition: newInvest,
-                               foerderung: Math.round(newSubsidy / 100) * 100
+                               foerderung: Math.round(newSubsidy)
                              }));
                            }} 
-                           min={10000} max={40000} step={500} 
+                           min={15000} max={40000} step={500} 
                         />
-                     </div>
+                        <p className="text-xs text-slate-500">
+                          Bruttopreis inkl. Montage. Sie können den Betrag bei Bedarf anpassen.
+                        </p>
+                      </div>
 
-                     <div className="space-y-4">
+                      <div className="space-y-4">
                         <div className="flex justify-between">
-                           <Label>Erwartete Förderung</Label>
+                           <Label>Erwartete Förderung (30%, max. 7.500 €)</Label>
                            <span className="font-bold text-green-600">- {data.foerderung.toLocaleString()} €</span>
                         </div>
                         <Slider 
@@ -723,10 +777,26 @@ export default function Heizkostenrechner() {
                              updateData("foerderung", val[0]);
                              setHasUserModifiedInvest(true);
                            }} 
-                           min={0} max={25000} step={100} 
+                           min={0} max={15000} step={100} 
                         />
-                     </div>
-                  </div>
+                        {data.hasSolarthermie && (
+                          <p className="text-xs text-green-600">
+                            Inkl. Solarthermie-Bonus (+2.500 €)
+                          </p>
+                        )}
+                      </div>
+
+                      {/* Net Investment Summary */}
+                      <div className="bg-slate-100 rounded-lg p-4">
+                        <div className="flex justify-between items-center">
+                          <span className="font-medium text-slate-700">Netto-Investition nach Förderung</span>
+                          <span className="font-bold text-xl text-slate-900">
+                            {Math.max(0, data.investition - data.foerderung).toLocaleString()} €
+                          </span>
+                        </div>
+                      </div>
+                    </div>
+                  )}
 
                   <div className="space-y-6">
                     <h3 className="font-bold text-lg text-slate-900">Jährliche Wartungskosten</h3>
