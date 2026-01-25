@@ -135,11 +135,12 @@ export function getCapacityAt(modelId: ChofuModelId, airTemp: number, waterTemp:
 }
 
 export interface RecommendationResult {
-  status: "ok" | "exceeds_10kw_package";
+  status: "ok" | "borderline" | "exceeds_10kw_package";
   modelId?: ChofuModelId;
   modelLabel?: string;
   capacityW?: number;
   requiredW: number;
+  nominalW: number;
   marginPct?: number;
   message?: string;
 }
@@ -152,13 +153,15 @@ export function recommendModel(params: {
 }): RecommendationResult {
   const {
     heizlastKw,
-    designAirTemp = -7,
+    designAirTemp = -2,
     designWaterTemp = 55,
     safetyFactor = 1.05
   } = params;
   
-  const requiredW = heizlastKw * 1000 * safetyFactor;
+  const nominalW = heizlastKw * 1000;
+  const requiredW = nominalW * safetyFactor;
   
+  // First, try to find a model that covers requiredW (with safety factor)
   for (const modelId of MODEL_ORDER) {
     const capacityW = getCapacityAt(modelId, designAirTemp, designWaterTemp);
     
@@ -171,15 +174,36 @@ export function recommendModel(params: {
         modelLabel: MODELS[modelId].label,
         capacityW,
         requiredW,
+        nominalW,
         marginPct
       };
     }
   }
   
+  // Check if the largest model (10kW) at least covers nominalW (without safety factor)
+  const largestModelId: ChofuModelId = "AEYC-1049ZU-CH1";
+  const largestCapacityW = getCapacityAt(largestModelId, designAirTemp, designWaterTemp);
+  
+  if (largestCapacityW >= nominalW) {
+    // Borderline: covers nominal but not required (with safety)
+    return {
+      status: "borderline",
+      modelId: largestModelId,
+      modelLabel: MODELS[largestModelId].label,
+      capacityW: largestCapacityW,
+      requiredW,
+      nominalW,
+      marginPct: ((largestCapacityW - nominalW) / nominalW) * 100,
+      message: "Im Grenzbereich. Für exakte Auslegung (Hydraulik, Heizflächen, Vorlauftemperaturen) empfehlen wir eine Projektprüfung/Besichtigung."
+    };
+  }
+  
+  // Exceeds package: even nominal load not covered
   return {
     status: "exceeds_10kw_package",
     requiredW,
-    message: "Der Wärmebedarf liegt über dem 10-kW-Paketbereich bei A-7/W55. Fragen Sie unser 16-kW CHOFU Modell an (nicht im Paket)."
+    nominalW,
+    message: "Der Wärmebedarf liegt über dem 10-kW-Paketbereich. Fragen Sie unser 16-kW CHOFU Modell an (nicht im Paket)."
   };
 }
 

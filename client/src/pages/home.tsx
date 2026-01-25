@@ -87,11 +87,15 @@ export default function Home() {
     recommendation: string;
     modelId?: string;
     marginPct?: number;
-    status: "ok" | "exceeds_10kw_package";
-    suitability: "Sehr gut geeignet" | "Geeignet" | "Projekt prüfen";
+    status: "ok" | "borderline" | "exceeds_10kw_package";
+    suitability: "Geeignet" | "Projekt prüfen (Grenzbereich)" | "Über Paketbereich";
     suitabilityColor: string;
     buildingLabel: string;
+    message?: string;
   } | null>(null);
+
+  // Effizienz-Check uses A-2 (typical cold) for suitability check
+  const EFF_CHECK_AIR_TEMP = -2;
 
   const handleCalc = () => {
     const area = parseFloat(calcData.size);
@@ -108,32 +112,30 @@ export default function Home() {
     
     const modelResult = recommendModel({
       heizlastKw,
-      designAirTemp: -7,
+      designAirTemp: EFF_CHECK_AIR_TEMP,
       designWaterTemp: buildingType.designWaterTemp,
       safetyFactor: 1.05
     });
 
     let recommendation = "";
-    let suitability: "Sehr gut geeignet" | "Geeignet" | "Projekt prüfen" = "Geeignet";
-    let suitabilityColor = "bg-blue-100 text-blue-700 border-blue-200";
+    let suitability: "Geeignet" | "Projekt prüfen (Grenzbereich)" | "Über Paketbereich" = "Geeignet";
+    let suitabilityColor = "bg-green-100 text-green-700 border-green-200";
+    let message = "";
 
     if (modelResult.status === "ok") {
       recommendation = modelResult.modelLabel || "CHOFU";
-      
-      if (modelResult.marginPct && modelResult.marginPct > 30) {
-        suitability = "Sehr gut geeignet";
-        suitabilityColor = "bg-green-100 text-green-700 border-green-200";
-      } else if (modelResult.marginPct && modelResult.marginPct > 10) {
-        suitability = "Geeignet";
-        suitabilityColor = "bg-blue-100 text-blue-700 border-blue-200";
-      } else {
-        suitability = "Geeignet";
-        suitabilityColor = "bg-blue-100 text-blue-700 border-blue-200";
-      }
-    } else {
-      recommendation = "Projekt prüfen";
-      suitability = "Projekt prüfen";
+      suitability = "Geeignet";
+      suitabilityColor = "bg-green-100 text-green-700 border-green-200";
+    } else if (modelResult.status === "borderline") {
+      recommendation = modelResult.modelLabel || "CHOFU 10 kW";
+      suitability = "Projekt prüfen (Grenzbereich)";
       suitabilityColor = "bg-amber-100 text-amber-700 border-amber-200";
+      message = modelResult.message || "Im Grenzbereich. Für exakte Auslegung empfehlen wir eine Projektprüfung/Besichtigung.";
+    } else {
+      recommendation = "16 kW anfragen";
+      suitability = "Über Paketbereich";
+      suitabilityColor = "bg-red-100 text-red-700 border-red-200";
+      message = modelResult.message || "Der Wärmebedarf liegt über dem 10-kW-Paketbereich. Fragen Sie unser 16-kW CHOFU Modell an (nicht im Paket).";
     }
 
     setTimeout(() => {
@@ -147,7 +149,8 @@ export default function Home() {
         status: modelResult.status,
         suitability,
         suitabilityColor,
-        buildingLabel: buildingType.label
+        buildingLabel: buildingType.label,
+        message
       });
       setCalcStep(2);
       setIsCalculating(false);
@@ -311,9 +314,9 @@ export default function Home() {
                     {/* Result Header Badge */}
                     <div className="flex justify-center mb-2">
                       <div className={`px-4 py-1.5 rounded-full text-sm font-bold border ${result?.suitabilityColor} flex items-center gap-2`}>
-                        {result?.suitability === "Sehr gut geeignet" && <Check size={16} strokeWidth={3} />}
-                        {result?.suitability === "Geeignet" && <Check size={16} strokeWidth={3} />}
-                        {result?.suitability === "Projekt prüfen" && <AlertTriangle size={16} strokeWidth={3} />}
+                        {result?.status === "ok" && <Check size={16} strokeWidth={3} />}
+                        {result?.status === "borderline" && <AlertTriangle size={16} strokeWidth={3} />}
+                        {result?.status === "exceeds_10kw_package" && <AlertTriangle size={16} strokeWidth={3} />}
                         {result?.suitability}
                       </div>
                     </div>
@@ -326,11 +329,29 @@ export default function Home() {
                           {result?.low}–{result?.high} <span className="text-xs text-slate-500 font-normal">kW</span>
                         </div>
                       </div>
-                      <div className={`p-3 rounded-lg border text-center ${result?.status === "ok" ? "ring-1 ring-primary/20 bg-primary/5 border-slate-100" : "bg-amber-50 border-amber-200"}`}>
-                        <div className={`text-[10px] uppercase font-bold mb-1 ${result?.status === "ok" ? "text-primary" : "text-amber-700"}`}>
-                          {result?.status === "ok" ? "Empfehlung" : "Status"}
+                      <div className={`p-3 rounded-lg border text-center ${
+                        result?.status === "ok" 
+                          ? "ring-1 ring-primary/20 bg-primary/5 border-slate-100" 
+                          : result?.status === "borderline"
+                          ? "bg-amber-50 border-amber-200"
+                          : "bg-red-50 border-red-200"
+                      }`}>
+                        <div className={`text-[10px] uppercase font-bold mb-1 ${
+                          result?.status === "ok" 
+                            ? "text-primary" 
+                            : result?.status === "borderline"
+                            ? "text-amber-700"
+                            : "text-red-700"
+                        }`}>
+                          Empfehlung
                         </div>
-                        <div className={`font-bold text-sm md:text-base leading-tight ${result?.status === "ok" ? "text-primary" : "text-amber-700"}`}>
+                        <div className={`font-bold text-sm md:text-base leading-tight ${
+                          result?.status === "ok" 
+                            ? "text-primary" 
+                            : result?.status === "borderline"
+                            ? "text-amber-700"
+                            : "text-red-700"
+                        }`}>
                           {result?.recommendation}
                         </div>
                       </div>
@@ -342,22 +363,28 @@ export default function Home() {
                       </div>
                     </div>
 
-                    {/* Explanation or 16kW Info */}
+                    {/* Explanation Message */}
                     {result?.status === "ok" ? (
                       <div className="space-y-2">
-                        {result?.marginPct !== undefined && (
+                        {result?.marginPct !== undefined && result.marginPct > 0 && (
                           <p className="text-xs text-green-600 text-center font-medium">
                             Reserve: {result.marginPct.toFixed(0)}%
                           </p>
                         )}
                         <p className="text-xs text-slate-500 leading-relaxed text-center px-2">
-                          Orientierungswert. Exakte Auslegung durch Fachbetrieb empfohlen.
+                          Orientierungswert. Die Empfehlung basiert auf typischen Bedingungen. Exakte Auslegung durch Fachbetrieb empfohlen.
+                        </p>
+                      </div>
+                    ) : result?.status === "borderline" ? (
+                      <div className="bg-amber-50 border border-amber-200 rounded-lg p-4 space-y-2">
+                        <p className="text-sm text-amber-800 leading-relaxed text-center">
+                          {result?.message}
                         </p>
                       </div>
                     ) : (
-                      <div className="bg-amber-50 border border-amber-200 rounded-lg p-4 space-y-2">
-                        <p className="text-sm text-amber-800 leading-relaxed text-center">
-                          Der Wärmebedarf liegt über dem 10-kW-Paketbereich. Fragen Sie unser 16-kW CHOFU Modell an (nicht im Paket).
+                      <div className="bg-red-50 border border-red-200 rounded-lg p-4 space-y-2">
+                        <p className="text-sm text-red-800 leading-relaxed text-center">
+                          {result?.message}
                         </p>
                       </div>
                     )}
@@ -365,7 +392,7 @@ export default function Home() {
                     {/* CTAs */}
                     <div className="space-y-3 pt-2">
                       {result?.status === "exceeds_10kw_package" ? (
-                        <Button asChild className="w-full h-12 rounded-lg font-bold shadow-md hover:shadow-lg transition-all bg-amber-600 hover:bg-amber-700">
+                        <Button asChild className="w-full h-12 rounded-lg font-bold shadow-md hover:shadow-lg transition-all bg-red-600 hover:bg-red-700">
                           <Link href={`/kontakt?area=${calcData.size}&type=${result?.buildingLabel}&recommendation=16kW&interestModel=16kW`}>
                             16-kW Modell anfragen
                           </Link>

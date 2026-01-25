@@ -1,0 +1,130 @@
+ROLE: Senior Full-Stack Engineer + HVAC Planner
+PROJECT: meine-waermepumpe.at (React/TypeScript)
+TASK: Implement the agreed logic split:
+- Effizienz-Check = EIGNUNGSCHECK based on A-2 (air = -2°C), NOT a design sizing tool.
+- Heizkostenrechner = annual cost estimation based on typical conditions (A2 = +2°C) and/or SCOP logic.
+Also: DO NOT show any “Auslegung” tile to the user; keep building-type tiles and show building type in result.
+
+========================
+A) EFFIZIENZ-CHECK (client/src/pages/home.tsx)
+========================
+
+GOAL:
+Effizienz-Check is a plausibility/eignung check (Orientierungswert) using air temperature A-2 to allow realistic coverage in mild cold and avoid over-conservative A-7 gating.
+It MUST NOT be framed as “Auslegung”. No A/W values shown in UI.
+
+1) UI: building type selection remains as 3 tiles (NO dropdown):
+- Altbau (vor 1990)
+- Teilsaniert
+- Neubau (nach 2010)
+
+2) Internal mapping per tile (used for Heizlast estimate and for internal water temp selection):
+ALTBAU:
+  specificHeatLoad = 100  // W/m²
+  designWaterTemp = 55    // °C (internal only)
+TEILSANIERT:
+  specificHeatLoad = 70
+  designWaterTemp = 45
+NEUBAU:
+  specificHeatLoad = 40
+  designWaterTemp = 35
+
+3) Effizienz-Check reference air temperature:
+- effCheckAirTemp = -2   // A-2
+
+4) Heizlast estimate:
+nominalKw = wohnflaeche * specificHeatLoad / 1000
+lowKw = nominalKw * 0.85
+highKw = nominalKw * 1.15
+
+5) Model recommendation uses CHOFU capacity at A-2 and mapped water temp:
+Call recommendModel({
+  heatLoadKw: nominalKw,
+  airTemp: effCheckAirTemp,     // -2
+  waterTemp: designWaterTemp,   // 35/45/55
+  safetyFactor: 1.05
+})
+
+IMPORTANT: Effizienz-Check is NOT “Auslegung”; it is an Eignungscheck at typical cold (A-2).
+Therefore it is allowed to use the capacity values at A-2 for gating.
+However, do NOT show A-2/Wxx to users anywhere.
+
+6) Status logic (3 outcomes):
+- "Geeignet": if capacityW >= requiredW (requiredW = nominalKw*1000*safetyFactor)
+- "Projekt prüfen (Grenzbereich)": if capacityW >= nominalKw*1000 but < requiredW
+  Message: "Im Grenzbereich. Für exakte Auslegung (Hydraulik, Heizflächen, Vorlauftemperaturen) empfehlen wir eine Projektprüfung/Besichtigung."
+  CTA: "Kostenlosen Besichtigungstermin"
+- "Über Paketbereich": if capacityW < nominalKw*1000
+  Message: "Der Wärmebedarf liegt über dem 10-kW-Paketbereich. Fragen Sie unser 16-kW CHOFU Modell an (nicht im Paket)."
+  CTA: "16-kW Modell anfragen" -> contact form with hidden field interestModel=16kW
+
+7) Result UI tiles:
+- Keep HEIZLAST tile (show range lowKw–highKw)
+- Keep EMPFEHLUNG tile (show CHOFU 4/6/10 kW or model id)
+- Show GEBÄUDE tile with the selected building type label
+- REMOVE “Auslegung” tile completely; users must not see A/W values.
+
+8) Text under result tiles:
+Use:
+"Orientierungswert. Die Empfehlung basiert auf typischen Bedingungen. Exakte Auslegung durch Fachbetrieb empfohlen."
+Do NOT mention A-2/Wxx.
+
+========================
+B) CHOFU CAPACITY DATA + RECOMMENDATION ENGINE (client/src/lib/chofuCapacity.ts)
+========================
+
+1) Use the existing MODELS max-capacity data (values in Watt) as already defined.
+Ensure getCapacityAt(modelId, airTemp, waterTemp) supports:
+- linear interpolation over air temps [7, 2, -2, -7, -15, -20]
+- linear interpolation over water temps [35, 45, 55] (75 optional)
+- clamp input values to available ranges.
+
+2) recommendModel signature:
+recommendModel({heatLoadKw, airTemp, waterTemp, safetyFactor})
+- requiredW = heatLoadKw*1000*safetyFactor
+- evaluate models in ascending size order:
+  AEYC-0449ZU-CH1 -> AEYC-0649ZU-CH1 -> AEYC-1049ZU-CH1
+- return first model where capacityW >= requiredW with status "ok"
+- else if AEYC-1049 capacityW >= heatLoadKw*1000 return status "borderline"
+- else return status "exceeds_10kw_package"
+
+3) Integration:
+Effizienz-Check uses recommendModel with airTemp=-2 and mapped water temp.
+
+========================
+C) HEIZKOSTENRECHNER (client/src/pages/calculator.tsx)
+========================
+
+GOAL:
+Heizkostenrechner is annual cost estimation. Use typical conditions A2 (+2°C) internally OR keep SCOP mapping; do not use A-7.
+You do NOT need to display A2 to the user.
+
+1) Set a constant:
+annualRefAirTemp = +2  // A2
+
+2) Keep SCOP logic primarily dependent on effective water temp:
+- Use eff_vorlauf (as previously specified) based on anteilFussboden:
+  deltaT = (anteilFussboden/100) * 5
+  eff_vorlauf = clamp(vorlauf - deltaT, 30, 70)
+- Use eff_vorlauf in SCOP calculation.
+Optionally: if you want to incorporate A2, only use it as an internal assumption (no UI).
+
+3) Keep the previously required correctness fixes (Must-Fix):
+- Solarthermie counts only against Warmwasser-Anteil (new warmwasserAnteilPct default 20, solarNutzungsgrad 0.70)
+- Heizsystem "keine" forces method="flaeche"
+- Default price/efficiency resets on heating system change unless user manually overwrote
+- investNetto = max(0, investition - foerderung)
+- amortisationYears = null if ersparnis <= 0 with correct UI message
+- remove unused/dead code
+
+========================
+D) ACCEPTANCE CRITERIA
+========================
+1) Effizienz-Check uses airTemp=-2 internally for recommendation; no A/W displayed in UI.
+2) Result tiles: HEIZLAST + EMPFEHLUNG + GEBÄUDE only (no Auslegung tile).
+3) Effizienz-Check outputs:
+   - Geeignet if capacity at A-2/Wxx covers nominal*1.05
+   - Projekt prüfen if covers nominal but not nominal*1.05
+   - 16kW inquiry if does not cover nominal
+4) Heizkostenrechner uses typical annual assumption (A2) and/or SCOP mapping; never uses A-7.
+5) All Must-Fix corrections in calculator.tsx are implemented.
