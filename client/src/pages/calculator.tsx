@@ -8,16 +8,20 @@ import {
   Zap, 
   Leaf, 
   Check, 
-  Download,
   AlertTriangle,
-  Info
+  Info,
+  Mail,
+  Loader2,
+  CheckCircle
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Slider } from "@/components/ui/slider";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
+import { Checkbox } from "@/components/ui/checkbox";
 import { cn } from "@/lib/utils";
+import { Link } from "wouter";
 import { getCapacityAt, type ChofuModelId } from "@/lib/chofuCapacity";
 
 // --- Configuration & Constants ---
@@ -150,6 +154,86 @@ export default function Heizkostenrechner() {
   // Step 2 manual override flags
   const [vorlaufManuell, setVorlaufManuell] = useState(false);
   const [fbhManuell, setFbhManuell] = useState(false);
+
+  // Lead capture state (Step 4)
+  const [leadEmail, setLeadEmail] = useState("");
+  const [leadConsent, setLeadConsent] = useState(false);
+  const [leadSubmitting, setLeadSubmitting] = useState(false);
+  const [leadSubmitted, setLeadSubmitted] = useState(false);
+  const [leadError, setLeadError] = useState<string | null>(null);
+
+  // Email validation
+  const isValidEmail = (email: string) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+  const canSubmitLead = isValidEmail(leadEmail) && leadConsent && !leadSubmitting;
+
+  // Submit lead
+  const submitLead = async () => {
+    if (!canSubmitLead) return;
+    
+    setLeadSubmitting(true);
+    setLeadError(null);
+    
+    try {
+      const payload = {
+        email: leadEmail,
+        consent: {
+          accepted: true,
+          timestamp: new Date().toISOString(),
+          textVersion: "heizkosten_v1"
+        },
+        inputs: {
+          buildingClass: data.gebaeudeklasse,
+          area_m2: data.flaeche,
+          currentHeatingSystem: data.heizsystem,
+          efficiencyOldSystem: data.wirkungsgradAlt,
+          currentEnergyPrice: data.preisAlt,
+          wpPowerPrice: data.strompreisWP,
+          vorlaufTemp: data.vorlaufTemp,
+          fbhPercent: data.anteilFussboden,
+          warmwasserPercent: data.warmwasserAnteilPct,
+          solarEnabled: data.hasSolarthermie,
+          solarType: data.solarType,
+          solarArea: data.solarArea,
+          radiatorFansEnabled: data.hasFans
+        },
+        derived: {
+          effectiveVorlaufTemp: results.effectiveFlowTemp || data.vorlaufTemp,
+          selectedPackage: derivedPackage.package,
+          investmentGross: data.investition,
+          subsidyExpected: data.foerderung,
+          investmentNet: results.investNetto || Math.max(0, data.investition - data.foerderung)
+        },
+        results: {
+          nutzwaerme_kwh_a: results.nutzwaermeBedarf || 0,
+          wpStrom_kwh_a: results.nutzwaermeBedarf ? Math.round(results.nutzwaermeBedarf / parseFloat(results.effectiveSCOP || "3.5")) : 0,
+          wpStromkosten_eur_a: results.kostenNeu || 0,
+          wpCo2_kg_a: results.co2Neu || 0,
+          scop: results.effectiveSCOP || "0",
+          oldCost_eur_a: data.heizsystem !== "keine" ? results.kostenAktuell : null,
+          oldCo2_kg_a: data.heizsystem !== "keine" ? results.co2Alt : null,
+          savings_eur_a: data.heizsystem !== "keine" ? results.ersparnis : null,
+          amortisation_years: data.heizsystem !== "keine" ? results.amortizationYears : null,
+          co2Reduction_kg_a: data.heizsystem !== "keine" ? results.co2Ersparnis : null
+        }
+      };
+      
+      const response = await fetch("/api/heizkosten-lead", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload)
+      });
+      
+      if (!response.ok) {
+        throw new Error("Senden fehlgeschlagen");
+      }
+      
+      setLeadSubmitted(true);
+    } catch (err) {
+      setLeadError("Senden fehlgeschlagen – bitte versuchen Sie es erneut.");
+    } finally {
+      setLeadSubmitting(false);
+    }
+  };
 
   // Calculations
   useEffect(() => {
@@ -894,18 +978,82 @@ export default function Heizkostenrechner() {
                         </div>
 
                         {/* Explanatory Note for Standalone Mode */}
-                        <div className="text-center">
-                           <p className="text-sm text-slate-500 mb-4 max-w-2xl mx-auto">
-                             Da kein aktuelles Heizsystem ausgewählt wurde (Neubau/Neuinstallation), werden keine Vergleichswerte (Ersparnis oder Amortisation) berechnet.
-                           </p>
-                           <p className="text-sm text-slate-500 mb-6 max-w-2xl mx-auto">
-                              * Die berechneten Werte sind Schätzungen basierend auf Ihren Angaben und Durchschnittswerten. 
-                              Eine genaue Heizlastberechnung durch einen Fachpartner ist für die finale Planung notwendig.
-                           </p>
-                           <Button className="font-bold uppercase tracking-wide" size="lg" onClick={() => window.print()}>
-                              <Download className="mr-2" size={18} /> Ergebnis drucken / PDF
-                           </Button>
+                        <p className="text-sm text-slate-500 mb-4 max-w-2xl mx-auto text-center">
+                          Da kein aktuelles Heizsystem ausgewählt wurde (Neubau/Neuinstallation), werden keine Vergleichswerte (Ersparnis oder Amortisation) berechnet.
+                        </p>
+                        
+                        {/* Lead Capture CTA */}
+                        <div className="bg-white border border-primary/20 rounded-xl p-6 shadow-sm">
+                          {leadSubmitted ? (
+                            <div className="text-center py-4">
+                              <CheckCircle className="mx-auto h-12 w-12 text-green-500 mb-4" />
+                              <h3 className="text-lg font-bold text-slate-900 mb-2">Danke!</h3>
+                              <p className="text-slate-600">
+                                Wir haben Ihnen die Ergebnisse per E-Mail gesendet. Wir melden uns in Kürze für das Erstgespräch.
+                              </p>
+                            </div>
+                          ) : (
+                            <>
+                              <h3 className="text-lg font-bold text-slate-900 mb-2">Kostenloses Erstgespräch vereinbaren</h3>
+                              <p className="text-sm text-slate-600 mb-4">
+                                Wir senden Ihnen Ihre Ergebnisse per E-Mail und melden uns für ein kurzes Erstgespräch.
+                              </p>
+                              
+                              <div className="space-y-4">
+                                <div>
+                                  <Input
+                                    type="email"
+                                    placeholder="E-Mail Adresse"
+                                    value={leadEmail}
+                                    onChange={(e) => setLeadEmail(e.target.value)}
+                                    className="w-full"
+                                    data-testid="input-lead-email"
+                                  />
+                                </div>
+                                
+                                <div className="flex items-start space-x-3">
+                                  <Checkbox
+                                    id="consent-standalone"
+                                    checked={leadConsent}
+                                    onCheckedChange={(checked) => setLeadConsent(checked === true)}
+                                    data-testid="checkbox-lead-consent"
+                                  />
+                                  <label htmlFor="consent-standalone" className="text-xs text-slate-600 leading-relaxed cursor-pointer">
+                                    Ich bin einverstanden, dass meine Angaben zur Bearbeitung meiner Anfrage verarbeitet und zur Kontaktaufnahme an ausgewählte Fachbetriebe/Vertriebspartner weitergegeben werden.
+                                  </label>
+                                </div>
+                                
+                                <p className="text-xs text-slate-500">
+                                  <Link href="/datenschutz" className="underline hover:text-primary">
+                                    Weitere Informationen in der Datenschutzerklärung.
+                                  </Link>
+                                </p>
+                                
+                                {leadError && (
+                                  <p className="text-sm text-red-600">{leadError}</p>
+                                )}
+                                
+                                <Button 
+                                  className="w-full font-bold"
+                                  size="lg"
+                                  disabled={!canSubmitLead}
+                                  onClick={submitLead}
+                                  data-testid="button-submit-lead"
+                                >
+                                  {leadSubmitting ? (
+                                    <><Loader2 className="mr-2 h-4 w-4 animate-spin" /> Wird gesendet...</>
+                                  ) : (
+                                    <><Mail className="mr-2 h-4 w-4" /> Ergebnisse senden & Erstgespräch anfragen</>
+                                  )}
+                                </Button>
+                              </div>
+                            </>
+                          )}
                         </div>
+                        
+                        <p className="text-xs text-slate-400 text-center mt-4">
+                          * Die berechneten Werte sind Schätzungen basierend auf Ihren Angaben und Durchschnittswerten.
+                        </p>
                       </>
                     ) : (
                       /* Comparison Mode: Existing heating system */
@@ -983,15 +1131,78 @@ export default function Heizkostenrechner() {
                            </div>
                         </div>
 
-                        <div className="text-center">
-                           <p className="text-sm text-slate-500 mb-6 max-w-2xl mx-auto">
-                              * Die berechneten Werte sind Schätzungen basierend auf Ihren Angaben und Durchschnittswerten. 
-                              Eine genaue Heizlastberechnung durch einen Fachpartner ist für die finale Planung notwendig.
-                           </p>
-                           <Button className="font-bold uppercase tracking-wide" size="lg" onClick={() => window.print()}>
-                              <Download className="mr-2" size={18} /> Ergebnis drucken / PDF
-                           </Button>
+                        {/* Lead Capture CTA */}
+                        <div className="bg-white border border-primary/20 rounded-xl p-6 shadow-sm">
+                          {leadSubmitted ? (
+                            <div className="text-center py-4">
+                              <CheckCircle className="mx-auto h-12 w-12 text-green-500 mb-4" />
+                              <h3 className="text-lg font-bold text-slate-900 mb-2">Danke!</h3>
+                              <p className="text-slate-600">
+                                Wir haben Ihnen die Ergebnisse per E-Mail gesendet. Wir melden uns in Kürze für das Erstgespräch.
+                              </p>
+                            </div>
+                          ) : (
+                            <>
+                              <h3 className="text-lg font-bold text-slate-900 mb-2">Kostenloses Erstgespräch vereinbaren</h3>
+                              <p className="text-sm text-slate-600 mb-4">
+                                Wir senden Ihnen Ihre Ergebnisse per E-Mail und melden uns für ein kurzes Erstgespräch.
+                              </p>
+                              
+                              <div className="space-y-4">
+                                <div>
+                                  <Input
+                                    type="email"
+                                    placeholder="E-Mail Adresse"
+                                    value={leadEmail}
+                                    onChange={(e) => setLeadEmail(e.target.value)}
+                                    className="w-full"
+                                    data-testid="input-lead-email-compare"
+                                  />
+                                </div>
+                                
+                                <div className="flex items-start space-x-3">
+                                  <Checkbox
+                                    id="consent-compare"
+                                    checked={leadConsent}
+                                    onCheckedChange={(checked) => setLeadConsent(checked === true)}
+                                    data-testid="checkbox-lead-consent-compare"
+                                  />
+                                  <label htmlFor="consent-compare" className="text-xs text-slate-600 leading-relaxed cursor-pointer">
+                                    Ich bin einverstanden, dass meine Angaben zur Bearbeitung meiner Anfrage verarbeitet und zur Kontaktaufnahme an ausgewählte Fachbetriebe/Vertriebspartner weitergegeben werden.
+                                  </label>
+                                </div>
+                                
+                                <p className="text-xs text-slate-500">
+                                  <Link href="/datenschutz" className="underline hover:text-primary">
+                                    Weitere Informationen in der Datenschutzerklärung.
+                                  </Link>
+                                </p>
+                                
+                                {leadError && (
+                                  <p className="text-sm text-red-600">{leadError}</p>
+                                )}
+                                
+                                <Button 
+                                  className="w-full font-bold"
+                                  size="lg"
+                                  disabled={!canSubmitLead}
+                                  onClick={submitLead}
+                                  data-testid="button-submit-lead-compare"
+                                >
+                                  {leadSubmitting ? (
+                                    <><Loader2 className="mr-2 h-4 w-4 animate-spin" /> Wird gesendet...</>
+                                  ) : (
+                                    <><Mail className="mr-2 h-4 w-4" /> Ergebnisse senden & Erstgespräch anfragen</>
+                                  )}
+                                </Button>
+                              </div>
+                            </>
+                          )}
                         </div>
+                        
+                        <p className="text-xs text-slate-400 text-center mt-4">
+                          * Die berechneten Werte sind Schätzungen basierend auf Ihren Angaben und Durchschnittswerten.
+                        </p>
                       </>
                     )}
 
