@@ -723,15 +723,18 @@ export default function Heizkostenrechner() {
                     </div>
                   ) : (
                     <div className="bg-slate-50 p-6 rounded-xl border border-slate-100 space-y-8">
-                      {/* Auto-derived Package Display (read-only) */}
+                      {/* Recommended Package Display (read-only) */}
                       <div className="bg-primary/5 border border-primary/20 rounded-xl p-4">
                         <div className="flex items-center gap-3">
                           <Info className="text-primary flex-shrink-0" size={20} />
                           <div>
-                            <span className="text-sm text-slate-600">Automatisch gewählt basierend auf Ihren Angaben:</span>
-                            <div className="font-bold text-lg text-primary mt-1">
+                            <div className="font-bold text-slate-900">Empfohlenes Heizkraft-Paket für Ihr Gebäude</div>
+                            <div className="font-bold text-xl text-primary mt-1">
                               {derivedPackage.label}
                             </div>
+                            <span className="text-xs text-slate-500 mt-1 block">
+                              Basierend auf Ihren Angaben zu Gebäude, Fläche und Systemauslegung.
+                            </span>
                           </div>
                         </div>
                       </div>
