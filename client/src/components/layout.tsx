@@ -11,6 +11,7 @@ import meineWaermepumpeLogo from "@assets/meine-waermepumpe.at-logo-banner-trans
 export default function Layout({ children }: { children: React.ReactNode }) {
   const [location] = useLocation();
   const [isScrolled, setIsScrolled] = useState(false);
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -67,7 +68,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
 
           {/* Mobile Nav */}
           <div className="md:hidden">
-            <Sheet>
+            <Sheet open={isMenuOpen} onOpenChange={setIsMenuOpen}>
               <SheetTrigger asChild>
                 <Button variant="ghost" size="icon">
                   <Menu className="text-slate-800" />
@@ -76,15 +77,20 @@ export default function Layout({ children }: { children: React.ReactNode }) {
               <SheetContent side="right">
                 <div className="flex flex-col gap-6 mt-10">
                   {navLinks.map((link) => (
-                    <Link key={link.href} href={link.href} className={`text-lg font-medium flex items-center gap-3 ${
-                      location === link.href ? "text-primary" : "text-slate-600"
-                    }`}>
+                    <Link 
+                      key={link.href} 
+                      href={link.href} 
+                      className={`text-lg font-medium flex items-center gap-3 ${
+                        location === link.href ? "text-primary" : "text-slate-600"
+                      }`}
+                      onClick={() => setIsMenuOpen(false)}
+                    >
                       <link.icon size={20} />
                       {link.label}
                     </Link>
                   ))}
                   <Button className="w-full mt-4" asChild>
-                    <Link href="/kontakt">Termin vereinbaren</Link>
+                    <Link href="/kontakt" onClick={() => setIsMenuOpen(false)}>Termin vereinbaren</Link>
                   </Button>
                 </div>
               </SheetContent>
