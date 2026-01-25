@@ -191,16 +191,18 @@ Preferred communication style: Simple, everyday language.
 
 ### Effizienz-Check (home.tsx) - Suitability Check
 - Uses **A-2 temperature** (typical cold conditions) for suitability assessment
+- **Default values on load**: Neubau + 120 m² (shows result immediately)
 - **3 building type tiles**: Altbau, Teilsaniert, Neubau
 - Each type has internal parameters (hidden from user):
   - Altbau: 100 W/m², designWaterTemp=55°C
   - Teilsaniert: 70 W/m², designWaterTemp=45°C
   - Neubau: 40 W/m², designWaterTemp=35°C
-- **3 result statuses with distinct UI**:
-  - Green "Geeignet": CHOFU package is suitable
-  - Amber "Projekt prüfen (Grenzbereich)": Borderline, site inspection recommended
-  - Red "Über Paketbereich": 16kW model required (not in package)
+- **3 result statuses with positive UI**:
+  - Green "Geeignet": CHOFU package is suitable (checkmark icon)
+  - Green "Empfohlen": Borderline - positive framing, optimization recommended (checkmark icon)
+  - Blue "Mehr Leistung": 16kW model suggested (info icon)
 - No A/W technical values displayed to end users
+- No warning language or amber/orange styling for borderline cases
 - Heat load calculation: heizlastKw = (area × specificHeatLoad) / 1000
 - Range display: ±15% around calculated heat load
 - **Result tiles**: Heizlast (range), Empfehlung (model), Gebäude (building type)

@@ -1,0 +1,122 @@
+ROLE: Senior Full-Stack Engineer + HVAC Planner
+PROJECT: meine-waermepumpe.at (React/TypeScript)
+TASK: Improve Effizienz-Check UX for lead conversion.
+- Remove negative “Grenzbereich / Projekt prüfen” framing.
+- Keep internal logic and thresholds unchanged.
+- Use positive, lead-friendly wording and visuals.
+- Set sensible default values on initial load.
+
+WHERE: client/src/pages/home.tsx (Effizienz-Check)
+
+========================
+A) DEFAULT STATE (IMPORTANT)
+========================
+On initial page load (before any user interaction), set the following defaults:
+
+- buildingType = "Neubau (nach 2010)"
+- wohnflaeche = 120   // m²
+
+The Effizienz-Check should automatically calculate and display a result for these defaults.
+Do NOT require the user to interact first to see a result.
+
+Rationale:
+Neubau + 120 m² represents a realistic, positive reference case and improves first-impression conversion.
+
+========================
+B) STATUS MAPPING (LOGIC UNCHANGED)
+========================
+Keep the existing internal thresholds and recommendation logic exactly as-is:
+
+- status "ok":
+  capacityW >= requiredW
+
+- status "borderline":
+  capacityW >= nominalW AND capacityW < requiredW
+
+- status "exceeds_10kw_package":
+  capacityW < nominalW
+
+========================
+C) UI LABEL CHANGES (NO NEGATIVE WORDING)
+========================
+Change ONLY the labels, icons, and messaging – not the logic.
+
+1) Status badge:
+- status "ok":
+  Badge text: "Geeignet"
+  Icon: checkmark (✓)
+
+- status "borderline":
+  CHANGE badge text to: "Empfohlen"
+  Icon: checkmark (✓) or neutral info icon
+  DO NOT use:
+    - warning triangle
+    - the words "Grenzbereich"
+    - the words "Projekt prüfen"
+
+- status "exceeds_10kw_package":
+  Keep stronger wording and visual emphasis for alternative (16 kW).
+
+========================
+D) MESSAGE BOX TEXT
+========================
+1) For status "borderline" (now labeled "Empfohlen"):
+Show ONLY a positive optimization message:
+
+"Für maximale Effizienz, leisen Betrieb und optimale Förderung empfehlen wir eine kurze Projektprüfung/Besichtigung."
+
+Rules:
+- Do NOT mention risk
+- Do NOT imply potential problems
+- Do NOT say the system might not work
+
+2) For status "exceeds_10kw_package":
+Show message:
+
+"Für mehr Leistungsreserve empfehlen wir unser 16-kW CHOFU Modell (nicht im Paket)."
+
+========================
+E) CTA BEHAVIOR
+========================
+- status "ok":
+  Keep existing CTAs unchanged.
+
+- status "borderline" (Empfohlen):
+  Primary CTA:
+  "Kostenlosen Besichtigungstermin"
+  (same route and behavior as today)
+
+- status "exceeds_10kw_package":
+  CTA:
+  "16-kW Modell anfragen"
+  -> route to contact form
+  -> set hidden field: interestModel = "16kW"
+
+========================
+F) VISUAL STYLING
+========================
+- status "borderline" MUST use the same neutral/positive color scheme as "ok"
+- NO orange warning theme
+- NO alert/warning styling
+
+========================
+G) RESULT TILES
+========================
+Keep exactly these result tiles:
+- HEIZLAST (range)
+- EMPFEHLUNG (e.g. CHOFU 6 kW / CHOFU 10 kW)
+- GEBÄUDE (selected building type)
+
+REMOVE completely:
+- Any "Auslegung" tile
+- Any display of A/W points
+
+========================
+H) ACCEPTANCE CRITERIA
+========================
+1) On first load, Effizienz-Check shows a result using:
+   - Neubau
+   - 120 m²
+2) No warning language appears for borderline cases.
+3) "Empfohlen" feels positive and consultative, not risky.
+4) Lead CTAs are preserved or strengthened, not blocked.
