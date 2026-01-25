@@ -11,6 +11,7 @@ import { Link } from "wouter";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import chofuData from "@/content/brand/chofu.de.json";
+import chofuPremiumImage from "@/assets/chofu-premium.jpg";
 
 // Map icon strings to components
 const IconMap: Record<string, React.ComponentType<any>> = {
@@ -31,19 +32,33 @@ export function ChofuHomepageTeaser() {
     <section className="py-24 bg-slate-50 border-y border-slate-200">
       <div className="container mx-auto px-4">
         
-        <div className="max-w-3xl mx-auto text-center mb-16">
-          <div className="inline-flex items-center gap-2 text-primary font-bold uppercase tracking-wider text-sm mb-4">
-            <div className="h-px w-8 bg-primary"></div>
-            <span>{chofuData.brand.name} Japan</span>
-            <div className="h-px w-8 bg-primary"></div>
+        <div className="grid lg:grid-cols-2 gap-12 lg:gap-16 items-center mb-16">
+          {/* Text Column */}
+          <div className="text-center lg:text-left">
+            <div className="inline-flex items-center gap-2 text-primary font-bold uppercase tracking-wider text-sm mb-4">
+              <div className="h-px w-8 bg-primary"></div>
+              <span>{chofuData.brand.name} Japan</span>
+              <div className="h-px w-8 bg-primary"></div>
+            </div>
+            <h2 className="text-3xl md:text-4xl font-heading font-extrabold text-slate-900 mb-6 leading-tight">
+              {homepage.title}
+            </h2>
+            <div className="space-y-4 text-lg text-slate-600 leading-relaxed">
+              {homepage.intro?.map((paragraph: string, idx: number) => (
+                <p key={idx}>{paragraph}</p>
+              ))}
+            </div>
           </div>
-          <h2 className="text-3xl md:text-4xl font-heading font-extrabold text-slate-900 mb-6 leading-tight">
-            {homepage.title}
-          </h2>
-          <div className="space-y-4 text-lg text-slate-600 leading-relaxed">
-            {homepage.intro?.map((paragraph: string, idx: number) => (
-              <p key={idx}>{paragraph}</p>
-            ))}
+          
+          {/* Image Column */}
+          <div className="mt-8 lg:mt-0">
+            <img 
+              src={chofuPremiumImage}
+              alt="CHOFU Wärmepumpe – Premium Wärmepumpentechnik Made in Japan"
+              className="w-full h-auto rounded-xl shadow-lg shadow-slate-900/10 object-contain"
+              loading="lazy"
+              data-testid="img-chofu-premium"
+            />
           </div>
         </div>
 
