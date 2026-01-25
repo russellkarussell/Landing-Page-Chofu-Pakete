@@ -3,12 +3,23 @@ import type { Request, Response, NextFunction } from 'express';
 
 const supabaseUrl = process.env.SUPABASE_URL;
 const supabaseAnonKey = process.env.SUPABASE_ANON_KEY;
+const supabaseServiceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
 
 if (!supabaseUrl || !supabaseAnonKey) {
   throw new Error('SUPABASE_URL and SUPABASE_ANON_KEY must be set');
 }
 
 export const supabase = createClient(supabaseUrl, supabaseAnonKey);
+
+// Service role client for storage operations (bypasses RLS)
+const supabaseAdmin = supabaseServiceRoleKey 
+  ? createClient(supabaseUrl, supabaseServiceRoleKey, {
+      auth: {
+        autoRefreshToken: false,
+        persistSession: false
+      }
+    })
+  : supabase; // Fallback to anon client if service role key not set
 
 const ADMIN_EMAILS = (process.env.ADMIN_EMAILS || '').split(',').map(e => e.trim().toLowerCase()).filter(Boolean);
 
@@ -49,7 +60,8 @@ export async function uploadFile(
   fileName: string,
   contentType: string
 ): Promise<string | null> {
-  const { data, error } = await supabase.storage
+  // Use admin client for storage operations to bypass RLS
+  const { data, error } = await supabaseAdmin.storage
     .from(STORAGE_BUCKET)
     .upload(fileName, file, {
       contentType,
@@ -61,7 +73,8 @@ export async function uploadFile(
     return null;
   }
 
-  const { data: urlData } = supabase.storage
+  // Use admin client for public URL as well
+  const { data: urlData } = supabaseAdmin.storage
     .from(STORAGE_BUCKET)
     .getPublicUrl(data.path);
 
@@ -69,7 +82,8 @@ export async function uploadFile(
 }
 
 export async function deleteFile(filePath: string): Promise<boolean> {
-  const { error } = await supabase.storage
+  // Use admin client for storage operations to bypass RLS
+  const { error } = await supabaseAdmin.storage
     .from(STORAGE_BUCKET)
     .remove([filePath]);
 
