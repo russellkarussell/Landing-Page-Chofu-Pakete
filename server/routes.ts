@@ -272,6 +272,7 @@ export async function registerRoutes(
         await resendClient.emails.send({
           from: "meine-waermepumpe.at <anfrage@meine-waermepumpe.at>",
           to: validatedData.email,
+          bcc: NOTIFICATION_EMAIL,
           subject: "Ihre Heizkostenrechner-Ergebnisse – CHOFU Wärmepumpe",
           html: `
 <!DOCTYPE html>
