@@ -1,0 +1,164 @@
+ROLE: Senior Full-Stack Engineer + HVAC/Heizungsplaner. 
+PROJECT: meine-waermepumpe.at (React/TS). 
+TASK: Korrigiere Logik und Konsistenz von Effizienz-Check (home.tsx) und Heizkostenrechner (calculator.tsx). 
+Ziel: fachlich plausible Ergebnisse, konsistente Annahmen, modellbasierte Empfehlung anhand CHOFU R290 Max-Capacity Tabellen. Keine toten Inputs. Saubere Edge-Cases.
+
+========================
+A) EFFIZIENZ-CHECK (client/src/pages/home.tsx)
+========================
+1) Vereinheitliche Gebäude-Klassen mit Heizkostenrechner (5 Klassen statt 3):
+- alt_unsaniert: 100 W/m²
+- alt_teilsaniert: 70 W/m²
+- alt_saniert: 50 W/m²
+- neubau: 40 W/m²
+- niedrigenergie: 30 W/m²
+UI: Dropdown "Gebäudestandard" mit userfreundlichen Labels (Altbau unsaniert, Altbau teilsaniert, Altbau saniert, Neubau, Niedrigenergie).
+
+2) Heizlast-Berechnung:
+heizlast_kw = wohnflaeche * specificHeatLoad / 1000
+Bandbreite: low = heizlast_kw * 0.85, high = heizlast_kw * 1.15
+
+3) Entferne fixe 4/6/10-Schwellwerte und nutze neue Modell-Empfehlungsfunktion (siehe Abschnitt C).
+Design-Außentemperatur ist fix A = -7°C.
+Design-Vorlauf: im Effizienz-Check gibt es keinen Vorlauf-Input → setze default designWaterTemp = 55°C (konservativ). 
+Optional (nice): später auswählbar "Heizkörper (55°C)" vs "FBH (35°C)" vs "gemischt (45°C)".
+
+4) Ausgabe:
+- Zeige empfohlene Modellbezeichnung (AEYC-0449ZU-CH1 / AEYC-0649ZU-CH1 / AEYC-1049ZU-CH1) oder "Projekt prüfen".
+- Wenn selbst AEYC-1049ZU-CH1 am Designpunkt nicht reicht: 
+  Status "Projekt prüfen" + Hinweistext:
+  "Der Wärmebedarf liegt über dem 10-kW-Paketbereich bei A-7/W55. Fragen Sie unser 16-kW CHOFU Modell an (nicht im Paket)."
+  Dazu ein CTA Button "16-kW Modell anfragen" → führt zum Kontaktformular und setzt hidden field "interestModel=16kW".
+
+========================
+B) HEIZKOSTENRECHNER (client/src/pages/calculator.tsx)
+========================
+Must-Fix Korrekturen:
+1) Solarthermie NICHT vollständig von Raumwärme abziehen.
+Implementiere WW-Anteil:
+- Neues Feld: warmwasserAnteilPct (Default 20, Range 10..35)
+- ww_bedarf = nutzwaermeBedarf * warmwasserAnteilPct/100
+- solarErtrag = solarFlaeche * (regionSued ? 450 : 350)  (bestehende Logik ok)
+- solarNutzungsgrad = 0.70 (fix)
+- solarNutzbar = min(ww_bedarf, solarErtrag * solarNutzungsgrad)
+- remainingHeatDemand = nutzwaermeBedarf - solarNutzbar
+UI Hinweis: "Solarthermie wird vereinfacht als Warmwasser-Unterstützung gerechnet."
+
+2) anteilFussboden ist aktuell ein "Fake-Input" → muss genutzt werden.
+Berechne eff_vorlauf:
+deltaT = (anteilFussboden/100) * 5  (max 5K)
+eff_vorlauf = clamp(vorlauf - deltaT, 30, 70)
+Nutze eff_vorlauf für SCOP-Berechnung statt vorlauf.
+
+3) Heizsystem "keine" (Neubau ohne Altanlage):
+- Erzwinge method="flaeche"
+- Deaktiviere/Verberge Verbrauchseingabe
+- Altanlagenkosten/CO2 dann rein aus Flächenmethode ableiten.
+
+4) Default-Preis & Default-Wirkungsgrad beim Heizsystemwechsel:
+Aktuell bleiben Werte hängen. Implementiere Flags:
+- preisManuellGeaendert, etaManuellGeaendert (set true, sobald User Feld ändert).
+Beim Wechsel data.heizsystem:
+- if !preisManuellGeaendert: set preisAlt = defaultPrices[heizsystem]
+- if !etaManuellGeaendert: set wirkungsgradAlt = defaultWirkungsgrade[heizsystem]
+
+5) Nettoinvestition darf nicht negativ sein:
+investNetto = max(0, investition - foerderung)
+
+6) Amortisation bei ersparnis <= 0:
+- Set amortisationYears = null
+- UI: "Unter diesen Annahmen keine wirtschaftliche Amortisation."
+
+7) Entferne toten Code (z.B. trees/fußballfeld), falls nicht angezeigt.
+
+Optional (nice, aber klein):
+- Tooltips/Hinweise bei SCOP (vereinfachtes Modell), CO2-Faktoren (Durchschnittswerte), Förderung (Orientierung).
+
+========================
+C) MODELL-LOGIK: CHOFU R290 Maximum Capacity (Interpolation + Empfehlung)
+========================
+Erstelle Datei: client/src/lib/chofuCapacity.ts
+
+1) Datenstruktur (Werte in Watt). Quelle: Maximum Capacity (Heating).
+Designstützstellen:
+AirTemps: [7, 2, -2, -7, -15, -20]
+WaterTemps: [35, 45, 55, 75] (75 ist nur für bestimmte AirTemps vorhanden)
+
+Implementiere konstante MODELS:
+
+export type ChofuModelId = "AEYC-0449ZU-CH1" | "AEYC-0649ZU-CH1" | "AEYC-1049ZU-CH1";
+
+export const MODELS: Record<ChofuModelId, {
+  label: string;
+  capacitiesW: Record<number, Record<number, number>>; 
+  // capacitiesW[waterTemp][airTemp] = capacityW
+}> = { ... }
+
+Fülle capacitiesW exakt so:
+
+AEYC-0449ZU-CH1:
+W35:  { 7:7050, 2:5520, -2:5250, -7:5140, -15:4100, -20:3520 }
+W45:  { 7:6250, 2:5410, -2:5080, -7:4980, -15:3950, -20:3320 }
+W55:  { 7:5690, 2:5250, -2:4910, -7:4830, -15:3740, -20:3030 }
+W75:  { 7:3340, 2:3200, -2:3100, -7:2900 }
+
+AEYC-0649ZU-CH1:
+W35:  { 7:11080, 2:8020, -2:7360, -7:7250, -15:7220, -20:5920 }
+W45:  { 7:10900, 2:7880, -2:7180, -7:7020, -15:6910, -20:5800 }
+W55:  { 7:10750, 2:7710, -2:7000, -7:6770, -15:6440, -20:5480 }
+W75:  { 7:7620, 2:7060, -2:5260, -7:4650 }
+
+AEYC-1049ZU-CH1:
+W35:  { 7:13590, 2:11070, -2:10000, -7:10000, -15:8700, -20:7310 }
+W45:  { 7:12920, 2:11030, -2:9940, -7:9890, -15:8550, -20:7200 }
+W55:  { 7:12460, 2:10940, -2:9940, -7:9940, -15:8380, -20:7090 }
+W75:  { 7:8620, 2:7590, -2:7300, -7:5930 }
+
+2) Interpolation:
+Implementiere:
+- linearInterpolate(x, x1, y1, x2, y2)
+- getCapacityAt(modelId, airTemp, waterTemp): number (Watt)
+  a) clamp airTemp to min/max available in table [-20..7]
+  b) clamp waterTemp to [35..55] for recommendation use-cases (75 optional)
+  c) bilinear interpolation:
+     - finde air bracket (a1<=air<=a2) in AirTemps
+     - finde water bracket (w1<=water<=w2) in [35,45,55]
+     - interpolieren zuerst über water, dann über air (oder umgekehrt)
+  d) wenn waterTemp exakt 35/45/55 → nur air interpolation
+  e) W75 ist optional; nur verwenden, wenn beide AirTemps in W75 vorhanden; sonst fallback.
+
+3) Empfehlung:
+Implementiere recommendModel(params):
+- input: heizlastKw (number), designAirTemp=-7, designWaterTemp (number), safetyFactor=1.05
+- requiredW = heizlastKw * 1000 * safetyFactor
+- für Modelle in aufsteigender Größe: 0449, 0649, 1049
+  capacityW = getCapacityAt(modelId, designAirTemp, designWaterTemp)
+  if capacityW >= requiredW → return { status:"ok", modelId, capacityW, requiredW, marginPct }
+- wenn keines passt → return { status:"exceeds_10kw_package", message:"16kW anfragen" }
+
+4) Integration:
+- Effizienz-Check nutzt recommendModel(heizlastKw, -7, 55).
+- Heizkostenrechner (optional):
+  wenn du einen "passendes Modell" Hinweis einblenden willst:
+  schätze Heizlast aus Wohnfläche*W/m² oder nutze nutzwaermeBedarf/Heizstunden – optional. Nicht zwingend.
+
+========================
+D) UX / TEXT-OUTPUTS
+========================
+- Für status ok:
+  "Empfohlenes Paket: <label> (Auslegung A-7 / W<xx>)"
+  Zeige Reserve in % (marginPct) und Hinweis "Orientierungswert, exakte Auslegung durch Fachbetrieb".
+- Für exceeds_10kw_package:
+  "Der Wärmebedarf liegt über dem 10-kW-Paketbereich bei A-7/W55. Fragen Sie unser 16-kW CHOFU Modell an (nicht im Paket)."
+  CTA Button: "16-kW Modell anfragen" → Kontaktformular, hidden field: interestModel=16kW, plus optional prefilled message.
+
+========================
+E) AKZEPTANZKRITERIEN (Tests)
+========================
+1) Effizienz-Check und Heizkostenrechner verwenden identische W/m² Klassenwerte.
+2) Solarthermie reduziert nur WW-Anteil (nicht 1:1 die gesamte Nutzwärme).
+3) anteilFussboden beeinflusst eff_vorlauf und damit SCOP.
+4) Heizsystem "keine" blockiert Verbrauchsmethode.
+5) Beim Wechsel von Heizsystem werden Default-Preis/η korrekt gesetzt (außer User hat manuell überschrieben).
+6) Nettoinvestition nie < 0.
+7) Bei heizlast > capacity(1049@A-7/W55) erscheint 16kW-Anfragehinweis + CTA.
