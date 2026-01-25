@@ -54,3 +54,4 @@ integrations = ["hubspot:1.0.0", "resend:1.0.0"]
 VITE_SUPABASE_URL = "${SUPABASE_URL}"
 VITE_SUPABASE_ANON_KEY = "${SUPABASE_ANON_KEY}"
 ADMIN_EMAILS = "office@westech-solar.at"
+TURNSTILE_SITE_KEY = "0x4AAAAAACQcgnruJRIzL2DQ"
