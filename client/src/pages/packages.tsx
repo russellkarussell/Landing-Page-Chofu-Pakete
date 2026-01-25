@@ -92,6 +92,7 @@ export default function Packages() {
                     src={getPackageImage(pkg.kw)} 
                     alt={`CHOFU Wärmepumpe Außeneinheit – ${pkg.kw} kW Paket`}
                     className="w-full h-full object-cover object-center hover:scale-105 transition-transform duration-500"
+                    loading="lazy"
                   />
                 </div>
                 

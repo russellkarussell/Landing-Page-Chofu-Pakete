@@ -184,7 +184,7 @@ function ProductCard({ title, kw, image, link, features, highlight = false }: {
   return (
     <div className={`flex flex-col h-full bg-white rounded-xl border transition-all hover:shadow-xl ${highlight ? 'border-primary shadow-lg scale-105 z-10' : 'border-slate-200 hover:border-slate-300'}`}>
       <div className="relative aspect-[4/3] overflow-hidden rounded-t-xl bg-slate-100">
-        <img src={image} alt={title} className="w-full h-full object-cover object-center" />
+        <img src={image} alt={title} className="w-full h-full object-cover object-center" loading="lazy" />
         <div className="absolute top-4 right-4 bg-white/90 backdrop-blur text-slate-900 font-bold px-3 py-1 rounded-full text-sm shadow-sm border border-slate-200">
           {kw} kW
         </div>

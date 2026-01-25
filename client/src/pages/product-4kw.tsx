@@ -207,6 +207,7 @@ export default function Product4kW() {
                   src={controllerImage} 
                   alt="CMR-4100M Controller – Bedienoberfläche" 
                   className="w-full h-auto"
+                  loading="lazy"
                 />
               </div>
             </div>
