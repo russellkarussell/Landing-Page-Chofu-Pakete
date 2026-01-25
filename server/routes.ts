@@ -289,21 +289,21 @@ export async function registerRoutes(
           
           <!-- Logo -->
           <tr>
-            <td style="background-color: #ffffff; padding: 24px; text-align: center;">
+            <td style="background-color: #ffffff; padding: 24px 24px 16px 24px; text-align: center;">
               <img src="https://yeaxuexfornuxvcldtux.supabase.co/storage/v1/object/public/image/meine-waermepumpe.at-logo-banner-transparent.png" alt="meine-waermepumpe.at" width="250" style="max-width: 250px; height: auto;" />
             </td>
           </tr>
           
           <!-- Header -->
           <tr>
-            <td style="background: linear-gradient(135deg, #0f766e 0%, #14b8a6 100%); padding: 32px; text-align: center;">
+            <td style="background: linear-gradient(135deg, #0f766e 0%, #14b8a6 100%); padding: 20px 32px; text-align: center;">
               <h1 style="margin: 0; color: #ffffff; font-size: 24px; font-weight: 700;">Ihre Heizkostenrechner-Ergebnisse</h1>
             </td>
           </tr>
           
           <!-- Intro -->
           <tr>
-            <td style="padding: 32px;">
+            <td style="padding: 24px 32px 32px 32px;">
               <p style="margin: 0 0 24px; font-size: 16px; line-height: 1.6; color: #475569;">
                 Anbei finden Sie die Ergebnisse aus Ihrem Heizkostenrechner. Bitte beachten Sie, dass es sich um Orientierungswerte handelt – eine genaue Planung erfolgt durch den Fachbetrieb.
               </p>
