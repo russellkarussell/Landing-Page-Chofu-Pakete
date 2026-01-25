@@ -1,0 +1,185 @@
+ROLE: Senior Full-Stack Engineer (React/TypeScript) + Email/Deliverability (Resend) + GDPR-aware UX
+PROJECT: meine-waermepumpe.at (Replit)
+TASK: Add a high-converting lead CTA on the Heizkostenrechner results page (Step 4 of 4).
+Replace the “PDF drucken” primary action with an email capture + consent flow that:
+1) collects the user’s email,
+2) stores/sends the calculator input + results to backend,
+3) sends a nicely designed “Danke + Ihre Ergebnisse” email to the user via Resend,
+4) optionally notifies internal sales/partner routing (if already implemented elsewhere).
+
+IMPORTANT:
+- I will provide this to the planning agent; implement according to existing Resend setup in the project.
+
+========================
+A) UX / UI REQUIREMENTS (RESULT PAGE)
+========================
+WHERE:
+client/src/pages/calculator.tsx (Step 4 / Ergebnis)
+
+1) Add a prominent CTA card BELOW the results summary (and ABOVE any footnotes if possible).
+2) This card is independent of the existing contact form.
+
+CTA CARD CONTENT (German copy):
+Title:
+"Kostenloses Erstgespräch vereinbaren"
+
+Body:
+"Wir senden Ihnen Ihre Ergebnisse per E-Mail und melden uns für ein kurzes Erstgespräch."
+
+Email input:
+Placeholder: "E-Mail Adresse"
+Validation: required, basic email format.
+
+Required consent checkbox (must be checked to enable submit):
+Label:
+"Ich bin einverstanden, dass meine Angaben zur Bearbeitung meiner Anfrage verarbeitet und zur Kontaktaufnahme an ausgewählte Fachbetriebe/Vertriebspartner weitergegeben werden."
+
+Privacy link under checkbox:
+"Weitere Informationen in der Datenschutzerklärung."
+(link to existing privacy policy route)
+
+Primary button (disabled until email valid + consent checked):
+"Ergebnisse senden & Erstgespräch anfragen"
+
+Secondary link/button (optional, small):
+"Ergebnis als PDF" (keep as a small secondary action if PDF exists; otherwise remove the big PDF button)
+
+Success state after submit:
+- Replace form with a success message:
+  "Danke! Wir haben Ihnen die Ergebnisse per E-Mail gesendet. Wir melden uns in Kürze für das Erstgespräch."
+- Do not reload the page.
+
+Error state:
+- Show inline error text (calm styling): "Senden fehlgeschlagen – bitte versuchen Sie es erneut."
+
+STYLE:
+- No warning colors/icons
+- Calm premium card (consistent with site design)
+- Works on mobile: stacked layout, large tap targets
+
+========================
+B) DATA TO SEND (PAYLOAD)
+========================
+On submit, send to backend endpoint (create if missing):
+POST /api/heizkosten-lead
+
+Payload should include:
+{
+  email: string,
+  consent: { accepted: true, timestamp: ISOString, textVersion: "heizkosten_v1" },
+  context: { source: "heizkostenrechner", step: 4, pageUrl, userAgent },
+  inputs: {
+    buildingClass,
+    area_m2,
+    currentHeatingSystem,
+    efficiencyOldSystem,
+    currentEnergyPrice,
+    wpPowerPrice,
+    vorlaufTemp,
+    fbhPercent,
+    warmwasserPercent,
+    solarEnabled,
+    radiatorFansEnabled,
+    // plus any other existing inputs in the calculator
+  },
+  derived: {
+    effectiveVorlaufTemp,   // if you compute it
+    selectedPackage: "4kW"|"6kW"|"10kW"|null,   // if computed in step 3
+    investmentGross,
+    subsidyExpected,
+    investmentNet,
+  },
+  results: {
+    nutzwaerme_kwh_a,
+    wpStrom_kwh_a,
+    wpStromkosten_eur_a,
+    wpCo2_kg_a,
+    scop,
+    // if comparison mode exists, include:
+    oldCost_eur_a: number|null,
+    oldCo2_kg_a: number|null,
+    savings_eur_a: number|null,
+    amortisation_years: number|null,
+    co2Reduction_kg_a: number|null
+  }
+}
+
+NOTES:
+- Ensure GDPR-minimal: send only what is needed for follow-up + the promised email summary.
+
+========================
+C) BACKEND ENDPOINT (SERVER)
+========================
+Create/extend backend handler for POST /api/heizkosten-lead.
+
+Responsibilities:
+1) Validate:
+- email present and looks valid
+- consent.accepted === true
+If invalid -> return 400 with message.
+
+2) Create a lead record (if your project already persists leads, reuse existing DB logic; otherwise store minimally or forward to CRM).
+At minimum log it server-side.
+
+3) Send transactional email via Resend to the user:
+- Use existing Resend API key from ENV (RESEND_API_KEY or the project’s existing key name).
+- From address uses an already verified sender domain (whatever is configured).
+- Subject (German):
+  "Ihre Heizkostenrechner-Ergebnisse – CHOFU Wärmepumpe"
+- Email body should be a nicely designed HTML template.
+
+4) (Optional, if already present in project):
+Also notify internal sales inbox with the same payload summary.
+
+Return:
+{ ok: true } on success.
+
+========================
+D) RESEND EMAIL TEMPLATE (DESIGN REQUIREMENTS)
+========================
+Use a Resend Template (preferred) OR a React-email template stored in repo (depending on existing setup).
+The planning agent should align with what’s already implemented.
+
+Email structure (German):
+1) Header: "Danke für Ihre Anfrage"
+2) Short intro:
+"Anbei finden Sie die Ergebnisse aus Ihrem Heizkostenrechner (Orientierungswerte)."
+3) “Ihre Eingaben” block (bulleted or table):
+- Gebäudeklasse, Fläche
+- Vorlauf, FBH-Anteil, Warmwasser-Anteil
+- Strompreis WP
+- ggf. aktuelles Heizsystem (wenn vorhanden)
+4) “Ihre Ergebnisse” block:
+- Nutzwärmebedarf (kWh/a)
+- Stromkosten Wärmepumpe (€/a)
+- CO₂ Emissionen (kg/a oder t/a)
+- Effizienz (JAZ/SCOP)
+- wenn verfügbar: erwartete Förderung + Netto-Invest
+5) CTA button:
+"Kostenloses Erstgespräch vereinbaren"
+(link to your contact/booking page; use existing route)
+6) Footer disclaimer (small):
+"Alle Werte sind Schätzungen basierend auf Ihren Angaben und Durchschnittswerten. Eine genaue Planung erfolgt durch den Fachbetrieb."
+
+Branding:
+- Clean, premium, minimal
+- No heavy graphics required
+- Ensure good rendering on Gmail/Outlook (tables-based layout if needed)
+
+========================
+E) CONSENT UX (MUST)
+========================
+- The submit button is disabled until:
+  - valid email
+  - consent checkbox checked
+- Store consent timestamp + version in payload.
+- Link to privacy policy is present.
+
+========================
+F) ACCEPTANCE CRITERIA
+========================
+1) Results page has a clear primary CTA to capture email + request first call.
+2) User can submit only with email + consent.
+3) Backend sends a well-formatted Resend email containing inputs + results.
+4) Success message shown after send; no page reload.
+5) PDF button is no longer the primary CTA (either removed or moved to secondary).
