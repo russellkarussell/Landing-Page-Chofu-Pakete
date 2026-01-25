@@ -1,0 +1,103 @@
+ROLE: Senior Full-Stack Engineer + HVAC Planner
+PROJECT: meine-waermepumpe.at (React/TypeScript)
+TASK: Implement “Standalone Mode” in Heizkostenrechner results when no current heating system exists (Neubau / Neuinstallation).
+
+CONTEXT:
+If the user selects “Keine / Neubau” as current heating system, there is no reference system.
+Savings, amortisation, and CO₂ reduction are deltas and MUST NOT be calculated or displayed.
+Currently this leads to misleading negative values. This must be fixed.
+
+WHERE:
+client/src/pages/calculator.tsx
+- results calculation logic
+- results KPI UI (bottom result band)
+
+========================
+A) MODE DETECTION
+========================
+Define a boolean flag:
+isNewBuildMode = (data.currentHeatingSystem === "keine")  // or your enum/value
+
+========================
+B) CALCULATION RULES
+========================
+When isNewBuildMode === true:
+
+1) STILL calculate and keep:
+- Nutzwärmebedarf (kWh/a)
+- Wärmepumpen-Stromverbrauch (kWh/a)
+- Wärmepumpen-Stromkosten (€/a)
+- Wärmepumpen-CO₂-Emissionen (kg/a)
+- Effizienz (JAZ / SCOP)
+
+2) DO NOT calculate comparison metrics:
+Set the following explicitly to null:
+- altKosten
+- altCO2
+- ersparnis
+- amortisation
+- co2Reduktion
+
+Reason:
+Without a baseline heating system, comparison values are mathematically invalid.
+
+========================
+C) RESULT UI BEHAVIOR
+========================
+Modify ONLY the bottom KPI/result band depending on mode.
+
+IF isNewBuildMode === false:
+- Keep existing comparison layout:
+  - Jährliche Ersparnis
+  - Amortisation
+  - CO₂ Reduktion
+
+IF isNewBuildMode === true:
+REPLACE the comparison KPIs with a standalone layout showing ONLY:
+
+1) KPI 1:
+Title: "Jährliche Betriebskosten (Wärmepumpe)"
+Value: wpStromkosten (€/a)
+
+2) KPI 2:
+Title: "Effizienz (JAZ/SCOP)"
+Value: scop
+
+3) KPI 3:
+Title: "CO₂ Emissionen (Wärmepumpe)"
+Value: wpCO2 (kg/a or t/a – use existing formatting convention)
+
+IMPORTANT:
+- No negative values
+- No “k.A.”
+- No zero placeholders pretending to be comparisons
+
+========================
+D) EXPLANATORY NOTE (SMALL TEXT)
+========================
+When isNewBuildMode === true, display a small explanatory note below the KPIs:
+
+"Da kein aktuelles Heizsystem ausgewählt wurde (Neubau/Neuinstallation), werden keine Vergleichswerte
+(Ersparnis oder Amortisation) berechnet."
+
+Tone:
+- neutral
+- factual
+- NOT warning-like
+- NOT apologetic
+
+========================
+E) ACCEPTANCE CRITERIA
+========================
+1) Selecting “Keine / Neubau” never shows:
+   - negative Ersparnis
+   - negative CO₂ Reduktion
+   - Amortisation values
+
+2) Results remain meaningful:
+   - Betriebskosten, Effizienz und CO₂ der Wärmepumpe are always visible.
+
+3) Switching between “Kein Heizsystem” and any other heating system dynamically switches
+   between Standalone Mode and Comparison Mode without page reload.
+
+4) No calculation logic outside results is affected.

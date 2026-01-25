@@ -832,101 +832,172 @@ export default function Heizkostenrechner() {
               )}
 
               {/* --- STEP 4: ERGEBNIS --- */}
-              {step === 4 && (
-                <motion.div 
-                  key="step4"
-                  initial={{ opacity: 0, x: 20 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  exit={{ opacity: 0, x: -20 }}
-                  className="space-y-8 flex-grow"
-                >
-                  <StepHeader step={4} title="Ihr Sparpotenzial" />
+              {step === 4 && (() => {
+                const isNewBuildMode = data.heizsystem === "keine";
+                
+                return (
+                  <motion.div 
+                    key="step4"
+                    initial={{ opacity: 0, x: 20 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    exit={{ opacity: 0, x: -20 }}
+                    className="space-y-8 flex-grow"
+                  >
+                    <StepHeader step={4} title={isNewBuildMode ? "Ihre Wärmepumpen-Lösung" : "Ihr Sparpotenzial"} />
 
-                  <div className="grid md:grid-cols-2 gap-6">
-                    {/* Old System Card */}
-                    <div className="bg-white border border-slate-200 rounded-xl p-6 shadow-sm">
-                      <h3 className="text-sm font-bold uppercase tracking-wider text-slate-500 mb-4 border-b pb-2">Aktueller Status</h3>
-                      <ResultRow label="Nutzwärmebedarf" value={results.nutzwaermeBedarf?.toLocaleString()} unit="kWh/a" />
-                      <ResultRow label="Aktuelle Kosten" value={results.kostenAktuell?.toLocaleString()} unit="€/a" />
-                      <ResultRow label="CO₂ Emissionen" value={results.co2Alt?.toLocaleString()} unit="kg/a" />
-                    </div>
+                    {isNewBuildMode ? (
+                      /* Standalone Mode: New Build / No existing system */
+                      <>
+                        {/* Single Card for New System */}
+                        <div className="bg-primary/5 border border-primary/20 rounded-xl p-6 shadow-sm">
+                          <h3 className="text-sm font-bold uppercase tracking-wider text-primary mb-4 border-b border-primary/20 pb-2">Ihre CHOFU Wärmepumpe</h3>
+                          <ResultRow label="Nutzwärmebedarf" value={results.nutzwaermeBedarf?.toLocaleString()} unit="kWh/a" />
+                          <ResultRow label="Stromkosten" value={results.kostenNeu?.toLocaleString()} unit="€/a" highlight />
+                          <ResultRow label="CO₂ Emissionen" value={results.co2Neu?.toLocaleString()} unit="kg/a" highlight />
+                          <div className="mt-4 pt-4 border-t border-primary/20">
+                             <div className="flex justify-between items-center">
+                                <span className="font-bold text-slate-700">Effizienz (JAZ/SCOP)</span>
+                                <span className="font-bold text-primary text-xl">{results.effectiveSCOP}</span>
+                             </div>
+                          </div>
+                        </div>
 
-                    {/* New System Card */}
-                    <div className="bg-primary/5 border border-primary/20 rounded-xl p-6 shadow-sm">
-                      <h3 className="text-sm font-bold uppercase tracking-wider text-primary mb-4 border-b border-primary/20 pb-2">Mit Chofu Wärmepumpe</h3>
-                      <ResultRow label="Stromkosten" value={results.kostenNeu?.toLocaleString()} unit="€/a" highlight />
-                      <ResultRow label="CO₂ Emissionen" value={results.co2Neu?.toLocaleString()} unit="kg/a" highlight />
-                      <div className="mt-4 pt-4 border-t border-primary/20">
-                         <div className="flex justify-between items-center">
-                            <span className="font-bold text-slate-700">Effizienz (JAZ/SCOP)</span>
-                            <span className="font-bold text-primary text-xl">{results.effectiveSCOP}</span>
-                         </div>
-                      </div>
-                    </div>
-                  </div>
-
-                  {/* Main Result Highlight */}
-                  <div className="bg-slate-900 text-white p-8 rounded-xl shadow-2xl relative overflow-hidden">
-                     <div className="relative z-10 grid md:grid-cols-3 gap-8 text-center md:text-left">
-                        <div>
-                           <div className="text-slate-400 text-sm uppercase tracking-wider font-bold mb-1">Jährliche Ersparnis</div>
-                           <div className={cn(
-                             "text-4xl md:text-5xl font-heading font-extrabold",
-                             results.ersparnis > 0 ? "text-green-400" : "text-amber-400"
-                           )}>
-                             {results.ersparnis?.toLocaleString()} €
+                        {/* Standalone KPIs */}
+                        <div className="bg-slate-900 text-white p-8 rounded-xl shadow-2xl relative overflow-hidden">
+                           <div className="relative z-10 grid md:grid-cols-3 gap-8 text-center md:text-left">
+                              <div>
+                                 <div className="text-slate-400 text-sm uppercase tracking-wider font-bold mb-1">Jährliche Betriebskosten</div>
+                                 <div className="text-4xl md:text-5xl font-heading font-extrabold text-green-400">
+                                   {results.kostenNeu?.toLocaleString()} €
+                                 </div>
+                                 <div className="text-xs text-slate-400 mt-2">Stromkosten Wärmepumpe</div>
+                              </div>
+                              <div>
+                                 <div className="text-slate-400 text-sm uppercase tracking-wider font-bold mb-1">Effizienz (JAZ/SCOP)</div>
+                                 <div className="text-4xl md:text-5xl font-heading font-extrabold text-white">
+                                   {results.effectiveSCOP}
+                                 </div>
+                                 <div className="text-xs text-slate-400 mt-2">Jahresarbeitszahl</div>
+                              </div>
+                              <div>
+                                 <div className="text-slate-400 text-sm uppercase tracking-wider font-bold mb-1">CO₂ Emissionen</div>
+                                 <div className="text-4xl md:text-5xl font-heading font-extrabold text-blue-300">
+                                   {Math.round(results.co2Neu / 1000 * 10) / 10} t
+                                 </div>
+                                 <div className="text-xs text-slate-400 mt-2">pro Jahr</div>
+                              </div>
                            </div>
-                           <div className="text-xs text-slate-400 mt-2">Betriebskosten + Wartung</div>
-                        </div>
-                        <div>
-                           <div className="text-slate-400 text-sm uppercase tracking-wider font-bold mb-1">Amortisation</div>
-                           {results.amortizationYears !== null ? (
-                             <>
-                               <div className="text-4xl md:text-5xl font-heading font-extrabold text-white">
-                                 {results.amortizationYears}
-                               </div>
-                               <div className="text-xs text-slate-400 mt-2">Jahre (nach Förderung)</div>
-                             </>
-                           ) : (
-                             <>
-                               <div className="text-xl font-bold text-amber-400">
-                                 k.A.
-                               </div>
-                               <div className="text-xs text-amber-300 mt-2">
-                                 Unter diesen Annahmen keine wirtschaftliche Amortisation.
-                               </div>
-                             </>
-                           )}
-                        </div>
-                        <div>
-                           <div className="text-slate-400 text-sm uppercase tracking-wider font-bold mb-1">CO₂ Reduktion</div>
-                           <div className={cn(
-                             "text-4xl md:text-5xl font-heading font-extrabold",
-                             results.co2Ersparnis > 0 ? "text-blue-300" : "text-amber-400"
-                           )}>
-                             {Math.round(results.co2Ersparnis / 1000 * 10) / 10} t
+                           {/* Background Pattern */}
+                           <div className="absolute top-0 right-0 p-8 opacity-10">
+                              <Leaf size={200} />
                            </div>
-                           <div className="text-xs text-slate-400 mt-2">pro Jahr</div>
                         </div>
-                     </div>
-                     {/* Background Pattern */}
-                     <div className="absolute top-0 right-0 p-8 opacity-10">
-                        <Leaf size={200} />
-                     </div>
-                  </div>
 
-                  <div className="text-center">
-                     <p className="text-sm text-slate-500 mb-6 max-w-2xl mx-auto">
-                        * Die berechneten Werte sind Schätzungen basierend auf Ihren Angaben und Durchschnittswerten. 
-                        Eine genaue Heizlastberechnung durch einen Fachpartner ist für die finale Planung notwendig.
-                     </p>
-                     <Button className="font-bold uppercase tracking-wide" size="lg" onClick={() => window.print()}>
-                        <Download className="mr-2" size={18} /> Ergebnis drucken / PDF
-                     </Button>
-                  </div>
+                        {/* Explanatory Note for Standalone Mode */}
+                        <div className="text-center">
+                           <p className="text-sm text-slate-500 mb-4 max-w-2xl mx-auto">
+                             Da kein aktuelles Heizsystem ausgewählt wurde (Neubau/Neuinstallation), werden keine Vergleichswerte (Ersparnis oder Amortisation) berechnet.
+                           </p>
+                           <p className="text-sm text-slate-500 mb-6 max-w-2xl mx-auto">
+                              * Die berechneten Werte sind Schätzungen basierend auf Ihren Angaben und Durchschnittswerten. 
+                              Eine genaue Heizlastberechnung durch einen Fachpartner ist für die finale Planung notwendig.
+                           </p>
+                           <Button className="font-bold uppercase tracking-wide" size="lg" onClick={() => window.print()}>
+                              <Download className="mr-2" size={18} /> Ergebnis drucken / PDF
+                           </Button>
+                        </div>
+                      </>
+                    ) : (
+                      /* Comparison Mode: Existing heating system */
+                      <>
+                        <div className="grid md:grid-cols-2 gap-6">
+                          {/* Old System Card */}
+                          <div className="bg-white border border-slate-200 rounded-xl p-6 shadow-sm">
+                            <h3 className="text-sm font-bold uppercase tracking-wider text-slate-500 mb-4 border-b pb-2">Aktueller Status</h3>
+                            <ResultRow label="Nutzwärmebedarf" value={results.nutzwaermeBedarf?.toLocaleString()} unit="kWh/a" />
+                            <ResultRow label="Aktuelle Kosten" value={results.kostenAktuell?.toLocaleString()} unit="€/a" />
+                            <ResultRow label="CO₂ Emissionen" value={results.co2Alt?.toLocaleString()} unit="kg/a" />
+                          </div>
 
-                </motion.div>
-              )}
+                          {/* New System Card */}
+                          <div className="bg-primary/5 border border-primary/20 rounded-xl p-6 shadow-sm">
+                            <h3 className="text-sm font-bold uppercase tracking-wider text-primary mb-4 border-b border-primary/20 pb-2">Mit Chofu Wärmepumpe</h3>
+                            <ResultRow label="Stromkosten" value={results.kostenNeu?.toLocaleString()} unit="€/a" highlight />
+                            <ResultRow label="CO₂ Emissionen" value={results.co2Neu?.toLocaleString()} unit="kg/a" highlight />
+                            <div className="mt-4 pt-4 border-t border-primary/20">
+                               <div className="flex justify-between items-center">
+                                  <span className="font-bold text-slate-700">Effizienz (JAZ/SCOP)</span>
+                                  <span className="font-bold text-primary text-xl">{results.effectiveSCOP}</span>
+                               </div>
+                            </div>
+                          </div>
+                        </div>
+
+                        {/* Comparison KPIs */}
+                        <div className="bg-slate-900 text-white p-8 rounded-xl shadow-2xl relative overflow-hidden">
+                           <div className="relative z-10 grid md:grid-cols-3 gap-8 text-center md:text-left">
+                              <div>
+                                 <div className="text-slate-400 text-sm uppercase tracking-wider font-bold mb-1">Jährliche Ersparnis</div>
+                                 <div className={cn(
+                                   "text-4xl md:text-5xl font-heading font-extrabold",
+                                   results.ersparnis > 0 ? "text-green-400" : "text-amber-400"
+                                 )}>
+                                   {results.ersparnis?.toLocaleString()} €
+                                 </div>
+                                 <div className="text-xs text-slate-400 mt-2">Betriebskosten + Wartung</div>
+                              </div>
+                              <div>
+                                 <div className="text-slate-400 text-sm uppercase tracking-wider font-bold mb-1">Amortisation</div>
+                                 {results.amortizationYears !== null ? (
+                                   <>
+                                     <div className="text-4xl md:text-5xl font-heading font-extrabold text-white">
+                                       {results.amortizationYears}
+                                     </div>
+                                     <div className="text-xs text-slate-400 mt-2">Jahre (nach Förderung)</div>
+                                   </>
+                                 ) : (
+                                   <>
+                                     <div className="text-xl font-bold text-amber-400">
+                                       k.A.
+                                     </div>
+                                     <div className="text-xs text-amber-300 mt-2">
+                                       Unter diesen Annahmen keine wirtschaftliche Amortisation.
+                                     </div>
+                                   </>
+                                 )}
+                              </div>
+                              <div>
+                                 <div className="text-slate-400 text-sm uppercase tracking-wider font-bold mb-1">CO₂ Reduktion</div>
+                                 <div className={cn(
+                                   "text-4xl md:text-5xl font-heading font-extrabold",
+                                   results.co2Ersparnis > 0 ? "text-blue-300" : "text-amber-400"
+                                 )}>
+                                   {Math.round(results.co2Ersparnis / 1000 * 10) / 10} t
+                                 </div>
+                                 <div className="text-xs text-slate-400 mt-2">pro Jahr</div>
+                              </div>
+                           </div>
+                           {/* Background Pattern */}
+                           <div className="absolute top-0 right-0 p-8 opacity-10">
+                              <Leaf size={200} />
+                           </div>
+                        </div>
+
+                        <div className="text-center">
+                           <p className="text-sm text-slate-500 mb-6 max-w-2xl mx-auto">
+                              * Die berechneten Werte sind Schätzungen basierend auf Ihren Angaben und Durchschnittswerten. 
+                              Eine genaue Heizlastberechnung durch einen Fachpartner ist für die finale Planung notwendig.
+                           </p>
+                           <Button className="font-bold uppercase tracking-wide" size="lg" onClick={() => window.print()}>
+                              <Download className="mr-2" size={18} /> Ergebnis drucken / PDF
+                           </Button>
+                        </div>
+                      </>
+                    )}
+
+                  </motion.div>
+                );
+              })()}
 
             </AnimatePresence>
           </CardContent>
