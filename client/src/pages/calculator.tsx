@@ -1,4 +1,4 @@
-import { useState, useEffect, useMemo } from "react";
+import { useState, useEffect, useMemo, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { 
   ArrowRight, 
@@ -160,6 +160,7 @@ const STEP2_DEFAULTS: Record<string, { vorlauf: number; fbh: number }> = {
 
 export default function Heizkostenrechner() {
   const [step, setStep] = useState(1);
+  const hasInteracted = useRef(false);
   const [data, setData] = useState({
     method: "flaeche", // "flaeche" | "verbrauch"
     verbrauch: 2000,
@@ -502,12 +503,14 @@ export default function Heizkostenrechner() {
   };
 
   const nextStep = () => {
+    hasInteracted.current = true;
     setStep(s => Math.min(4, s + 1));
-    window.scrollTo({ top: 0, behavior: 'smooth' });
+    setTimeout(() => window.scrollTo({ top: 0, behavior: 'smooth' }), 50);
   };
   const prevStep = () => {
+    hasInteracted.current = true;
     setStep(s => Math.max(1, s - 1));
-    window.scrollTo({ top: 0, behavior: 'smooth' });
+    setTimeout(() => window.scrollTo({ top: 0, behavior: 'smooth' }), 50);
   };
 
   return (
@@ -1313,7 +1316,7 @@ export default function Heizkostenrechner() {
                  Weiter <ArrowRight size={16} />
                </Button>
              ) : (
-               <Button onClick={() => { setStep(1); window.scrollTo({ top: 0, behavior: 'smooth' }); }} variant="ghost" className="text-primary hover:text-primary/80">
+               <Button onClick={() => { hasInteracted.current = true; setStep(1); setTimeout(() => window.scrollTo({ top: 0, behavior: 'smooth' }), 50); }} variant="ghost" className="text-primary hover:text-primary/80">
                  Neu berechnen
                </Button>
              )}
