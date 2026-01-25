@@ -483,7 +483,7 @@ export default function Home() {
              <div className="relative p-1 bg-gradient-to-br from-slate-100 to-slate-200 rounded-none border border-slate-200 w-full max-w-sm">
                 <div className="bg-white p-6 text-center space-y-4">
                   <div className="mx-auto flex items-center justify-center">
-                    <img src={ehpaLabel} alt="EHPA Gütesiegel" className="h-32 w-auto object-contain" loading="lazy" />
+                    <img src={ehpaLabel} alt="EHPA Gütesiegel" className="h-32 w-auto object-contain" />
                   </div>
                   <h3 className="font-bold text-slate-900 text-lg uppercase tracking-wide">EHPA Gütesiegel</h3>
                   <p className="text-sm text-slate-500">Unsere Anlagen sind zertifiziert und voll förderfähig in ganz Österreich.</p>

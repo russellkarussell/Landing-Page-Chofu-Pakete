@@ -56,7 +56,6 @@ export function ChofuHomepageTeaser() {
               src={chofuPremiumImage}
               alt="CHOFU Wärmepumpe – Premium Wärmepumpentechnik Made in Japan"
               className="w-full h-auto rounded-xl shadow-lg shadow-slate-900/10 object-contain"
-              loading="lazy"
               data-testid="img-chofu-premium"
             />
           </div>

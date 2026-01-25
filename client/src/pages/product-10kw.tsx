@@ -204,7 +204,6 @@ export default function Product10kW() {
                   src={controllerImage} 
                   alt="CMR-4100M Controller – Zeitprogramm" 
                   className="w-full h-auto"
-                  loading="lazy"
                 />
               </div>
             </div>
