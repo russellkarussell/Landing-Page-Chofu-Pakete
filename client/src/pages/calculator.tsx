@@ -84,22 +84,38 @@ const ResultRow = ({ label, value, unit, highlight = false, negative = false }: 
 
 // --- Main Component ---
 
+// Package investment presets
+const PACKAGE_PRESETS = {
+  "4kW": 12803,
+  "6kW": 13293,
+  "10kW": 14343,
+};
+
+// Defaults for Step 2 based on building class
+const STEP2_DEFAULTS: Record<string, { vorlauf: number; fbh: number }> = {
+  alt_unsaniert: { vorlauf: 55, fbh: 0 },
+  alt_teilsaniert: { vorlauf: 45, fbh: 30 },
+  alt_saniert: { vorlauf: 40, fbh: 60 },
+  neubau: { vorlauf: 35, fbh: 100 },
+  niedrigenergie: { vorlauf: 32, fbh: 100 },
+};
+
 export default function Heizkostenrechner() {
   const [step, setStep] = useState(1);
   const [data, setData] = useState({
     method: "flaeche", // "flaeche" | "verbrauch"
     verbrauch: 2000,
-    flaeche: 150,
-    gebaeudeklasse: "alt_unsaniert",
-    heizsystem: "heizoel",
-    wirkungsgradAlt: 80,
-    preisAlt: 1.03,
+    flaeche: 120,
+    gebaeudeklasse: "neubau",
+    heizsystem: "keine",
+    wirkungsgradAlt: 100,
+    preisAlt: 0,
     
     // Step 2
     strompreisWP: 0.25,
-    anteilFussboden: 50,
-    vorlaufTemp: 55,
-    warmwasserAnteilPct: 20,
+    anteilFussboden: 100,
+    vorlaufTemp: 35,
+    warmwasserAnteilPct: 10,
     
     // Step 2 - Optimization
     hasSolarthermie: false,
@@ -108,8 +124,9 @@ export default function Heizkostenrechner() {
     hasFans: false,
     
     // Step 3
-    investition: 22000,
-    foerderung: 16000,
+    selectedPackage: "6kW" as keyof typeof PACKAGE_PRESETS,
+    investition: 13293,
+    foerderung: 4000,
     wartungAlt: 150,
     wartungNeu: 250,
   });
@@ -118,11 +135,40 @@ export default function Heizkostenrechner() {
   const [hasUserModifiedInvest, setHasUserModifiedInvest] = useState(false);
   const [preisManuellGeaendert, setPreisManuellGeaendert] = useState(false);
   const [etaManuellGeaendert, setEtaManuellGeaendert] = useState(false);
+  
+  // Step 2 manual override flags
+  const [vorlaufManuell, setVorlaufManuell] = useState(false);
+  const [fbhManuell, setFbhManuell] = useState(false);
 
   // Calculations
   useEffect(() => {
     calculateResults();
   }, [data]);
+
+  // Update Step 2 defaults when building class changes (if not manually overridden)
+  useEffect(() => {
+    const defaults = STEP2_DEFAULTS[data.gebaeudeklasse];
+    if (!defaults) return;
+    
+    const updates: any = {};
+    if (!vorlaufManuell) {
+      updates.vorlaufTemp = defaults.vorlauf;
+    }
+    if (!fbhManuell) {
+      updates.anteilFussboden = defaults.fbh;
+    }
+    
+    if (Object.keys(updates).length > 0) {
+      setData(prev => ({ ...prev, ...updates }));
+    }
+  }, [data.gebaeudeklasse, vorlaufManuell, fbhManuell]);
+
+  // Auto-uncheck hasFans when FBH > 50%
+  useEffect(() => {
+    if (data.anteilFussboden > 50 && data.hasFans) {
+      setData(prev => ({ ...prev, hasFans: false }));
+    }
+  }, [data.anteilFussboden]);
 
   // Handle heating system change - auto-update defaults unless manually modified
   const handleHeizsystemChange = (newSystem: string) => {
@@ -144,40 +190,23 @@ export default function Heizkostenrechner() {
     setData(prev => ({ ...prev, ...updates }));
   };
 
-  // Update defaults for Investment based on calculated load
+  // Update investment based on selected package (only when not manually modified)
   useEffect(() => {
-    // Calculate load immediately based on current data
-    const specLoad = CONFIG.specificHeatLoad[data.gebaeudeklasse as keyof typeof CONFIG.specificHeatLoad] || 50;
-    const estimatedLoadKw = (data.flaeche * specLoad) / 1000;
-
     if (!hasUserModifiedInvest) {
-       let suggestedInvest = 22000;
+       const suggestedInvest = PACKAGE_PRESETS[data.selectedPackage];
        
-       if (estimatedLoadKw < 5) suggestedInvest = 20000; // 4kW Package
-       else if (estimatedLoadKw < 8) suggestedInvest = 22000; // 6kW Package
-       else suggestedInvest = 23000; // 10kW Package
-
-       // Calculate Subsidy (User Logic: 30% max 7500)
-       // Base: 30% of Invest, capped at 7500
        const calculatedPercentage = suggestedInvest * 0.30;
-       let maxCap = 7500;
-       
-       // Assuming Solar Bonus increases the cap or is added on top?
-       // Usually flat rate bonuses are added ON TOP of percentage calcs or limits.
-       // Let's assume 30% rule applies to base, then + bonus.
-       // But user said "invest 20k -> 6k funding", which is exactly 30%.
-       
-       let suggestedSubsidy = Math.min(calculatedPercentage, maxCap);
+       let suggestedSubsidy = Math.min(calculatedPercentage, 7500);
        
        if (data.hasSolarthermie) suggestedSubsidy += 2500;
 
        setData(prev => ({
          ...prev,
          investition: suggestedInvest,
-         foerderung: Math.round(suggestedSubsidy / 100) * 100 // Round to nearest 100
+         foerderung: Math.round(suggestedSubsidy / 100) * 100
        }));
     }
-  }, [data.flaeche, data.gebaeudeklasse, data.hasSolarthermie, hasUserModifiedInvest]);
+  }, [data.selectedPackage, data.hasSolarthermie, hasUserModifiedInvest]);
 
   const calculateResults = () => {
     let nutzwaermeBedarf = 0;
@@ -513,7 +542,10 @@ export default function Heizkostenrechner() {
                        </div>
                        <Slider 
                           value={[data.vorlaufTemp]} 
-                          onValueChange={(val) => updateData("vorlaufTemp", val[0])} 
+                          onValueChange={(val) => {
+                            setVorlaufManuell(true);
+                            updateData("vorlaufTemp", val[0]);
+                          }} 
                           min={30} max={75} step={1} 
                        />
                        <p className="text-xs text-slate-500">Niedrigere Vorlauftemperaturen erhöhen die Effizienz (SCOP) der Wärmepumpe massiv.</p>
@@ -526,7 +558,10 @@ export default function Heizkostenrechner() {
                        </div>
                        <Slider 
                           value={[data.anteilFussboden]} 
-                          onValueChange={(val) => updateData("anteilFussboden", val[0])} 
+                          onValueChange={(val) => {
+                            setFbhManuell(true);
+                            updateData("anteilFussboden", val[0]);
+                          }} 
                           min={0} max={100} step={5} 
                        />
                        <p className="text-xs text-slate-500">Höherer FBH-Anteil senkt die effektive Vorlauftemperatur und verbessert den SCOP.</p>
@@ -542,7 +577,7 @@ export default function Heizkostenrechner() {
                           onValueChange={(val) => updateData("warmwasserAnteilPct", val[0])} 
                           min={10} max={35} step={1} 
                        />
-                       <p className="text-xs text-slate-500">Typisch 15-25% des Gesamtwärmebedarfs für Warmwasser.</p>
+                       <p className="text-xs text-slate-500">Typisch 10–25% des Gesamtwärmebedarfs für Warmwasser.</p>
                     </div>
                   </div>
 
@@ -580,21 +615,23 @@ export default function Heizkostenrechner() {
                         )}
                       </div>
 
-                      {/* Fans Toggle */}
-                      <div className={cn(
-                        "border-2 rounded-xl p-4 cursor-pointer transition-all",
-                        data.hasFans ? "border-primary bg-primary/5" : "border-slate-200"
-                      )} onClick={() => updateData("hasFans", !data.hasFans)}>
-                        <div className="flex items-center gap-3">
-                           <div className={cn("w-6 h-6 rounded border flex items-center justify-center", data.hasFans ? "bg-primary border-primary text-white" : "border-slate-300")}>
-                             {data.hasFans && <Check size={16} />}
-                           </div>
-                           <div className="flex flex-col">
-                             <span className="font-bold text-slate-700">Heizkörperlüfter</span>
-                             <span className="text-xs text-slate-500">Senkt nötige Vorlauftemp. um ca. 5°C</span>
-                           </div>
+                      {/* Fans Toggle - only show when FBH <= 50% */}
+                      {data.anteilFussboden <= 50 && (
+                        <div className={cn(
+                          "border-2 rounded-xl p-4 cursor-pointer transition-all",
+                          data.hasFans ? "border-primary bg-primary/5" : "border-slate-200"
+                        )} onClick={() => updateData("hasFans", !data.hasFans)}>
+                          <div className="flex items-center gap-3">
+                             <div className={cn("w-6 h-6 rounded border flex items-center justify-center", data.hasFans ? "bg-primary border-primary text-white" : "border-slate-300")}>
+                               {data.hasFans && <Check size={16} />}
+                             </div>
+                             <div className="flex flex-col">
+                               <span className="font-bold text-slate-700">Heizkörperlüfter</span>
+                               <span className="text-xs text-slate-500">Senkt nötige Vorlauftemp. um ca. 5°C</span>
+                             </div>
+                          </div>
                         </div>
-                      </div>
+                      )}
                     </div>
                   </div>
                 </motion.div>
@@ -612,24 +649,55 @@ export default function Heizkostenrechner() {
                   <StepHeader step={3} title="Investition & Wartung" />
                   
                   <div className="bg-slate-50 p-6 rounded-xl border border-slate-100 space-y-8">
+                     {/* Package Selector */}
+                     <div className="space-y-4">
+                        <Label>Wärmepumpen-Paket wählen</Label>
+                        <div className="grid grid-cols-3 gap-2">
+                          {(Object.keys(PACKAGE_PRESETS) as Array<keyof typeof PACKAGE_PRESETS>).map((pkg) => (
+                            <button
+                              key={pkg}
+                              onClick={() => {
+                                const newInvest = PACKAGE_PRESETS[pkg];
+                                const calculatedPercentage = newInvest * 0.30;
+                                let newSubsidy = Math.min(calculatedPercentage, 7500);
+                                if (data.hasSolarthermie) newSubsidy += 2500;
+                                
+                                setHasUserModifiedInvest(false);
+                                setData(prev => ({
+                                  ...prev,
+                                  selectedPackage: pkg,
+                                  investition: newInvest,
+                                  foerderung: Math.round(newSubsidy / 100) * 100
+                                }));
+                              }}
+                              data-testid={`package-${pkg}`}
+                              className={cn(
+                                "p-4 text-center border-2 rounded-xl transition-all font-medium",
+                                data.selectedPackage === pkg 
+                                  ? "border-primary bg-primary/5 text-primary" 
+                                  : "border-slate-200 text-slate-600 hover:border-slate-300"
+                              )}
+                            >
+                              <div className="font-bold text-lg">{pkg}</div>
+                              <div className="text-xs text-slate-500 mt-1">{PACKAGE_PRESETS[pkg].toLocaleString()} €</div>
+                            </button>
+                          ))}
+                        </div>
+                     </div>
+
                      <div className="space-y-4">
                         <div className="flex justify-between">
-                           <Label>Investitionskosten (inkl. Montage)</Label>
+                           <Label>Investitionskosten – {data.selectedPackage} Paket</Label>
                            <span className="font-bold text-primary">{data.investition.toLocaleString()} €</span>
                         </div>
                         <Slider 
                            value={[data.investition]} 
                            onValueChange={(val) => {
-                             // User manually changed investment
                              setHasUserModifiedInvest(true);
                              
-                             // Recalculate subsidy dynamically even when manual, 
-                             // to keep it compliant with guidelines (30% max 7500)
                              const newInvest = val[0];
-                             
                              const calculatedPercentage = newInvest * 0.30;
                              let maxCap = 7500;
-                             
                              let newSubsidy = Math.min(calculatedPercentage, maxCap);
                              
                              if (data.hasSolarthermie) newSubsidy += 2500;
