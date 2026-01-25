@@ -317,14 +317,14 @@ export async function registerRoutes(
                 <table width="100%" cellpadding="0" cellspacing="0" style="margin-bottom: 16px;">
                   <tr>
                     <td width="50%" style="vertical-align: middle; padding: 8px;">
-                      <img src="https://meine-waermepumpe.at/email-chofu-${derived.selectedPackage.replace('kW', 'kw')}.webp" alt="CHOFU Wärmepumpe ${derived.selectedPackage}" width="220" style="max-width: 220px; height: auto; border-radius: 8px; display: block; margin: 0 auto;" />
+                      <img src="https://yeaxuexfornuxvcldtux.supabase.co/storage/v1/object/public/image/email-chofu-${derived.selectedPackage.replace('kW', 'kw')}-small.webp" alt="CHOFU Wärmepumpe ${derived.selectedPackage}" width="220" style="max-width: 220px; height: auto; border-radius: 8px; display: block; margin: 0 auto;" />
                     </td>
                     <td width="50%" style="vertical-align: top; padding: 8px;">
                       <!-- USP 1: Made in Japan -->
                       <table cellpadding="0" cellspacing="0" style="background-color: #ffffff; border-radius: 8px; padding: 12px; width: 100%; margin-bottom: 8px;">
                         <tr>
                           <td width="44" style="vertical-align: top;">
-                            <img src="https://meine-waermepumpe.at/email-usp-japan.png" alt="Made in Japan" width="36" height="36" style="display: block;" />
+                            <img src="https://yeaxuexfornuxvcldtux.supabase.co/storage/v1/object/public/image/email-usp-japan.png" alt="Made in Japan" width="36" height="36" style="display: block;" />
                           </td>
                           <td style="padding-left: 10px; vertical-align: top;">
                             <strong style="font-size: 13px; color: #1e293b;">Made in Japan</strong><br/>
@@ -336,7 +336,7 @@ export async function registerRoutes(
                       <table cellpadding="0" cellspacing="0" style="background-color: #ffffff; border-radius: 8px; padding: 12px; width: 100%;">
                         <tr>
                           <td width="44" style="vertical-align: top;">
-                            <img src="https://meine-waermepumpe.at/email-usp-schallpegel.png" alt="31 dB(A)" width="36" height="36" style="display: block;" />
+                            <img src="https://yeaxuexfornuxvcldtux.supabase.co/storage/v1/object/public/image/email-usp-schallpegel.png" alt="31 dB(A)" width="36" height="36" style="display: block;" />
                           </td>
                           <td style="padding-left: 10px; vertical-align: top;">
                             <strong style="font-size: 13px; color: #1e293b;">31 dB(A) Nachtmodus</strong><br/>
@@ -365,7 +365,7 @@ export async function registerRoutes(
                       <table cellpadding="0" cellspacing="0" style="background-color: #ffffff; border-radius: 8px; padding: 12px; width: 100%; margin-bottom: 8px;">
                         <tr>
                           <td width="44" style="vertical-align: top;">
-                            <img src="https://meine-waermepumpe.at/email-usp-fussabdruck.png" alt="Kompakt" width="36" height="36" style="display: block;" />
+                            <img src="https://yeaxuexfornuxvcldtux.supabase.co/storage/v1/object/public/image/email-usp-fussabdruck.png" alt="Kompakt" width="36" height="36" style="display: block;" />
                           </td>
                           <td style="padding-left: 10px; vertical-align: top;">
                             <strong style="font-size: 13px; color: #1e293b;">Minimale Stellfläche</strong><br/>
@@ -377,7 +377,7 @@ export async function registerRoutes(
                       <table cellpadding="0" cellspacing="0" style="background-color: #ffffff; border-radius: 8px; padding: 12px; width: 100%;">
                         <tr>
                           <td width="44" style="vertical-align: top;">
-                            <img src="https://meine-waermepumpe.at/email-usp-heizleistung.png" alt="100%" width="36" height="36" style="display: block;" />
+                            <img src="https://yeaxuexfornuxvcldtux.supabase.co/storage/v1/object/public/image/email-usp-heizleistung.png" alt="100%" width="36" height="36" style="display: block;" />
                           </td>
                           <td style="padding-left: 10px; vertical-align: top;">
                             <strong style="font-size: 13px; color: #1e293b;">100% bei −5 °C</strong><br/>
