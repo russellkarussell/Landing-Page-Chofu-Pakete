@@ -1,0 +1,76 @@
+ROLE: Senior Frontend Engineer (React / Tailwind)
+PROJECT: meine-waermepumpe.at
+TASK: Integrate a premium CHOFU product image into the existing “CHOFU – Wärmepumpentechnik aus Japan” section to enhance brand perception.
+
+CONTEXT:
+There is an existing section with:
+- small overline: “CHOFU JAPAN”
+- headline: “CHOFU – Wärmepumpentechnik aus Japan”
+- 2 paragraphs of centered text (brand & quality message)
+
+A high-quality, dark, premium product image (CHOFU heat pump close-up, “Made in Japan” badge visible) will be provided separately.
+
+========================
+A) LAYOUT GOAL
+========================
+- Create a premium, calm, high-end visual impression.
+- Image should support the text, not dominate it.
+- Avoid “marketing clutter” or slider/carousel behavior.
+
+========================
+B) DESKTOP LAYOUT (>=1024px)
+========================
+1) Convert the section into a 2-column layout:
+- Left column:
+  - Existing text content unchanged
+  - Vertically centered
+- Right column:
+  - The provided CHOFU product image
+
+2) Image styling:
+- Display as a large, clean product visual
+- Slight border-radius (e.g. rounded-xl)
+- Subtle shadow (low opacity, soft)
+- No overlay text on the image
+- No background behind the image (let it breathe)
+
+3) Alignment:
+- Image vertically centered relative to text block
+- Do NOT stretch image unnaturally
+- Maintain original aspect ratio
+
+========================
+C) MOBILE / TABLET LAYOUT (<1024px)
+========================
+1) Stack layout vertically:
+- Text first
+- Image below the text
+
+2) Mobile image behavior:
+- Full width
+- Reduced height if necessary (object-contain or object-cover with safe crop)
+- Margin-top spacing so it feels intentional, not appended
+
+========================
+D) CONTENT RULES
+========================
+- Do NOT change headline or text wording
+- Do NOT add captions, labels, or badges
+- Do NOT add animations or parallax
+- The image must visually communicate “Premium / Made in Japan” on its own
+
+========================
+E) IMAGE HANDLING
+========================
+- The image will be provided manually after this prompt
+- Use semantic <img> or Next/Image equivalent
+- Add meaningful alt text:
+  alt="CHOFU Wärmepumpe – Premium Wärmepumpentechnik Made in Japan"
+
+========================
+F) ACCEPTANCE CRITERIA
+========================
+1) Section feels more premium and technical, not louder.
+2) Image is clearly associated with the CHOFU brand message.
+3) Text remains perfectly readable and dominant on mobile.
+4) No CLS or layout jumps when image loads.
