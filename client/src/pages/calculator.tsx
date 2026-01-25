@@ -459,8 +459,14 @@ export default function Heizkostenrechner() {
     setData(prev => ({ ...prev, [key]: value }));
   };
 
-  const nextStep = () => setStep(s => Math.min(4, s + 1));
-  const prevStep = () => setStep(s => Math.max(1, s - 1));
+  const nextStep = () => {
+    setStep(s => Math.min(4, s + 1));
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+  const prevStep = () => {
+    setStep(s => Math.max(1, s - 1));
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
 
   return (
     <div className="min-h-screen bg-slate-50 pt-10 pb-20">
@@ -1228,7 +1234,7 @@ export default function Heizkostenrechner() {
                  Weiter <ArrowRight size={16} />
                </Button>
              ) : (
-               <Button onClick={() => setStep(1)} variant="ghost" className="text-primary hover:text-primary/80">
+               <Button onClick={() => { setStep(1); window.scrollTo({ top: 0, behavior: 'smooth' }); }} variant="ghost" className="text-primary hover:text-primary/80">
                  Neu berechnen
                </Button>
              )}
