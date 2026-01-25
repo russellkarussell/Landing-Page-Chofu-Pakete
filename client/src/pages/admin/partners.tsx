@@ -30,6 +30,12 @@ export default function AdminPartners() {
   const [selectedPartner, setSelectedPartner] = useState<PartnerWithRefs | null>(null);
   const [selectedBundeslaender, setSelectedBundeslaender] = useState<string[]>([]);
 
+  // All hooks must be called unconditionally
+  const { data: partners = [], isLoading } = useQuery<Partner[]>({
+    queryKey: ["/api/partners"],
+    enabled: !!user, // Only fetch when user is authenticated
+  });
+
   useEffect(() => {
     if (editingPartner) {
       setSelectedBundeslaender(editingPartner.bundeslaender || []);
@@ -38,23 +44,7 @@ export default function AdminPartners() {
     }
   }, [editingPartner]);
 
-  if (loading) {
-    return (
-      <div className="min-h-screen flex items-center justify-center">
-        <Loader2 className="w-8 h-8 animate-spin text-primary" />
-      </div>
-    );
-  }
-
-  if (!user) {
-    navigate('/admin/login');
-    return null;
-  }
-
-  const { data: partners = [], isLoading } = useQuery<Partner[]>({
-    queryKey: ["/api/partners"],
-  });
-
+  // All mutation hooks must be called before any conditional returns
   const createPartner = useMutation({
     mutationFn: async (data: Partial<Partner>) => {
       const res = await fetch("/api/admin/partners", {
@@ -161,6 +151,14 @@ export default function AdminPartners() {
     },
   });
 
+  // Redirect to login if not authenticated (in useEffect to avoid render-time navigation)
+  useEffect(() => {
+    if (!loading && !user) {
+      navigate('/admin/login');
+    }
+  }, [loading, user, navigate]);
+
+  // Helper function for fetching partner details
   const fetchPartnerDetails = async (id: string) => {
     const partner = partners.find(p => p.id === id);
     if (!partner) return;
@@ -170,6 +168,18 @@ export default function AdminPartners() {
       setSelectedPartner(data);
     }
   };
+
+  if (loading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <Loader2 className="w-8 h-8 animate-spin text-primary" />
+      </div>
+    );
+  }
+
+  if (!user) {
+    return null;
+  }
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
