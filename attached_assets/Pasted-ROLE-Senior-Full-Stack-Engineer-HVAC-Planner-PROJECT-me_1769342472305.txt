@@ -1,0 +1,76 @@
+ROLE: Senior Full-Stack Engineer + HVAC Planner
+PROJECT: meine-waermepumpe.at (React/TypeScript)
+TASK: Effizienz-Check: remove "Auslegung" from UI output, keep it internal for calculations, and show building type tile in result again. Also ensure HVAC logic is plausible (Neubau => low temp).
+
+========================
+A) EFFIZIENZ-CHECK LOGIC (client/src/pages/home.tsx)
+========================
+
+1) Building type selection stays as tiles (NO dropdown):
+- Altbau (vor 1990)
+- Teilsaniert
+- Neubau (nach 2010)
+(If your UI already uses slightly different labels like "Saniert", keep the existing UI labels, but preserve 3 tiles.)
+
+2) Map each tile to two internal parameters:
+- specificHeatLoad (W/m²)
+- designWaterTemp (°C) used ONLY internally (NOT shown to user)
+Design air temperature is fixed:
+- designAirTemp = -7
+
+Use this mapping (conservative + plausible):
+ALTBAU:
+  specificHeatLoad = 100
+  designWaterTemp = 55
+TEILSANIERT:
+  specificHeatLoad = 70
+  designWaterTemp = 45
+NEUBAU:
+  specificHeatLoad = 40
+  designWaterTemp = 35
+
+3) Heizlast calculation:
+heizlast_kw = wohnflaeche * specificHeatLoad / 1000
+low = heizlast_kw * 0.85
+high = heizlast_kw * 1.15
+
+4) Recommendation:
+Call recommendModel(heizlast_kw, designAirTemp=-7, designWaterTemp) from chofuCapacity.ts (already implemented).
+Safety factor remains 1.05 inside recommendModel.
+
+5) If exceeds package range:
+If recommendModel returns status "exceeds_10kw_package":
+- Show message:
+  "Der Wärmebedarf liegt über dem 10-kW-Paketbereich. Fragen Sie unser 16-kW CHOFU Modell an (nicht im Paket)."
+- Provide CTA button "16-kW Modell anfragen" that routes to contact form and sets hidden field interestModel=16kW.
+
+========================
+B) EFFIZIENZ-CHECK RESULT UI (home.tsx)
+========================
+
+1) REMOVE the "Auslegung" result tile completely.
+User must NOT see "A-7/Wxx" or any design point.
+
+2) ADD building type back into the result area as a tile (similar styling to the existing result tiles):
+- Title: "GEBÄUDE"
+- Value: the selected building label (e.g. "Altbau", "Teilsaniert", "Neubau" or "Saniert" depending on your UI labels)
+This tile should replace the removed "Auslegung" tile position, so the result grid stays balanced.
+
+3) Keep these visible result tiles:
+- HEIZLAST (range low-high)
+- EMPFEHLUNG (e.g., CHOFU 6 kW / CHOFU 10 kW mapped to model labels if you show kW or AEYC ids)
+- GEBÄUDE (selected building type)
+
+4) Text under tiles:
+Keep a short note:
+"Orientierungswert. Exakte Auslegung durch Fachbetrieb empfohlen."
+Do NOT mention A-7/Wxx.
+
+========================
+C) ACCEPTANCE CRITERIA
+========================
+1) Result UI shows NO "Auslegung" anywhere.
+2) Result UI shows building type tile "GEBÄUDE" with selected value.
+3) Neubau uses designWaterTemp=35 internally; Teilsaniert=45; Altbau=55.
+4) Model recommendation changes appropriately when switching tiles because the internal designWaterTemp changes.
+5) Existing CTA buttons remain functional.
