@@ -1,6 +1,6 @@
 
 import { Link, useLocation } from "wouter";
-import { Leaf, Menu, X, Phone, Calculator, Package, Home, Zap, LayoutGrid } from "lucide-react";
+import { Leaf, Menu, X, Phone, Calculator, Package, Home, Zap, LayoutGrid, Users } from "lucide-react";
 import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
@@ -24,7 +24,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
     { href: "/pakete", label: "Pakete", icon: Package },
     { href: "/waermepumpen", label: "Wärmepumpen", icon: LayoutGrid },
     { href: "/rechner", label: "Heizkostenrechner", icon: Calculator },
-    { href: "/kontakt", label: "Kontakt", icon: Phone },
+    { href: "/fachpartner", label: "Partner", icon: Users },
   ];
 
   return (
@@ -119,6 +119,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
               <li><Link href="/" className="hover:text-primary transition-colors">Startseite</Link></li>
               <li><Link href="/pakete" className="hover:text-primary transition-colors">Pakete</Link></li>
               <li><Link href="/rechner" className="hover:text-primary transition-colors">Heizkostenrechner</Link></li>
+              <li><Link href="/fachpartner" className="hover:text-primary transition-colors">Partner</Link></li>
               <li><Link href="/kontakt" className="hover:text-primary transition-colors">Kontakt</Link></li>
             </ul>
           </div>
