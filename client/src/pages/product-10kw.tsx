@@ -4,7 +4,6 @@ import { Badge } from "@/components/ui/badge";
 import { 
   Check, 
   ArrowRight, 
-  Download, 
   Smartphone, 
   Flame, 
   Snowflake, 
@@ -19,6 +18,7 @@ import heroImage from "@/assets/chofu-10kw-product.jpg";
 import closeupImage from "@/assets/japan-map-icon.png";
 import controllerImage from "@assets/CMR-4100M_Display_(1)_1767199982916.jpg";
 import { useEffect } from "react";
+import { ProductDownloads } from "@/components/product-downloads";
 
 export default function Product10kW() {
   useEffect(() => {
@@ -256,21 +256,7 @@ export default function Product10kW() {
       </section>
 
       {/* F) Downloads */}
-      <section className="py-16 bg-slate-50 border-t border-slate-200">
-        <div className="container mx-auto px-4 max-w-4xl">
-          <h2 className="text-2xl font-bold text-slate-900 mb-8">Downloads & Dokumente</h2>
-          <div className="grid md:grid-cols-2 gap-6">
-             <DownloadCard 
-               title="Installations- & Bedienungsanleitung" 
-               subtitle="CHOFU AEYC (R290)" 
-             />
-             <DownloadCard 
-               title="Installationsanleitung Controller" 
-               subtitle="CMR-4100M" 
-             />
-          </div>
-        </div>
-      </section>
+      <ProductDownloads />
 
       {/* G) Suitable For */}
       <section className="py-20 bg-white">
@@ -367,20 +353,6 @@ function TableRow({ label, value, highlight = false }: { label: string, value: s
       <td className="py-3 px-4 font-medium text-slate-600 w-1/2 border-r border-slate-50">{label}</td>
       <td className={`py-3 px-4 ${highlight ? "font-bold text-slate-900" : "text-slate-800"}`}>{value}</td>
     </tr>
-  );
-}
-
-function DownloadCard({ title, subtitle }: { title: string, subtitle: string }) {
-  return (
-    <div className="flex items-center justify-between bg-white p-6 rounded-xl border border-slate-200 hover:border-primary/50 hover:shadow-md transition-all group cursor-pointer">
-      <div>
-        <h3 className="font-bold text-slate-900 group-hover:text-primary transition-colors">{title}</h3>
-        <p className="text-sm text-slate-500">{subtitle}</p>
-      </div>
-      <div className="bg-slate-100 p-3 rounded-full text-slate-400 group-hover:bg-primary/10 group-hover:text-primary transition-colors">
-        <Download size={20} />
-      </div>
-    </div>
   );
 }
 
