@@ -72,7 +72,7 @@ export default function Home() {
   });
   
   const partnersForBundesland = allPartners.filter(p => p.bundeslaender?.includes(selectedBundesland));
-  const [calcStep, setCalcStep] = useState(2); // Start at step 2 (result view) with defaults
+  const [calcStep, setCalcStep] = useState(1); // Start at step 1 (form view) with defaults prefilled
   const [isCalculating, setIsCalculating] = useState(false);
 
   // Effizienz-Check uses A-2 (typical cold) for suitability check
