@@ -582,6 +582,26 @@ export default function Heizkostenrechner() {
                 >
                   <StepHeader step={1} title="Ihre aktuellen Daten" />
                   
+                  {/* Heating System - moved above method selection */}
+                  <div className="space-y-4">
+                    <Label className="text-base">Aktuelles Heizsystem</Label>
+                    <div className="grid grid-cols-2 md:grid-cols-4 gap-2">
+                      {HEATING_SYSTEMS.map(sys => (
+                        <button
+                          key={sys.value}
+                          onClick={() => handleHeizsystemChange(sys.value)}
+                          data-testid={`heating-system-${sys.value}`}
+                          className={cn(
+                            "p-3 text-sm border rounded-lg text-center transition-all font-medium",
+                            data.heizsystem === sys.value ? "border-primary bg-primary/5 text-primary" : "border-slate-200 text-slate-600 hover:border-slate-300"
+                          )}
+                        >
+                          {sys.label}
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+
                   {/* Calculation Method */}
                   <div className="grid md:grid-cols-2 gap-4">
                     <button 
@@ -610,7 +630,7 @@ export default function Heizkostenrechner() {
                       <Flame size={32} className={data.method === "verbrauch" ? "text-primary" : "text-slate-400"} />
                       <span className="mt-3 font-bold text-slate-700">Nach Verbrauch</span>
                       <span className="text-xs text-slate-500 mt-1">
-                        {data.heizsystem === "keine" ? "Nicht verfügbar (Neubau)" : "Für genauere Ergebnisse"}
+                        {data.heizsystem === "keine" ? "Verfügbar nach Auswahl des Heizsystems" : "Für genauere Ergebnisse"}
                       </span>
                     </button>
                   </div>
@@ -667,26 +687,6 @@ export default function Heizkostenrechner() {
                         </div>
                       </div>
                     )}
-                  </div>
-
-                  {/* Heating System */}
-                  <div className="space-y-4">
-                    <Label className="text-base">Aktuelles Heizsystem</Label>
-                    <div className="grid grid-cols-2 md:grid-cols-4 gap-2">
-                      {HEATING_SYSTEMS.map(sys => (
-                        <button
-                          key={sys.value}
-                          onClick={() => handleHeizsystemChange(sys.value)}
-                          data-testid={`heating-system-${sys.value}`}
-                          className={cn(
-                            "p-3 text-sm border rounded-lg text-center transition-all font-medium",
-                            data.heizsystem === sys.value ? "border-primary bg-primary/5 text-primary" : "border-slate-200 text-slate-600 hover:border-slate-300"
-                          )}
-                        >
-                          {sys.label}
-                        </button>
-                      ))}
-                    </div>
                   </div>
 
                   {data.heizsystem !== "keine" && (
