@@ -8,7 +8,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Check, ArrowRight, Zap, ShieldCheck, Euro, Coins, Info, Home as HomeIcon, Building, Loader2, Calculator } from "lucide-react";
+import { Check, ArrowRight, Zap, ShieldCheck, Euro, Coins, Info, Home as HomeIcon, Building, Loader2, Calculator, AlertTriangle } from "lucide-react";
 import { BUNDESLAENDER, PACKAGES, SUBSIDIES, formatEUR, getSubsidy, getNetPrice } from "@/lib/constants";
 import { useQuery } from "@tanstack/react-query";
 import type { Partner } from "@shared/schema";
@@ -18,6 +18,15 @@ import ehpaLabel from "@assets/image_1767188918778.png";
 import { ChofuHomepageTeaser } from "@/components/brand/ChofuHomepageTeaser";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 import { PriceDisclaimer } from "@/components/price-disclaimer";
+import { BUILDING_STANDARDS, calculateHeizlast, recommendModel, type BuildingStandardKey } from "@/lib/chofuCapacity";
+
+const BUILDING_STANDARD_OPTIONS: { value: BuildingStandardKey; label: string }[] = [
+  { value: "alt_unsaniert", label: "Altbau unsaniert" },
+  { value: "alt_teilsaniert", label: "Altbau teilsaniert" },
+  { value: "alt_saniert", label: "Altbau saniert" },
+  { value: "neubau", label: "Neubau" },
+  { value: "niedrigenergie", label: "Niedrigenergie" }
+];
 
 // Custom Icons for Building Types
 const IconAltbau = ({ className }: { className?: string }) => (
@@ -61,72 +70,76 @@ export default function Home() {
   const [isCalculating, setIsCalculating] = useState(false);
 
   // Mini Calculator State
-  const [calcData, setCalcData] = useState({ size: "140", type: "Saniert" });
+  const [calcData, setCalcData] = useState({ 
+    size: "140", 
+    buildingStandard: "alt_teilsaniert" as BuildingStandardKey 
+  });
   const [result, setResult] = useState<{
     low: string;
     high: string;
+    heizlastKw: number;
     recommendation: string;
-    suitability: "Sehr gut geeignet" | "Geeignet" | "Details prüfen";
+    modelId?: string;
+    marginPct?: number;
+    status: "ok" | "exceeds_10kw_package";
+    suitability: "Sehr gut geeignet" | "Geeignet" | "Projekt prüfen";
     suitabilityColor: string;
+    designWaterTemp: number;
   } | null>(null);
 
   const handleCalc = () => {
-    // Validation
     const area = parseFloat(calcData.size);
     if (!area || area < 40 || area > 350) {
-      // Input validation handled by UI feedback or simple return for now
       return;
     }
 
     setIsCalculating(true);
 
-    // Factors
-    const factors: Record<string, number> = {
-      "Altbau": 80,
-      "Saniert": 60,
-      "Neubau": 40
-    };
+    const { heizlastKw, low, high } = calculateHeizlast(area, calcData.buildingStandard);
     
-    const factor = factors[calcData.type] || 60;
-    const heatLoadkW = (area * factor) / 1000;
-    
-    // Uncertainty band +/- 15%
-    const low = heatLoadkW * 0.85;
-    const high = heatLoadkW * 1.15;
+    const designWaterTemp = 55;
+    const modelResult = recommendModel({
+      heizlastKw,
+      designAirTemp: -7,
+      designWaterTemp,
+      safetyFactor: 1.05
+    });
 
-    // Recommendation logic
     let recommendation = "";
-    if (high <= 4.5) {
-      recommendation = "CHOFU 4 kW";
-    } else if (high <= 7.0) {
-      recommendation = "CHOFU 6 kW";
-    } else {
-      recommendation = "CHOFU 10 kW";
-    }
-
-    // Suitability logic
-    let suitability: "Sehr gut geeignet" | "Geeignet" | "Details prüfen" = "Geeignet";
+    let suitability: "Sehr gut geeignet" | "Geeignet" | "Projekt prüfen" = "Geeignet";
     let suitabilityColor = "bg-blue-100 text-blue-700 border-blue-200";
 
-    if (calcData.type === "Neubau" && high <= 4.5) {
-      suitability = "Sehr gut geeignet";
-      suitabilityColor = "bg-green-100 text-green-700 border-green-200";
-    } else if (calcData.type === "Saniert" && high <= 7.0) {
-      suitability = "Geeignet";
-      suitabilityColor = "bg-blue-100 text-blue-700 border-blue-200";
-    } else if (calcData.type === "Altbau" && high >= 9.0) {
-      suitability = "Details prüfen";
+    if (modelResult.status === "ok") {
+      recommendation = modelResult.modelLabel || "CHOFU";
+      
+      if (modelResult.marginPct && modelResult.marginPct > 30) {
+        suitability = "Sehr gut geeignet";
+        suitabilityColor = "bg-green-100 text-green-700 border-green-200";
+      } else if (modelResult.marginPct && modelResult.marginPct > 10) {
+        suitability = "Geeignet";
+        suitabilityColor = "bg-blue-100 text-blue-700 border-blue-200";
+      } else {
+        suitability = "Geeignet";
+        suitabilityColor = "bg-blue-100 text-blue-700 border-blue-200";
+      }
+    } else {
+      recommendation = "Projekt prüfen";
+      suitability = "Projekt prüfen";
       suitabilityColor = "bg-amber-100 text-amber-700 border-amber-200";
     }
 
-    // Simulate delay
     setTimeout(() => {
       setResult({
         low: low.toFixed(1),
         high: high.toFixed(1),
+        heizlastKw,
         recommendation,
+        modelId: modelResult.modelId,
+        marginPct: modelResult.marginPct,
+        status: modelResult.status,
         suitability,
-        suitabilityColor
+        suitabilityColor,
+        designWaterTemp
       });
       setCalcStep(2);
       setIsCalculating(false);
@@ -230,56 +243,30 @@ export default function Home() {
                       <p className="text-[11px] text-slate-400 pl-1">Beheizte Wohnfläche (ca.)</p>
                     </div>
 
-                    {/* Gebäudetyp Input */}
+                    {/* Gebäudestandard Input */}
                     <div className="space-y-4">
-                      <Label className="text-xs uppercase font-bold text-slate-500 tracking-wider">Gebäudetyp</Label>
-                      <div className="grid grid-cols-3 gap-3">
-                        {[
-                          { id: "Altbau", label: "Altbau (vor 1990)", Icon: IconAltbau },
-                          { id: "Saniert", label: "Teilsaniert", Icon: IconSaniert },
-                          { id: "Neubau", label: "Neubau (nach 2010)", Icon: IconNeubau },
-                        ].map((type) => {
-                          const isSelected = calcData.type === type.id;
-                          return (
-                            <button
-                              key={type.id}
-                              onClick={() => setCalcData({...calcData, type: type.id})}
-                              className={`
-                                relative rounded-xl border-2 p-3 flex flex-col items-center justify-center gap-3 h-28 transition-all duration-300 group
-                                focus:outline-none focus:ring-2 focus:ring-primary/50 focus:ring-offset-2
-                                ${isSelected 
-                                  ? 'border-primary bg-primary/5 shadow-md' 
-                                  : 'border-slate-100 bg-white text-slate-400 hover:border-slate-300 hover:bg-slate-50'
-                                }
-                              `}
-                              type="button"
-                              aria-pressed={isSelected}
-                              aria-label={type.label}
-                            >
-                              {isSelected && (
-                                <div className="absolute top-2 right-2 text-primary animate-in fade-in zoom-in duration-300">
-                                  <Check size={14} strokeWidth={4} />
-                                </div>
-                              )}
-                              
-                              <type.Icon 
-                                className={`w-10 h-10 transition-colors duration-300 ${
-                                  isSelected 
-                                    ? 'text-primary' 
-                                    : 'text-slate-300 group-hover:text-slate-500'
-                                }`} 
-                              />
-                              
-                              <span className={`text-[11px] font-bold leading-tight transition-colors duration-300 ${
-                                isSelected ? 'text-primary' : 'text-slate-500 group-hover:text-slate-700'
-                              }`}>
-                                {type.label}
-                              </span>
-                            </button>
-                          );
-                        })}
-                      </div>
-                      <p className="text-[11px] text-slate-400 pl-1 text-center">Wärmeschutz grob (für erste Einschätzung)</p>
+                      <Label className="text-xs uppercase font-bold text-slate-500 tracking-wider">Gebäudestandard</Label>
+                      <Select 
+                        value={calcData.buildingStandard} 
+                        onValueChange={(value) => setCalcData({...calcData, buildingStandard: value as BuildingStandardKey})}
+                      >
+                        <SelectTrigger className="w-full h-12" data-testid="select-building-standard">
+                          <SelectValue placeholder="Bitte wählen" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          {BUILDING_STANDARD_OPTIONS.map((option) => (
+                            <SelectItem key={option.value} value={option.value} data-testid={`option-${option.value}`}>
+                              <div className="flex items-center justify-between w-full">
+                                <span>{option.label}</span>
+                                <span className="text-xs text-slate-400 ml-2">
+                                  ({BUILDING_STANDARDS[option.value].specificHeatLoad} W/m²)
+                                </span>
+                              </div>
+                            </SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
+                      <p className="text-[11px] text-slate-400 pl-1 text-center">Wärmeschutz Ihres Gebäudes (für erste Einschätzung)</p>
                     </div>
 
                     {/* Submit Button */}
@@ -314,7 +301,7 @@ export default function Home() {
                       <div className={`px-4 py-1.5 rounded-full text-sm font-bold border ${result?.suitabilityColor} flex items-center gap-2`}>
                         {result?.suitability === "Sehr gut geeignet" && <Check size={16} strokeWidth={3} />}
                         {result?.suitability === "Geeignet" && <Check size={16} strokeWidth={3} />}
-                        {result?.suitability === "Details prüfen" && <Info size={16} strokeWidth={3} />}
+                        {result?.suitability === "Projekt prüfen" && <AlertTriangle size={16} strokeWidth={3} />}
                         {result?.suitability}
                       </div>
                     </div>
@@ -327,30 +314,57 @@ export default function Home() {
                           {result?.low}–{result?.high} <span className="text-xs text-slate-500 font-normal">kW</span>
                         </div>
                       </div>
-                      <div className="bg-slate-50 p-3 rounded-lg border border-slate-100 text-center ring-1 ring-primary/20 bg-primary/5">
-                        <div className="text-[10px] uppercase text-primary font-bold mb-1">Empfehlung</div>
-                        <div className="font-bold text-primary text-sm md:text-base leading-tight">
+                      <div className={`p-3 rounded-lg border text-center ${result?.status === "ok" ? "ring-1 ring-primary/20 bg-primary/5 border-slate-100" : "bg-amber-50 border-amber-200"}`}>
+                        <div className={`text-[10px] uppercase font-bold mb-1 ${result?.status === "ok" ? "text-primary" : "text-amber-700"}`}>
+                          {result?.status === "ok" ? "Empfehlung" : "Status"}
+                        </div>
+                        <div className={`font-bold text-sm md:text-base leading-tight ${result?.status === "ok" ? "text-primary" : "text-amber-700"}`}>
                           {result?.recommendation}
                         </div>
                       </div>
                       <div className="bg-slate-50 p-3 rounded-lg border border-slate-100 text-center">
-                        <div className="text-[10px] uppercase text-slate-500 font-bold mb-1">Gebäude</div>
+                        <div className="text-[10px] uppercase text-slate-500 font-bold mb-1">Auslegung</div>
                         <div className="font-bold text-slate-900 text-sm md:text-base leading-tight truncate">
-                          {calcData.type}
+                          A-7/W{result?.designWaterTemp}
                         </div>
                       </div>
                     </div>
 
-                    {/* Explanation */}
-                    <p className="text-xs text-slate-500 leading-relaxed text-center px-2">
-                      Die Empfehlung basiert auf einer konservativen Heizlast-Schätzung. Für exakte Auslegung (Hydraulik, Heizflächen, Vorlauftemperaturen) empfehlen wir die Besichtigung.
-                    </p>
+                    {/* Explanation or 16kW Info */}
+                    {result?.status === "ok" ? (
+                      <div className="space-y-2">
+                        {result?.marginPct !== undefined && (
+                          <p className="text-xs text-green-600 text-center font-medium">
+                            Reserve: {result.marginPct.toFixed(0)}%
+                          </p>
+                        )}
+                        <p className="text-xs text-slate-500 leading-relaxed text-center px-2">
+                          Orientierungswert. Exakte Auslegung durch Fachbetrieb empfohlen.
+                        </p>
+                      </div>
+                    ) : (
+                      <div className="bg-amber-50 border border-amber-200 rounded-lg p-4 space-y-2">
+                        <p className="text-sm text-amber-800 leading-relaxed text-center">
+                          Der Wärmebedarf liegt über dem 10-kW-Paketbereich bei A-7/W55. Fragen Sie unser 16-kW CHOFU Modell an (nicht im Paket).
+                        </p>
+                      </div>
+                    )}
 
                     {/* CTAs */}
                     <div className="space-y-3 pt-2">
-                      <Button asChild className="w-full h-12 rounded-lg font-bold shadow-md hover:shadow-lg transition-all">
-                         <Link href={`/kontakt?area=${calcData.size}&type=${calcData.type}&recommendation=${encodeURIComponent(result?.recommendation || "")}`}>Kostenlosen Besichtigungstermin</Link>
-                      </Button>
+                      {result?.status === "exceeds_10kw_package" ? (
+                        <Button asChild className="w-full h-12 rounded-lg font-bold shadow-md hover:shadow-lg transition-all bg-amber-600 hover:bg-amber-700">
+                          <Link href={`/kontakt?area=${calcData.size}&type=${BUILDING_STANDARDS[calcData.buildingStandard].label}&recommendation=16kW&interestModel=16kW`}>
+                            16-kW Modell anfragen
+                          </Link>
+                        </Button>
+                      ) : (
+                        <Button asChild className="w-full h-12 rounded-lg font-bold shadow-md hover:shadow-lg transition-all">
+                          <Link href={`/kontakt?area=${calcData.size}&type=${BUILDING_STANDARDS[calcData.buildingStandard].label}&recommendation=${encodeURIComponent(result?.recommendation || "")}`}>
+                            Kostenlosen Besichtigungstermin
+                          </Link>
+                        </Button>
+                      )}
                       <Button 
                         asChild
                         variant="outline" 
@@ -364,6 +378,7 @@ export default function Home() {
                       <button 
                         onClick={() => setCalcStep(1)}
                         className="w-full text-center text-xs text-slate-400 hover:text-primary transition-colors mt-2"
+                        data-testid="button-recalculate"
                       >
                         Neu berechnen
                       </button>

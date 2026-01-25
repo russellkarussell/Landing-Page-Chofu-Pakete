@@ -33,19 +33,19 @@ const CONFIG = {
     pellets: 0.02, strom: 0.22, keine: 0
   },
   stromCo2Faktor: 0.22,
-  kgCo2ProFussballfeldWaldProJahr: 5600,
-  klasseFactors: { alt_unsaniert: 200, alt_teilsaniert: 150, alt_saniert: 100, neubau: 70, niedrigenergie: 30 },
+  heatingHoursPerYear: 2000,
   specificHeatLoad: { alt_unsaniert: 100, alt_teilsaniert: 70, alt_saniert: 50, neubau: 40, niedrigenergie: 30 },
   solarYieldFactors: { flach: 350, roehren: 450 },
   heizkoerperventilatorEffekt: 5,
 };
 
+// Energy demand derived: specificHeatLoad(W/m²) × heatingHoursPerYear(2000) / 1000 = kWh/m²·a
 const BUILDING_CLASSES = [
   { value: "alt_unsaniert", label: "Altbau, unsaniert", desc: "~200 kWh/m²·a", load: "~100 W/m²" },
-  { value: "alt_teilsaniert", label: "Altbau, teilsaniert", desc: "~150 kWh/m²·a", load: "~70 W/m²" },
+  { value: "alt_teilsaniert", label: "Altbau, teilsaniert", desc: "~140 kWh/m²·a", load: "~70 W/m²" },
   { value: "alt_saniert", label: "Altbau, saniert", desc: "~100 kWh/m²·a", load: "~50 W/m²" },
-  { value: "neubau", label: "Neubau", desc: "~70 kWh/m²·a", load: "~40 W/m²" },
-  { value: "niedrigenergie", label: "Niedrigenergiehaus", desc: "~30 kWh/m²·a", load: "~30 W/m²" }
+  { value: "neubau", label: "Neubau", desc: "~80 kWh/m²·a", load: "~40 W/m²" },
+  { value: "niedrigenergie", label: "Niedrigenergiehaus", desc: "~60 kWh/m²·a", load: "~30 W/m²" }
 ];
 
 const HEATING_SYSTEMS = [
@@ -99,6 +99,7 @@ export default function Heizkostenrechner() {
     strompreisWP: 0.25,
     anteilFussboden: 50,
     vorlaufTemp: 55,
+    warmwasserAnteilPct: 20,
     
     // Step 2 - Optimization
     hasSolarthermie: false,
@@ -115,11 +116,33 @@ export default function Heizkostenrechner() {
 
   const [results, setResults] = useState<any>({});
   const [hasUserModifiedInvest, setHasUserModifiedInvest] = useState(false);
+  const [preisManuellGeaendert, setPreisManuellGeaendert] = useState(false);
+  const [etaManuellGeaendert, setEtaManuellGeaendert] = useState(false);
 
   // Calculations
   useEffect(() => {
     calculateResults();
   }, [data]);
+
+  // Handle heating system change - auto-update defaults unless manually modified
+  const handleHeizsystemChange = (newSystem: string) => {
+    const updates: any = { heizsystem: newSystem };
+    
+    // Force flaeche method for "keine"
+    if (newSystem === "keine") {
+      updates.method = "flaeche";
+    }
+    
+    // Update defaults if not manually changed
+    if (!preisManuellGeaendert) {
+      updates.preisAlt = CONFIG.defaultPrices[newSystem as keyof typeof CONFIG.defaultPrices] || 0;
+    }
+    if (!etaManuellGeaendert) {
+      updates.wirkungsgradAlt = CONFIG.defaultWirkungsgrade[newSystem as keyof typeof CONFIG.defaultWirkungsgrade] || 100;
+    }
+    
+    setData(prev => ({ ...prev, ...updates }));
+  };
 
   // Update defaults for Investment based on calculated load
   useEffect(() => {
@@ -162,7 +185,7 @@ export default function Heizkostenrechner() {
     let co2Alt = 0;
     
     // 1. Demand & Old System
-    if (data.method === "verbrauch") {
+    if (data.method === "verbrauch" && data.heizsystem !== "keine") {
       const factor = CONFIG.energyFactors[data.heizsystem as keyof typeof CONFIG.energyFactors];
       const energieInput = data.verbrauch * factor; // kWh
       nutzwaermeBedarf = energieInput * (data.wirkungsgradAlt / 100);
@@ -172,51 +195,60 @@ export default function Heizkostenrechner() {
       const co2Factor = CONFIG.co2FactorsKwhInput[data.heizsystem as keyof typeof CONFIG.co2FactorsKwhInput];
       co2Alt = energieInput * co2Factor;
     } else {
-      // Area based
-      const demandPerSqm = CONFIG.klasseFactors[data.gebaeudeklasse as keyof typeof CONFIG.klasseFactors];
-      nutzwaermeBedarf = data.flaeche * demandPerSqm;
+      // Area based (also forced for "keine" heating system)
+      // Derive energy demand from specificHeatLoad (W/m²) using heating hours
+      const specLoad = CONFIG.specificHeatLoad[data.gebaeudeklasse as keyof typeof CONFIG.specificHeatLoad] || 50;
+      nutzwaermeBedarf = (data.flaeche * specLoad * CONFIG.heatingHoursPerYear) / 1000;
       
-      // Reverse calculate equivalent consumption for cost
-      // Nutzwärme = Input * Efficiency => Input = Nutzwärme / Efficiency
-      const efficiency = data.wirkungsgradAlt > 0 ? data.wirkungsgradAlt / 100 : 1;
-      const impliedInputKwh = nutzwaermeBedarf / efficiency;
-      
-      const factor = CONFIG.energyFactors[data.heizsystem as keyof typeof CONFIG.energyFactors];
-      const impliedUnits = factor > 0 ? impliedInputKwh / factor : 0;
-      
-      kostenAktuell = impliedUnits * data.preisAlt;
-      
-      const co2Factor = CONFIG.co2FactorsKwhInput[data.heizsystem as keyof typeof CONFIG.co2FactorsKwhInput];
-      co2Alt = impliedInputKwh * co2Factor;
+      if (data.heizsystem !== "keine") {
+        // Reverse calculate equivalent consumption for cost
+        // Nutzwärme = Input * Efficiency => Input = Nutzwärme / Efficiency
+        const efficiency = data.wirkungsgradAlt > 0 ? data.wirkungsgradAlt / 100 : 1;
+        const impliedInputKwh = nutzwaermeBedarf / efficiency;
+        
+        const factor = CONFIG.energyFactors[data.heizsystem as keyof typeof CONFIG.energyFactors];
+        const impliedUnits = factor > 0 ? impliedInputKwh / factor : 0;
+        
+        kostenAktuell = impliedUnits * data.preisAlt;
+        
+        const co2Factor = CONFIG.co2FactorsKwhInput[data.heizsystem as keyof typeof CONFIG.co2FactorsKwhInput];
+        co2Alt = impliedInputKwh * co2Factor;
+      } else {
+        // No old system - no old costs or CO2
+        kostenAktuell = 0;
+        co2Alt = 0;
+      }
     }
 
-    // 2. Solar Contribution
+    // 2. Solar Contribution - only reduce hot water portion
+    let solarNutzbar = 0;
     let solarErtrag = 0;
     if (data.hasSolarthermie) {
       const yieldFactor = CONFIG.solarYieldFactors[data.solarType as keyof typeof CONFIG.solarYieldFactors];
       solarErtrag = data.solarArea * yieldFactor;
+      
+      // Solar thermal only reduces warm water portion
+      const wwBedarf = nutzwaermeBedarf * (data.warmwasserAnteilPct / 100);
+      const solarNutzungsgrad = 0.70; // Fixed utilization rate
+      solarNutzbar = Math.min(wwBedarf, solarErtrag * solarNutzungsgrad);
     }
     
-    const remainingHeatDemand = Math.max(0, nutzwaermeBedarf - solarErtrag);
+    const remainingHeatDemand = Math.max(0, nutzwaermeBedarf - solarNutzbar);
 
     // 3. Heat Pump Efficiency (SCOP)
-    // Simple model: SCOP drops as flow temp rises
-    // Base SCOP at 35C = 4.8, at 55C = 3.6 (approx)
-    // Linear interpolation model for demo
-    let flowTemp = data.vorlaufTemp;
+    // Calculate effective flow temp based on floor heating share
+    const deltaT = (data.anteilFussboden / 100) * 5; // Max 5K reduction
+    let effVorlauf = Math.max(30, Math.min(70, data.vorlaufTemp - deltaT));
+    
+    // Apply fans effect on top
     if (data.hasFans) {
-        flowTemp = Math.max(30, flowTemp - CONFIG.heizkoerperventilatorEffekt);
+      effVorlauf = Math.max(30, effVorlauf - CONFIG.heizkoerperventilatorEffekt);
     }
     
-    // Very rough COP estimation formula: COP = 8.0 - (0.1 * deltaT) where deltaT = Flow - Source(approx 2 for year avg)
-    // Better simplified: 
-    // 35C -> 4.5
-    // 55C -> 3.0
-    // 20 diff -> 1.5 diff
-    // factor = 0.075 per degree
+    // SCOP model: Base at 35C = 4.8, drops 0.07 per degree
     const baseSCOP35 = 4.8;
     const dropPerDegree = 0.07; 
-    let estimatedSCOP = baseSCOP35 - ((flowTemp - 35) * dropPerDegree);
+    let estimatedSCOP = baseSCOP35 - ((effVorlauf - 35) * dropPerDegree);
     if (estimatedSCOP < 2.0) estimatedSCOP = 2.0;
     if (estimatedSCOP > 6.0) estimatedSCOP = 6.0;
 
@@ -231,9 +263,12 @@ export default function Heizkostenrechner() {
     const ersparnis = Math.round((kostenAktuell + data.wartungAlt) - (kostenNeu + data.wartungNeu));
     const co2Ersparnis = Math.round(co2Alt - co2Neu);
     
-    // 7. Amortization
-    const investNetto = data.investition - data.foerderung;
-    const amortizationYears = ersparnis > 0 ? (investNetto / ersparnis) : 999;
+    // 7. Amortization (ensure investNetto >= 0)
+    const investNetto = Math.max(0, data.investition - data.foerderung);
+    let amortizationYears: number | null = null;
+    if (ersparnis > 0 && investNetto > 0) {
+      amortizationYears = investNetto / ersparnis;
+    }
     
     // 8. Size Estimate
     const specLoad = CONFIG.specificHeatLoad[data.gebaeudeklasse as keyof typeof CONFIG.specificHeatLoad] || 50;
@@ -244,15 +279,16 @@ export default function Heizkostenrechner() {
       kostenAktuell: Math.round(kostenAktuell),
       co2Alt: Math.round(co2Alt),
       solarErtrag: Math.round(solarErtrag),
+      solarNutzbar: Math.round(solarNutzbar),
       effectiveSCOP: estimatedSCOP.toFixed(2),
-      effectiveFlowTemp: flowTemp,
+      effectiveFlowTemp: effVorlauf,
       kostenNeu: Math.round(kostenNeu),
       co2Neu: Math.round(co2Neu),
       ersparnis,
       co2Ersparnis,
-      amortizationYears: amortizationYears > 100 ? "> 100" : amortizationYears.toFixed(1),
+      amortizationYears: amortizationYears === null ? null : (amortizationYears > 100 ? "> 100" : amortizationYears.toFixed(1)),
       estimatedLoadKw: estimatedLoadKw.toFixed(1),
-      trees: (co2Ersparnis / (CONFIG.kgCo2ProFussballfeldWaldProJahr / 1000)).toFixed(1) // Just reusing the constant name as factor logic
+      investNetto
     });
   };
 
@@ -304,6 +340,7 @@ export default function Heizkostenrechner() {
                   <div className="grid md:grid-cols-2 gap-4">
                     <button 
                       onClick={() => updateData("method", "flaeche")}
+                      data-testid="method-flaeche"
                       className={cn(
                         "flex flex-col items-center p-6 border-2 rounded-xl transition-all",
                         data.method === "flaeche" ? "border-primary bg-primary/5 shadow-md" : "border-slate-200 hover:border-slate-300"
@@ -315,15 +352,20 @@ export default function Heizkostenrechner() {
                     </button>
                     
                     <button 
-                      onClick={() => updateData("method", "verbrauch")}
+                      onClick={() => data.heizsystem !== "keine" && updateData("method", "verbrauch")}
+                      disabled={data.heizsystem === "keine"}
+                      data-testid="method-verbrauch"
                       className={cn(
                         "flex flex-col items-center p-6 border-2 rounded-xl transition-all",
-                        data.method === "verbrauch" ? "border-primary bg-primary/5 shadow-md" : "border-slate-200 hover:border-slate-300"
+                        data.method === "verbrauch" ? "border-primary bg-primary/5 shadow-md" : "border-slate-200 hover:border-slate-300",
+                        data.heizsystem === "keine" ? "opacity-50 cursor-not-allowed" : ""
                       )}
                     >
                       <Flame size={32} className={data.method === "verbrauch" ? "text-primary" : "text-slate-400"} />
                       <span className="mt-3 font-bold text-slate-700">Nach Verbrauch</span>
-                      <span className="text-xs text-slate-500 mt-1">Für genauere Ergebnisse</span>
+                      <span className="text-xs text-slate-500 mt-1">
+                        {data.heizsystem === "keine" ? "Nicht verfügbar (Neubau)" : "Für genauere Ergebnisse"}
+                      </span>
                     </button>
                   </div>
 
@@ -388,7 +430,8 @@ export default function Heizkostenrechner() {
                       {HEATING_SYSTEMS.map(sys => (
                         <button
                           key={sys.value}
-                          onClick={() => updateData("heizsystem", sys.value)}
+                          onClick={() => handleHeizsystemChange(sys.value)}
+                          data-testid={`heating-system-${sys.value}`}
                           className={cn(
                             "p-3 text-sm border rounded-lg text-center transition-all font-medium",
                             data.heizsystem === sys.value ? "border-primary bg-primary/5 text-primary" : "border-slate-200 text-slate-600 hover:border-slate-300"
@@ -409,18 +452,24 @@ export default function Heizkostenrechner() {
                           </div>
                           <Slider 
                              value={[data.wirkungsgradAlt]} 
-                             onValueChange={(val) => updateData("wirkungsgradAlt", val[0])} 
+                             onValueChange={(val) => {
+                               setEtaManuellGeaendert(true);
+                               updateData("wirkungsgradAlt", val[0]);
+                             }} 
                              min={50} max={100} step={1} 
                           />
                        </div>
                        <div className="space-y-4">
                           <div className="flex justify-between">
                              <Label>Aktueller Preis / Einheit</Label>
-                             <span className="font-bold text-primary">{data.preisAlt} €</span>
+                             <span className="font-bold text-primary">{data.preisAlt.toFixed(2)} €</span>
                           </div>
                           <Slider 
                              value={[data.preisAlt]} 
-                             onValueChange={(val) => updateData("preisAlt", val[0])} 
+                             onValueChange={(val) => {
+                               setPreisManuellGeaendert(true);
+                               updateData("preisAlt", val[0]);
+                             }} 
                              min={0.05} max={3.00} step={0.01} 
                           />
                        </div>
@@ -469,6 +518,32 @@ export default function Heizkostenrechner() {
                        />
                        <p className="text-xs text-slate-500">Niedrigere Vorlauftemperaturen erhöhen die Effizienz (SCOP) der Wärmepumpe massiv.</p>
                     </div>
+
+                    <div className="space-y-4">
+                       <div className="flex justify-between">
+                          <Label>Anteil Fußbodenheizung</Label>
+                          <span className="font-bold text-primary">{data.anteilFussboden}%</span>
+                       </div>
+                       <Slider 
+                          value={[data.anteilFussboden]} 
+                          onValueChange={(val) => updateData("anteilFussboden", val[0])} 
+                          min={0} max={100} step={5} 
+                       />
+                       <p className="text-xs text-slate-500">Höherer FBH-Anteil senkt die effektive Vorlauftemperatur und verbessert den SCOP.</p>
+                    </div>
+
+                    <div className="space-y-4">
+                       <div className="flex justify-between">
+                          <Label>Warmwasseranteil am Wärmebedarf</Label>
+                          <span className="font-bold text-primary">{data.warmwasserAnteilPct}%</span>
+                       </div>
+                       <Slider 
+                          value={[data.warmwasserAnteilPct]} 
+                          onValueChange={(val) => updateData("warmwasserAnteilPct", val[0])} 
+                          min={10} max={35} step={1} 
+                       />
+                       <p className="text-xs text-slate-500">Typisch 15-25% des Gesamtwärmebedarfs für Warmwasser.</p>
+                    </div>
                   </div>
 
                   <div className="space-y-6">
@@ -490,6 +565,9 @@ export default function Heizkostenrechner() {
                         </div>
                         {data.hasSolarthermie && (
                            <div className="pl-9 space-y-3" onClick={e => e.stopPropagation()}>
+                              <p className="text-xs text-slate-500 mb-2">
+                                Solarthermie wird vereinfacht als Warmwasser-Unterstützung gerechnet.
+                              </p>
                               <div className="flex gap-2">
                                  <button onClick={() => updateData("solarType", "flach")} className={cn("text-xs px-2 py-1 rounded border", data.solarType === "flach" ? "bg-white border-primary text-primary" : "bg-slate-50")}>Flachkollektor</button>
                                  <button onClick={() => updateData("solarType", "roehren")} className={cn("text-xs px-2 py-1 rounded border", data.solarType === "roehren" ? "bg-white border-primary text-primary" : "bg-slate-50")}>Röhrenkollektor</button>
@@ -651,21 +729,40 @@ export default function Heizkostenrechner() {
                      <div className="relative z-10 grid md:grid-cols-3 gap-8 text-center md:text-left">
                         <div>
                            <div className="text-slate-400 text-sm uppercase tracking-wider font-bold mb-1">Jährliche Ersparnis</div>
-                           <div className="text-4xl md:text-5xl font-heading font-extrabold text-green-400">
+                           <div className={cn(
+                             "text-4xl md:text-5xl font-heading font-extrabold",
+                             results.ersparnis > 0 ? "text-green-400" : "text-amber-400"
+                           )}>
                              {results.ersparnis?.toLocaleString()} €
                            </div>
                            <div className="text-xs text-slate-400 mt-2">Betriebskosten + Wartung</div>
                         </div>
                         <div>
                            <div className="text-slate-400 text-sm uppercase tracking-wider font-bold mb-1">Amortisation</div>
-                           <div className="text-4xl md:text-5xl font-heading font-extrabold text-white">
-                             {results.amortizationYears}
-                           </div>
-                           <div className="text-xs text-slate-400 mt-2">Jahre (nach Förderung)</div>
+                           {results.amortizationYears !== null ? (
+                             <>
+                               <div className="text-4xl md:text-5xl font-heading font-extrabold text-white">
+                                 {results.amortizationYears}
+                               </div>
+                               <div className="text-xs text-slate-400 mt-2">Jahre (nach Förderung)</div>
+                             </>
+                           ) : (
+                             <>
+                               <div className="text-xl font-bold text-amber-400">
+                                 k.A.
+                               </div>
+                               <div className="text-xs text-amber-300 mt-2">
+                                 Unter diesen Annahmen keine wirtschaftliche Amortisation.
+                               </div>
+                             </>
+                           )}
                         </div>
                         <div>
                            <div className="text-slate-400 text-sm uppercase tracking-wider font-bold mb-1">CO₂ Reduktion</div>
-                           <div className="text-4xl md:text-5xl font-heading font-extrabold text-blue-300">
+                           <div className={cn(
+                             "text-4xl md:text-5xl font-heading font-extrabold",
+                             results.co2Ersparnis > 0 ? "text-blue-300" : "text-amber-400"
+                           )}>
                              {Math.round(results.co2Ersparnis / 1000 * 10) / 10} t
                            </div>
                            <div className="text-xs text-slate-400 mt-2">pro Jahr</div>
