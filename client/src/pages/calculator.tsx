@@ -232,11 +232,11 @@ export default function Heizkostenrechner() {
   const [leadError, setLeadError] = useState<string | null>(null);
   
   // Turnstile for spam protection
-  const { containerRef: turnstileRef, token: turnstileToken, reset: resetTurnstile } = useTurnstile();
+  const { containerRef: turnstileRef, token: turnstileToken, isValid: turnstileIsValid, reset: resetTurnstile } = useTurnstile();
 
   // Email validation
   const isValidEmail = (email: string) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
-  const canSubmitLead = isValidEmail(leadEmail) && leadConsent && !leadSubmitting && !!turnstileToken;
+  const canSubmitLead = isValidEmail(leadEmail) && leadConsent && !leadSubmitting && turnstileIsValid;
 
   // Submit lead
   const submitLead = async () => {

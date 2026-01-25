@@ -27,11 +27,28 @@ export function useTurnstile() {
   const widgetIdRef = useRef<string | null>(null);
   const [token, setToken] = useState<string | null>(null);
   const [isReady, setIsReady] = useState(false);
+  const [hasError, setHasError] = useState(false);
+  const [isRequired, setIsRequired] = useState(true); // Assume required until we know otherwise
+  const retryCountRef = useRef(0);
+
+  // Fetch Turnstile config from server to determine if it's required
+  useEffect(() => {
+    fetch("/api/config/turnstile")
+      .then((res) => res.json())
+      .then((data) => {
+        setIsRequired(data.required);
+      })
+      .catch(() => {
+        // If config fetch fails, assume Turnstile is required (safe default)
+        setIsRequired(true);
+      });
+  }, []);
 
   const reset = useCallback(() => {
     if (widgetIdRef.current && window.turnstile) {
       window.turnstile.reset(widgetIdRef.current);
       setToken(null);
+      setHasError(false);
     }
   }, []);
 
@@ -41,7 +58,14 @@ export function useTurnstile() {
 
     const initTurnstile = () => {
       if (!window.turnstile) {
-        setTimeout(initTurnstile, 100);
+        retryCountRef.current++;
+        if (retryCountRef.current < 50) {
+          setTimeout(initTurnstile, 100);
+        } else {
+          console.warn("[Turnstile] Failed to load after 5s, allowing form submission without CAPTCHA");
+          setHasError(true);
+          setIsReady(true);
+        }
         return;
       }
 
@@ -49,22 +73,30 @@ export function useTurnstile() {
         window.turnstile.remove(widgetIdRef.current);
       }
 
-      widgetIdRef.current = window.turnstile.render(container, {
-        sitekey: TURNSTILE_SITE_KEY,
-        callback: (t: string) => {
-          setToken(t);
-        },
-        "error-callback": () => {
-          setToken(null);
-        },
-        "expired-callback": () => {
-          setToken(null);
-        },
-        theme: "light",
-        size: "normal",
-      });
-
-      setIsReady(true);
+      try {
+        widgetIdRef.current = window.turnstile.render(container, {
+          sitekey: TURNSTILE_SITE_KEY,
+          callback: (t: string) => {
+            setToken(t);
+            setHasError(false);
+          },
+          "error-callback": () => {
+            console.warn("[Turnstile] Error callback triggered, allowing form submission without CAPTCHA");
+            setToken(null);
+            setHasError(true);
+          },
+          "expired-callback": () => {
+            setToken(null);
+          },
+          theme: "light",
+          size: "normal",
+        });
+        setIsReady(true);
+      } catch (err) {
+        console.warn("[Turnstile] Failed to render widget:", err);
+        setHasError(true);
+        setIsReady(true);
+      }
     };
 
     initTurnstile();
@@ -77,5 +109,8 @@ export function useTurnstile() {
     };
   }, []);
 
-  return { containerRef, token, isReady, reset };
+  // Valid if: has token, OR (has error AND turnstile is not required in this environment)
+  const isValid = token !== null || (hasError && !isRequired);
+
+  return { containerRef, token, isReady, hasError, isValid, isRequired, reset };
 }

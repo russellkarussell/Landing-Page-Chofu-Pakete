@@ -60,21 +60,31 @@ export async function registerRoutes(
       anonKey: process.env.SUPABASE_ANON_KEY,
     });
   });
+
+  // Expose whether Turnstile verification is enforced (for frontend graceful degradation)
+  app.get("/api/config/turnstile", (req, res) => {
+    res.json({
+      required: !!process.env.TURNSTILE_SECRET_KEY,
+    });
+  });
   
   app.post("/api/contact", async (req, res) => {
     try {
       const { turnstileToken, ...formData } = req.body;
       
-      if (!turnstileToken) {
+      // Verify Turnstile token if provided, or require it only when secret key is configured
+      if (turnstileToken) {
+        const isValidToken = await verifyTurnstileToken(turnstileToken);
+        if (!isValidToken) {
+          res.status(400).json({ message: "Sicherheitsprüfung fehlgeschlagen. Bitte versuchen Sie es erneut." });
+          return;
+        }
+      } else if (process.env.TURNSTILE_SECRET_KEY) {
+        // Token required in production when secret key is set
         res.status(400).json({ message: "Sicherheitsprüfung erforderlich" });
         return;
       }
-      
-      const isValidToken = await verifyTurnstileToken(turnstileToken);
-      if (!isValidToken) {
-        res.status(400).json({ message: "Sicherheitsprüfung fehlgeschlagen. Bitte versuchen Sie es erneut." });
-        return;
-      }
+      // If no token AND no secret key configured, allow submission (dev mode)
       
       const validatedData = insertContactRequestSchema.parse(formData);
       

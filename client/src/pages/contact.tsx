@@ -22,7 +22,7 @@ export default function Contact() {
   const { toast } = useToast();
   const [location] = useLocation();
   const [isSubmitted, setIsSubmitted] = useState(false);
-  const { containerRef: turnstileRef, token: turnstileToken, reset: resetTurnstile } = useTurnstile();
+  const { containerRef: turnstileRef, token: turnstileToken, isValid: turnstileIsValid, reset: resetTurnstile } = useTurnstile();
 
   const form = useForm<z.infer<typeof insertContactRequestSchema>>({
     resolver: zodResolver(insertContactRequestSchema),
@@ -73,7 +73,7 @@ Bitte um Beratung zu diesem Objekt.`;
   }, [form]);
 
   function onSubmit(values: z.infer<typeof insertContactRequestSchema>) {
-    if (!turnstileToken) {
+    if (!turnstileIsValid) {
       toast({
         title: "Sicherheitsprüfung erforderlich",
         description: "Bitte warten Sie, bis die Sicherheitsprüfung abgeschlossen ist.",
@@ -81,7 +81,7 @@ Bitte um Beratung zu diesem Objekt.`;
       });
       return;
     }
-    mutation.mutate({ ...values, turnstileToken }, {
+    mutation.mutate({ ...values, turnstileToken: turnstileToken || "" }, {
       onSuccess: () => {
         resetTurnstile();
       }
@@ -245,7 +245,7 @@ Bitte um Beratung zu diesem Objekt.`;
                   <Button 
                     type="submit" 
                     className="w-full h-12 text-lg font-bold shadow-lg hover:shadow-xl transition-all"
-                    disabled={mutation.isPending || !turnstileToken}
+                    disabled={mutation.isPending || !turnstileIsValid}
                     data-testid="button-submit-contact"
                   >
                     {mutation.isPending ? "Wird gesendet..." : "Termin anfragen"}
