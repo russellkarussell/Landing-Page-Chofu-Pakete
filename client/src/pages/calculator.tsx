@@ -29,9 +29,11 @@ import chofu4kwProduct from "@/assets/chofu-4kw-product.webp";
 import chofu6kwProduct from "@/assets/chofu-6kw-product.webp";
 import chofu10kwProduct from "@/assets/chofu-10kw-product.webp";
 
-// USP icons (only using top 2 for recommendation section)
+// USP icons
 import uspJapan from "@/assets/usp-japan.png";
 import uspSchallpegel from "@/assets/usp-schallpegel.png";
+import uspFussabdruck from "@/assets/usp-fussabdruck.png";
+import uspHeizleistung from "@/assets/usp-heizleistung.png";
 
 // Product image mapping
 const productImages: Record<string, string> = {
@@ -40,7 +42,7 @@ const productImages: Record<string, string> = {
   "10kW": chofu10kwProduct,
 };
 
-// USP data - only top 2 for recommendation section
+// USP data - split into top and bottom rows
 const topUsps = [
   {
     icon: uspJapan,
@@ -51,6 +53,19 @@ const topUsps = [
     icon: uspSchallpegel,
     title: "31 dB(A) im Nachtmodus",
     text: "Besonders leiser Betrieb – ideal auch in dicht bebauten Gebieten."
+  }
+];
+
+const bottomUsps = [
+  {
+    icon: uspFussabdruck,
+    title: "Minimale Stellfläche",
+    text: "Kompaktes Außengerät – passt auch bei wenig Platz."
+  },
+  {
+    icon: uspHeizleistung,
+    title: "100% Leistung bei −5 °C",
+    text: "Volle Nennleistung auch bei Kälte – ohne elektrische Zusatzheizung."
   }
 ];
 
@@ -1024,19 +1039,37 @@ export default function Heizkostenrechner() {
                           </div>
                         </div>
                         
-                        {/* Package Name */}
-                        <div className="border-t border-slate-200 pt-5">
-                          <h4 className="text-lg font-bold text-primary mb-3">CHOFU {derivedPackage.package} Paket</h4>
+                        {/* Bottom Row: Package contents (left) + 2 more USPs (right) */}
+                        <div className="grid md:grid-cols-2 gap-6 border-t border-slate-200 pt-5">
+                          {/* Package Contents */}
+                          <div>
+                            <h4 className="text-lg font-bold text-primary mb-3">CHOFU {derivedPackage.package} Paket</h4>
+                            <ul className="space-y-2">
+                              {packageContents[derivedPackage.package]?.map((item, index) => (
+                                <li key={index} className="flex items-center gap-2 text-sm text-slate-700">
+                                  <Check size={16} className="text-primary flex-shrink-0" />
+                                  {item}
+                                </li>
+                              ))}
+                            </ul>
+                          </div>
                           
-                          {/* Package Contents as bullet list */}
-                          <ul className="space-y-2">
-                            {packageContents[derivedPackage.package]?.map((item, index) => (
-                              <li key={index} className="flex items-center gap-2 text-sm text-slate-700">
-                                <Check size={16} className="text-primary flex-shrink-0" />
-                                {item}
-                              </li>
+                          {/* Bottom 2 USPs */}
+                          <div className="flex flex-col gap-4 justify-center">
+                            {bottomUsps.map((usp, index) => (
+                              <div key={index} className="flex items-start gap-4 p-4 bg-slate-50 rounded-lg">
+                                <img 
+                                  src={usp.icon} 
+                                  alt={usp.title}
+                                  className="w-12 h-12 object-contain flex-shrink-0"
+                                />
+                                <div>
+                                  <h4 className="font-semibold text-sm text-slate-900 mb-1">{usp.title}</h4>
+                                  <p className="text-xs text-slate-600 leading-relaxed">{usp.text}</p>
+                                </div>
+                              </div>
                             ))}
-                          </ul>
+                          </div>
                         </div>
                         
                         <p className="text-center text-xs text-slate-400 mt-5 pt-4 border-t border-slate-100">
