@@ -308,6 +308,86 @@ export async function registerRoutes(
                 Anbei finden Sie die Ergebnisse aus Ihrem Heizkostenrechner. Bitte beachten Sie, dass es sich um Orientierungswerte handelt – eine genaue Planung erfolgt durch den Fachbetrieb.
               </p>
               
+              ${derived.selectedPackage ? `
+              <!-- Empfohlene Lösung -->
+              <div style="background-color: #f8fafc; border-radius: 12px; padding: 24px; margin-bottom: 24px; border: 1px solid #e2e8f0;">
+                <h2 style="margin: 0 0 16px; font-size: 18px; font-weight: 600; color: #0f766e; text-align: center;">Ihre empfohlene CHOFU Wärmepumpe</h2>
+                
+                <!-- Product Image -->
+                <table width="100%" cellpadding="0" cellspacing="0">
+                  <tr>
+                    <td align="center" style="padding-bottom: 20px;">
+                      <img src="https://meine-waermepumpe.at/email-chofu-${derived.selectedPackage.replace('kW', 'kw')}.webp" alt="CHOFU Wärmepumpe ${derived.selectedPackage}" width="280" style="max-width: 280px; height: auto; border-radius: 8px;" />
+                    </td>
+                  </tr>
+                </table>
+                
+                <!-- USP Grid -->
+                <table width="100%" cellpadding="8" cellspacing="0">
+                  <tr>
+                    <td width="50%" style="vertical-align: top; padding: 8px;">
+                      <table cellpadding="0" cellspacing="0" style="background-color: #ffffff; border-radius: 8px; padding: 12px; width: 100%;">
+                        <tr>
+                          <td width="48" style="vertical-align: top;">
+                            <img src="https://meine-waermepumpe.at/email-usp-japan.png" alt="Made in Japan" width="40" height="40" style="display: block;" />
+                          </td>
+                          <td style="padding-left: 10px; vertical-align: top;">
+                            <strong style="font-size: 13px; color: #1e293b;">Made in Japan</strong><br/>
+                            <span style="font-size: 11px; color: #64748b;">Japanische Qualität für langlebigen Betrieb.</span>
+                          </td>
+                        </tr>
+                      </table>
+                    </td>
+                    <td width="50%" style="vertical-align: top; padding: 8px;">
+                      <table cellpadding="0" cellspacing="0" style="background-color: #ffffff; border-radius: 8px; padding: 12px; width: 100%;">
+                        <tr>
+                          <td width="48" style="vertical-align: top;">
+                            <img src="https://meine-waermepumpe.at/email-usp-schallpegel.png" alt="31 dB(A)" width="40" height="40" style="display: block;" />
+                          </td>
+                          <td style="padding-left: 10px; vertical-align: top;">
+                            <strong style="font-size: 13px; color: #1e293b;">31 dB(A) Nachtmodus</strong><br/>
+                            <span style="font-size: 11px; color: #64748b;">Besonders leiser Betrieb.</span>
+                          </td>
+                        </tr>
+                      </table>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td width="50%" style="vertical-align: top; padding: 8px;">
+                      <table cellpadding="0" cellspacing="0" style="background-color: #ffffff; border-radius: 8px; padding: 12px; width: 100%;">
+                        <tr>
+                          <td width="48" style="vertical-align: top;">
+                            <img src="https://meine-waermepumpe.at/email-usp-fussabdruck.png" alt="Kompakt" width="40" height="40" style="display: block;" />
+                          </td>
+                          <td style="padding-left: 10px; vertical-align: top;">
+                            <strong style="font-size: 13px; color: #1e293b;">Minimale Stellfläche</strong><br/>
+                            <span style="font-size: 11px; color: #64748b;">Kompaktes Außengerät.</span>
+                          </td>
+                        </tr>
+                      </table>
+                    </td>
+                    <td width="50%" style="vertical-align: top; padding: 8px;">
+                      <table cellpadding="0" cellspacing="0" style="background-color: #ffffff; border-radius: 8px; padding: 12px; width: 100%;">
+                        <tr>
+                          <td width="48" style="vertical-align: top;">
+                            <img src="https://meine-waermepumpe.at/email-usp-heizleistung.png" alt="100%" width="40" height="40" style="display: block;" />
+                          </td>
+                          <td style="padding-left: 10px; vertical-align: top;">
+                            <strong style="font-size: 13px; color: #1e293b;">100% bei −5 °C</strong><br/>
+                            <span style="font-size: 11px; color: #64748b;">Ohne elektrische Zusatzheizung.</span>
+                          </td>
+                        </tr>
+                      </table>
+                    </td>
+                  </tr>
+                </table>
+                
+                <p style="margin: 16px 0 0; text-align: center; font-size: 13px; color: #64748b;">
+                  Empfohlen: <strong style="color: #0f766e;">CHOFU ${derived.selectedPackage} Paket</strong>
+                </p>
+              </div>
+              ` : ''}
+              
               <!-- Ihre Eingaben -->
               <h2 style="margin: 0 0 16px; font-size: 18px; font-weight: 600; color: #0f766e; border-bottom: 2px solid #0f766e; padding-bottom: 8px;">Ihre Eingaben</h2>
               <table width="100%" cellpadding="8" cellspacing="0" style="margin-bottom: 24px; font-size: 14px;">
