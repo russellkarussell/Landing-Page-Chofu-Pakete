@@ -317,7 +317,7 @@ export async function registerRoutes(
                 <table width="100%" cellpadding="0" cellspacing="0" style="margin-bottom: 16px;">
                   <tr>
                     <td width="50%" style="vertical-align: middle; padding: 8px;">
-                      <img src="https://yeaxuexfornuxvcldtux.supabase.co/storage/v1/object/public/image/email-chofu-${derived.selectedPackage.replace('kW', 'kw')}.webp" alt="CHOFU Wärmepumpe ${derived.selectedPackage}" width="220" style="max-width: 220px; height: auto; border-radius: 8px; display: block; margin: 0 auto;" />
+                      <img src="https://yeaxuexfornuxvcldtux.supabase.co/storage/v1/object/public/image/email-chofu-${derived.selectedPackage.replace('kW', 'kw')}-small.png" alt="CHOFU Wärmepumpe ${derived.selectedPackage}" width="220" style="max-width: 220px; height: auto; border-radius: 8px; display: block; margin: 0 auto;" />
                     </td>
                     <td width="50%" style="vertical-align: top; padding: 8px;">
                       <!-- USP 1: Made in Japan -->
