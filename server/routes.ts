@@ -217,7 +217,7 @@ export async function registerRoutes(
             properties: {
               email: validatedData.email,
               hs_lead_status: "NEW",
-              lead_source: "heizkostenrechner",
+              lead_source: LEAD_SOURCE,
             },
             associations: []
           });
@@ -229,7 +229,7 @@ export async function registerRoutes(
               await hubspotClient.crm.contacts.basicApi.update(existingIdMatch[1], {
                 properties: {
                   hs_lead_status: "NEW",
-                  lead_source: "heizkostenrechner",
+                  lead_source: LEAD_SOURCE,
                 }
               });
               console.log(`HubSpot contact updated from Heizkostenrechner: ${validatedData.email}`);
@@ -246,6 +246,8 @@ export async function registerRoutes(
       try {
         const { client: resendClient, fromEmail } = await getUncachableResendClient();
         const { inputs, results, derived } = validatedData;
+        
+        console.log(`Attempting to send email to user: ${validatedData.email}, from: ${fromEmail}`);
         
         const buildingLabels: Record<string, string> = {
           alt_unsaniert: "Altbau, unsaniert",
@@ -419,9 +421,10 @@ export async function registerRoutes(
 </html>
           `,
         });
-        console.log(`Heizkostenrechner results email sent to ${validatedData.email}`);
+        console.log(`Heizkostenrechner results email successfully sent to ${validatedData.email}`);
       } catch (emailError: any) {
-        console.error("Email error (heizkosten-lead):", emailError.message || emailError);
+        console.error("Email error (heizkosten-lead) - Details:", JSON.stringify(emailError, null, 2));
+        console.error("Email error message:", emailError.message || emailError);
       }
 
       // Notify internal team
