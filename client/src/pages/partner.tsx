@@ -100,17 +100,19 @@ export default function PartnerProfile() {
             {partner.references && partner.references.length > 0 && (
               <div>
                 <h2 className="text-xl font-semibold mb-4">Referenzprojekte</h2>
-                <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
                   {partner.references.map((ref) => (
-                    <div key={ref.id} className="group relative overflow-hidden rounded-xl">
-                      <img 
-                        src={ref.imageUrl} 
-                        alt={ref.caption || "Referenzprojekt"} 
-                        className="w-full h-48 object-cover transition-transform group-hover:scale-105"
-                      />
+                    <div key={ref.id} className="group overflow-hidden rounded-xl shadow-md bg-white">
+                      <div className="relative overflow-hidden">
+                        <img 
+                          src={ref.imageUrl} 
+                          alt={ref.caption || "Referenzprojekt"} 
+                          className="w-full h-64 sm:h-72 object-cover transition-transform group-hover:scale-105"
+                        />
+                      </div>
                       {ref.caption && (
-                        <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent flex items-end p-4 opacity-0 group-hover:opacity-100 transition-opacity">
-                          <p className="text-white text-sm">{ref.caption}</p>
+                        <div className="p-4 bg-white">
+                          <p className="text-slate-700 text-sm">{ref.caption}</p>
                         </div>
                       )}
                     </div>
