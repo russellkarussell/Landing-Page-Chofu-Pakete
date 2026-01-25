@@ -985,29 +985,63 @@ export default function Heizkostenrechner() {
                       <div className="bg-white border border-slate-200 rounded-xl p-6 shadow-sm mb-6">
                         <h3 className="text-lg font-bold text-slate-900 mb-6">Ihre empfohlene CHOFU Wärmepumpe</h3>
                         
-                        <div className="grid md:grid-cols-2 gap-8">
+                        {/* Top Row: Image + First 2 USPs */}
+                        <div className="grid md:grid-cols-3 gap-6 mb-6 items-stretch">
                           {/* Product Image */}
-                          <div className="flex items-center justify-center">
+                          <div className="flex items-center justify-center bg-slate-50 rounded-xl p-4 min-h-[180px]">
                             <img 
                               src={productImages[derivedPackage.package]} 
                               alt={`CHOFU Wärmepumpe ${derivedPackage.package} – Made in Japan`}
-                              className="rounded-xl shadow-lg max-h-[280px] object-contain"
+                              className="rounded-lg shadow-lg max-h-[160px] object-contain"
                             />
                           </div>
                           
-                          {/* USP Grid */}
-                          <div className="grid grid-cols-2 gap-4">
-                            {uspItems.map((usp, index) => (
-                              <div key={index} className="flex flex-col items-center text-center p-3 bg-slate-50 rounded-lg">
-                                <img 
-                                  src={usp.icon} 
-                                  alt={usp.title}
-                                  className="w-12 h-12 object-contain mb-2"
-                                />
-                                <h4 className="font-semibold text-sm text-slate-900 mb-1">{usp.title}</h4>
-                                <p className="text-xs text-slate-600 leading-relaxed">{usp.text}</p>
-                              </div>
-                            ))}
+                          {/* First 2 USPs */}
+                          {uspItems.slice(0, 2).map((usp, index) => (
+                            <div key={index} className="flex flex-col items-center justify-center text-center p-4 bg-slate-50 rounded-xl min-h-[180px]">
+                              <img 
+                                src={usp.icon} 
+                                alt={usp.title}
+                                className="w-12 h-12 object-contain mb-2"
+                              />
+                              <h4 className="font-semibold text-sm text-slate-900 mb-1">{usp.title}</h4>
+                              <p className="text-xs text-slate-600 leading-relaxed">{usp.text}</p>
+                            </div>
+                          ))}
+                        </div>
+                        
+                        {/* Package Name */}
+                        <div className="text-center mb-6">
+                          <span className="inline-block px-6 py-3 bg-primary text-white rounded-full font-bold text-lg">
+                            CHOFU {derivedPackage.package} Paket
+                          </span>
+                        </div>
+                        
+                        {/* Bottom Row: Remaining 2 USPs + Package Features */}
+                        <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-4">
+                          {/* Remaining 2 USPs */}
+                          {uspItems.slice(2, 4).map((usp, index) => (
+                            <div key={index} className="flex flex-col items-center text-center p-4 bg-slate-50 rounded-lg">
+                              <img 
+                                src={usp.icon} 
+                                alt={usp.title}
+                                className="w-10 h-10 object-contain mb-2"
+                              />
+                              <h4 className="font-semibold text-sm text-slate-900 mb-1">{usp.title}</h4>
+                              <p className="text-xs text-slate-600 leading-relaxed">{usp.text}</p>
+                            </div>
+                          ))}
+                          
+                          {/* Package Features */}
+                          <div className="flex flex-col items-center text-center p-4 bg-primary/5 rounded-lg border border-primary/20">
+                            <Zap className="w-10 h-10 text-primary mb-2" />
+                            <h4 className="font-semibold text-sm text-slate-900 mb-1">Inneneinheit inkl.</h4>
+                            <p className="text-xs text-slate-600 leading-relaxed">Hydraulikmodul mit integriertem Warmwasserspeicher.</p>
+                          </div>
+                          <div className="flex flex-col items-center text-center p-4 bg-primary/5 rounded-lg border border-primary/20">
+                            <Check className="w-10 h-10 text-primary mb-2" />
+                            <h4 className="font-semibold text-sm text-slate-900 mb-1">Fixpreis-Montage</h4>
+                            <p className="text-xs text-slate-600 leading-relaxed">Installation durch zertifizierte Fachpartner.</p>
                           </div>
                         </div>
                         
