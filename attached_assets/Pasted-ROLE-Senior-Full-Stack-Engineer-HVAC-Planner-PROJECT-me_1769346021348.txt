@@ -1,0 +1,146 @@
+ROLE: Senior Full-Stack Engineer + HVAC Planner
+PROJECT: meine-waermepumpe.at (React/TypeScript)
+TASK: Update ONLY the Heizkostenrechner (client/src/pages/calculator.tsx) with improved defaults, cross-step dependent defaults, conditional UI, and package-based investment presets.
+
+SCOPE:
+- Only Heizkostenrechner (4-step flow). Effizienz-Check is already finished; do NOT change it.
+
+========================
+A) STEP 1 DEFAULTS (Gebäudeklasse + Fläche + aktuelles Heizsystem)
+========================
+On initial load of the Heizkostenrechner:
+1) Default building class selection:
+- buildingClass = "neubau" (Neubau)
+
+2) Default heated area:
+- area_m2 = 120
+
+3) Default current heating system:
+- currentHeatingSystem = "keine" (Keine / Neubau)
+
+Acceptance:
+- The UI shows Neubau preselected (tile highlighted), area slider/value = 120 m², and "Keine / Neubau" selected.
+
+IMPORTANT:
+- These are prefilled defaults; never reset after user interaction.
+
+========================
+B) STEP 2 DEPENDENT DEFAULT LOGIC (Vorlauf + FBH-Anteil)
+========================
+Goal: If the user changes buildingClass in Step 1 and has not manually overridden Step 2 sliders yet, Step 2 should auto-adjust reasonable defaults for Vorlauf + Anteil FBH.
+
+Implement two "manual override" flags:
+- vorlaufManuell = false initially
+- fbhManuell = false initially
+Set them true as soon as user touches corresponding sliders.
+Auto-update defaults ONLY when flags are false.
+
+1) Defaults for Step 2 based on buildingClass:
+
+CASE "neubau":
+- defaultVorlauf = 35 °C
+- defaultFBH = 100 %
+Rationale: Neubau typically low-temp with mostly/fully underfloor heating.
+
+CASE "altbau_unsaniert":
+- defaultVorlauf = 55 °C
+- defaultFBH = 0 %
+Rationale: older radiators, higher flow temps.
+
+CASE "altbau_teilsaniert":
+- defaultVorlauf = 45 °C
+- defaultFBH = 30 %
+Rationale: mixed system common, partial UFH possible.
+
+CASE "altbau_saniert":
+- defaultVorlauf = 40 °C
+- defaultFBH = 60 %
+Rationale: better envelope + often partial UFH; lower design flow.
+
+CASE "niedrigenergie":
+- defaultVorlauf = 32 °C
+- defaultFBH = 100 %
+Rationale: very low temps.
+
+If your Step-1 UI currently only has 3 tiles (Altbau/Teilsaniert/Neubau), then map them like this:
+- Altbau (vor 1990) -> use altbau_unsaniert defaults above
+- Teilsaniert -> use altbau_teilsaniert defaults above
+- Neubau -> use neubau defaults above
+(If you already have the 5-class tiles as shown, use the full set.)
+
+2) Ensure Step 2 UI reflects these defaults:
+- Slider "Vorlauftemperatur" is set to defaultVorlauf
+- Slider "Anteil Fußbodenheizung" is set to defaultFBH
+
+3) Warmwasser default:
+- warmwasserAnteilPct default MUST be 10% (not 20%)
+- Update helper text under slider to:
+  "Typisch 10–25% des Gesamtwärmebedarfs für Warmwasser."
+(Include 10% explicitly as the starting reference.)
+
+Acceptance:
+- Selecting Neubau in Step 1 and moving to Step 2 shows 35°C and 100% FBH automatically (unless user previously changed them manually).
+- Selecting Altbau/Teilsaniert updates Step 2 to plausible values per mapping.
+
+========================
+C) CONDITIONAL UI: Heizkörperlüfter option
+========================
+Requirement:
+- If Anteil Fußbodenheizung > 50%, hide (disable + not visible) the option "Heizkörperlüfter", because it is not relevant.
+
+Implementation:
+- In Step 2, in "Optimierungs-Optionen", conditionally render the Heizkörperlüfter checkbox/card only when fbhPercent <= 50.
+- If the user had previously checked Heizkörperlüfter and then increases FBH to >50, auto-uncheck it (set false) to avoid inconsistent state.
+
+Acceptance:
+- Heizkörperlüfter disappears immediately when FBH slider goes above 50%.
+- If it was selected, it resets to off.
+
+========================
+D) STEP 3: PACKAGE-BASED INVESTMENT PRESETS + LABELING
+========================
+Goal: In Step 3 (Investitionskosten), show package names and preload the investment slider/input with the package price.
+
+1) Package options and defaults (based on screenshot values):
+Create 3 selectable package presets:
+- "Investitionskosten – 4kW Paket"  -> default investment = 12803  (EUR)
+- "Investitionskosten – 6kW Paket"  -> default investment = 13293  (EUR)
+- "Investitionskosten – 10kW Paket" -> default investment = 14343  (EUR)
+
+2) UI behavior:
+- Add a segmented control / radio tiles / dropdown (your choice consistent with existing style) to select package: 4kW, 6kW, 10kW.
+- When user selects a package and has NOT manually overridden investment value yet, set investition = packagePrice.
+- Track manual override flag:
+  - investManuell = false initially
+  - set true when user changes invest slider/input
+  - only auto-update investition from package choice when investManuell is false
+- Default selected package should be derived from Step 1/2 outcomes if you already compute a recommended size; otherwise set default to 6kW (safe mid) OR keep 4kW if Neubau 120m² default (your call). 
+Prefer: default package = 6kW to avoid undersizing perception in marketing, unless you already compute a recommendation.
+
+3) Display:
+In Step 3, label the investment field clearly as:
+"Investitionskosten – <selected package>"
+
+Acceptance:
+- Step 3 shows “Investitionskosten – 4kW/6kW/10kW Paket”.
+- Investment value preloads to the selected package price.
+- Manual adjustments are preserved and not overwritten automatically.
+
+========================
+E) DO NOT CHANGE CORE CALCULATION EXCEPT WHERE REQUIRED BY DEFAULTS/UI
+========================
+- Keep the annual cost calculation approach (A2 typical / SCOP mapping) as currently implemented.
+- Keep the previously agreed solar->warmwasser-only logic and other correctness fixes already implemented in calculator.tsx.
+This task focuses on defaults, conditional UI, and package presets.
+
+========================
+F) ACCEPTANCE CHECKLIST
+========================
+1) Step 1 defaults:
+   Neubau selected, 120 m², Keine/Neubau selected.
+2) Step 2 defaults follow Step 1 buildingClass (35°C + 100% FBH for Neubau).
+3) Warmwasser default is 10% and helper text mentions “10–25%”.
+4) Heizkörperlüfter hidden when FBH > 50% and auto-unchecked if needed.
+5) Step 3 includes package selector and preloads investment:
+   4kW=12803, 6kW=13293, 10kW=14343.
+6) Manual overrides are respected (values don’t reset after user changes them).
