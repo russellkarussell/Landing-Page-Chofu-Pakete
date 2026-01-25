@@ -6,9 +6,9 @@ import { Badge } from "@/components/ui/badge";
 import { Check, X, ArrowRight, Ruler, Download, Info } from "lucide-react";
 import { PACKAGES, SUBSIDIES, formatEUR, getSubsidy, getNetPrice } from "@/lib/constants";
 import { PackagesTrustRow } from "@/components/brand/PackagesTrustRow";
-import chofu4kw from "@assets/image_1767196454458.png";
-import chofu6kw from "@assets/image_1767196466560.png";
-import chofu10kw from "@/assets/chofu-10kw.png";
+import chofu4kw from "@/assets/chofu-4kw-product.webp";
+import chofu6kw from "@/assets/chofu-6kw-product.webp";
+import chofu10kw from "@/assets/chofu-10kw.webp";
 import { PackageContentsAccordion } from "@/components/packages/PackageContentsAccordion";
 import { PriceDisclaimer } from "@/components/price-disclaimer";
 

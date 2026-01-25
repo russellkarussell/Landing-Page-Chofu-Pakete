@@ -14,9 +14,9 @@ import {
   ShieldCheck,
   Zap
 } from "lucide-react";
-import heroImage from "@assets/PXL_20250803_105021980-Photoroom_1767199080674.jpg";
-import closeupImage from "@/assets/japan-map-icon.png";
-import controllerImage from "@assets/CMR-4100M_Display_(1)_1767199043612.jpg";
+import heroImage from "@/assets/chofu-6kw-hero.webp";
+import closeupImage from "@/assets/japan-map-icon.webp";
+import controllerImage from "@/assets/cmr-controller-display.webp";
 import { useEffect } from "react";
 import { ProductDownloads } from "@/components/product-downloads";
 

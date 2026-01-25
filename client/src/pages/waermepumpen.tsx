@@ -13,9 +13,9 @@ import {
   Zap,
   LayoutGrid
 } from "lucide-react";
-import heroImage4kW from "@assets/image_1767196454458.png";
-import heroImage6kW from "@assets/PXL_20250803_105021980-Photoroom_1767199080674.jpg";
-import heroImage10kW from "@/assets/chofu-10kw.png";
+import heroImage4kW from "@/assets/chofu-4kw-product.webp";
+import heroImage6kW from "@/assets/chofu-6kw-hero.webp";
+import heroImage10kW from "@/assets/chofu-10kw.webp";
 import { useEffect } from "react";
 
 export default function HeatPumpOverview() {

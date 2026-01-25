@@ -12,9 +12,9 @@ import { Check, ArrowRight, Zap, ShieldCheck, Euro, Coins, Info, Home as HomeIco
 import { BUNDESLAENDER, PACKAGES, SUBSIDIES, formatEUR, getSubsidy, getNetPrice } from "@/lib/constants";
 import { useQuery } from "@tanstack/react-query";
 import type { Partner } from "@shared/schema";
-import heroImage from "@/assets/hero-modern-house-bg.png";
+import heroImage from "@/assets/hero-modern-house-bg.webp";
 import { motion } from "framer-motion";
-import ehpaLabel from "@assets/image_1767188918778.png";
+import ehpaLabel from "@/assets/ehpa-label.webp";
 import { ChofuHomepageTeaser } from "@/components/brand/ChofuHomepageTeaser";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 import { PriceDisclaimer } from "@/components/price-disclaimer";

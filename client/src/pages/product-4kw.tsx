@@ -16,9 +16,9 @@ import {
   Info,
   Home
 } from "lucide-react";
-import heroImage from "@assets/PXL_20250803_105021980-Photoroom_1767198306969.jpg";
-import closeupImage from "@/assets/japan-map-icon.png";
-import controllerImage from "@assets/CMR-4100M_Image_1767198341060.jpg";
+import heroImage from "@/assets/chofu-4kw-hero.webp";
+import closeupImage from "@/assets/japan-map-icon.webp";
+import controllerImage from "@/assets/cmr-controller.webp";
 import { useEffect } from "react";
 import { ProductDownloads } from "@/components/product-downloads";
 

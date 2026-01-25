@@ -11,7 +11,7 @@ import { Link } from "wouter";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import chofuData from "@/content/brand/chofu.de.json";
-import chofuPremiumImage from "@/assets/chofu-premium.jpg";
+import chofuPremiumImage from "@/assets/chofu-premium.webp";
 
 // Map icon strings to components
 const IconMap: Record<string, React.ComponentType<any>> = {
