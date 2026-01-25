@@ -1,0 +1,55 @@
+ROLE: Senior Full-Stack Engineer
+PROJECT: meine-waermepumpe.at (React/TypeScript)
+TASK: Fix /pakete so that the 10kW package is no longer a mockup.
+Until the real 10kW package accessory list is ready, use the SAME accessory list as the 6kW package.
+Do NOT change pricing logic unless already handled elsewhere. This task is about package contents displayed on /pakete.
+
+WHERE:
+- Locate the /pakete page component (likely a route/page such as client/src/pages/pakete.tsx or similar).
+- Locate the data source used to render package cards (an array/object like PACKAGES, packagesData, or similar).
+
+========================
+A) REQUIRED CHANGE
+========================
+1) Identify the existing accessory/items list used for the 6kW package.
+2) Copy/reuse this exact list for the 10kW package so the 10kW card displays a complete, real accessory list (no placeholders).
+3) Ensure the UI renders the 10kW package accessory list in the same format as 4kW and 6kW (bullets/sections).
+4) Remove any “mockup”, “coming soon”, placeholder text, or empty list states for the 10kW package.
+
+========================
+B) ACCESSORY LIST TO USE (FOR BOTH 6kW AND TEMPORARILY 10kW)
+========================
+Use this exact list (including section titles) as the accessory list content:
+
+SECTION: "HEIZKRAFT compact² Hydrobox (Systemtrennung + Sicherheitstechnik)"
+- 1,6 m² Edelstahl-Plattenwärmetauscher (hydraulische Trennung)
+- 3 kW Heizstab integriert
+- 3-Wege-Ventil (Danfoss) Warmwasser-Umschaltung
+- 10 l Ausdehnungsgefäß, Manometer, 2 Entlüfter, 3 bar Sicherheitsventil
+- 2 Umwälzpumpen (je 4,2 m³/h)
+
+SECTION: "Speicher & Systemschutz"
+- HEIZKRAFT WP1 300-GR – 300 l emaillierter Wärmepumpenspeicher (4 m² Wärmetauscherfläche)
+- Fish S4 30 – 30 l Rücklaufspeicher (Taktschutz & Abtaureserve)
+- IVAR Dirtstop 1″ Magnetfilter
+
+SECTION: "Verbindungskomponenten"
+- Solarleitung DN20 (2×) inkl. Verschraubungssatz
+- Reduzierstück 1″ AG × 3/4″ IG
+- Frostschutz-Konzentrat 10 l
+- Dämpfungssockel Set (2 Stk.) für Außeneinheit
+
+========================
+C) IMPLEMENTATION NOTES
+========================
+- Prefer DRY implementation: define the accessory list once (e.g., const accessories_6kw = {...}) and reference it for both 6kW and 10kW.
+- Keep the package name/title for 10kW as “10kW Performance-Paket” (or existing title), only replace the accessory list content.
+- Do not modify the 4kW package list.
+- Do not modify routing/SEO; only ensure /pakete renders correctly.
+
+========================
+D) ACCEPTANCE CRITERIA
+========================
+1) /pakete shows the 10kW package with a full accessory list (no mockup/placeholder).
+2) The 10kW accessory list matches the 6kW accessory list exactly (same sections and bullets).
+3) No UI regressions on 4kW and 6kW package cards.
