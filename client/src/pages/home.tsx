@@ -18,15 +18,9 @@ import ehpaLabel from "@assets/image_1767188918778.png";
 import { ChofuHomepageTeaser } from "@/components/brand/ChofuHomepageTeaser";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 import { PriceDisclaimer } from "@/components/price-disclaimer";
-import { BUILDING_STANDARDS, calculateHeizlast, recommendModel, type BuildingStandardKey } from "@/lib/chofuCapacity";
+import { recommendModel } from "@/lib/chofuCapacity";
 
-const BUILDING_STANDARD_OPTIONS: { value: BuildingStandardKey; label: string }[] = [
-  { value: "alt_unsaniert", label: "Altbau unsaniert" },
-  { value: "alt_teilsaniert", label: "Altbau teilsaniert" },
-  { value: "alt_saniert", label: "Altbau saniert" },
-  { value: "neubau", label: "Neubau" },
-  { value: "niedrigenergie", label: "Niedrigenergie" }
-];
+type BuildingTypeKey = "altbau" | "teilsaniert" | "neubau";
 
 // Custom Icons for Building Types
 const IconAltbau = ({ className }: { className?: string }) => (
@@ -58,6 +52,18 @@ const IconNeubau = ({ className }: { className?: string }) => (
   </svg>
 );
 
+const BUILDING_TYPES: Record<BuildingTypeKey, { 
+  id: BuildingTypeKey;
+  label: string; 
+  specificHeatLoad: number; 
+  designWaterTemp: number;
+  Icon: React.FC<{ className?: string }>;
+}> = {
+  altbau: { id: "altbau", label: "Altbau", specificHeatLoad: 100, designWaterTemp: 55, Icon: IconAltbau },
+  teilsaniert: { id: "teilsaniert", label: "Teilsaniert", specificHeatLoad: 70, designWaterTemp: 45, Icon: IconSaniert },
+  neubau: { id: "neubau", label: "Neubau", specificHeatLoad: 40, designWaterTemp: 35, Icon: IconNeubau }
+};
+
 export default function Home() {
   const [selectedBundesland, setSelectedBundesland] = useState<string>("Wien");
   
@@ -72,7 +78,7 @@ export default function Home() {
   // Mini Calculator State
   const [calcData, setCalcData] = useState({ 
     size: "140", 
-    buildingStandard: "alt_teilsaniert" as BuildingStandardKey 
+    buildingType: "teilsaniert" as BuildingTypeKey 
   });
   const [result, setResult] = useState<{
     low: string;
@@ -84,7 +90,7 @@ export default function Home() {
     status: "ok" | "exceeds_10kw_package";
     suitability: "Sehr gut geeignet" | "Geeignet" | "Projekt prüfen";
     suitabilityColor: string;
-    designWaterTemp: number;
+    buildingLabel: string;
   } | null>(null);
 
   const handleCalc = () => {
@@ -95,13 +101,15 @@ export default function Home() {
 
     setIsCalculating(true);
 
-    const { heizlastKw, low, high } = calculateHeizlast(area, calcData.buildingStandard);
+    const buildingType = BUILDING_TYPES[calcData.buildingType];
+    const heizlastKw = (area * buildingType.specificHeatLoad) / 1000;
+    const low = heizlastKw * 0.85;
+    const high = heizlastKw * 1.15;
     
-    const designWaterTemp = 55;
     const modelResult = recommendModel({
       heizlastKw,
       designAirTemp: -7,
-      designWaterTemp,
+      designWaterTemp: buildingType.designWaterTemp,
       safetyFactor: 1.05
     });
 
@@ -139,7 +147,7 @@ export default function Home() {
         status: modelResult.status,
         suitability,
         suitabilityColor,
-        designWaterTemp
+        buildingLabel: buildingType.label
       });
       setCalcStep(2);
       setIsCalculating(false);
@@ -243,29 +251,33 @@ export default function Home() {
                       <p className="text-[11px] text-slate-400 pl-1">Beheizte Wohnfläche (ca.)</p>
                     </div>
 
-                    {/* Gebäudestandard Input */}
+                    {/* Gebäudestandard Input - 3 Tiles */}
                     <div className="space-y-4">
-                      <Label className="text-xs uppercase font-bold text-slate-500 tracking-wider">Gebäudestandard</Label>
-                      <Select 
-                        value={calcData.buildingStandard} 
-                        onValueChange={(value) => setCalcData({...calcData, buildingStandard: value as BuildingStandardKey})}
-                      >
-                        <SelectTrigger className="w-full h-12" data-testid="select-building-standard">
-                          <SelectValue placeholder="Bitte wählen" />
-                        </SelectTrigger>
-                        <SelectContent>
-                          {BUILDING_STANDARD_OPTIONS.map((option) => (
-                            <SelectItem key={option.value} value={option.value} data-testid={`option-${option.value}`}>
-                              <div className="flex items-center justify-between w-full">
-                                <span>{option.label}</span>
-                                <span className="text-xs text-slate-400 ml-2">
-                                  ({BUILDING_STANDARDS[option.value].specificHeatLoad} W/m²)
-                                </span>
-                              </div>
-                            </SelectItem>
-                          ))}
-                        </SelectContent>
-                      </Select>
+                      <Label className="text-xs uppercase font-bold text-slate-500 tracking-wider">Gebäudetyp</Label>
+                      <div className="grid grid-cols-3 gap-2">
+                        {(Object.keys(BUILDING_TYPES) as BuildingTypeKey[]).map((key) => {
+                          const type = BUILDING_TYPES[key];
+                          const isSelected = calcData.buildingType === key;
+                          return (
+                            <button
+                              key={key}
+                              type="button"
+                              onClick={() => setCalcData({...calcData, buildingType: key})}
+                              className={`flex flex-col items-center justify-center p-3 rounded-lg border-2 transition-all ${
+                                isSelected 
+                                  ? "border-primary bg-primary/5 text-primary shadow-md" 
+                                  : "border-slate-200 bg-white text-slate-600 hover:border-slate-300 hover:bg-slate-50"
+                              }`}
+                              data-testid={`tile-${key}`}
+                            >
+                              <type.Icon className={`w-6 h-6 mb-1 ${isSelected ? "text-primary" : "text-slate-500"}`} />
+                              <span className={`text-xs font-semibold ${isSelected ? "text-primary" : "text-slate-700"}`}>
+                                {type.label}
+                              </span>
+                            </button>
+                          );
+                        })}
+                      </div>
                       <p className="text-[11px] text-slate-400 pl-1 text-center">Wärmeschutz Ihres Gebäudes (für erste Einschätzung)</p>
                     </div>
 
@@ -323,9 +335,9 @@ export default function Home() {
                         </div>
                       </div>
                       <div className="bg-slate-50 p-3 rounded-lg border border-slate-100 text-center">
-                        <div className="text-[10px] uppercase text-slate-500 font-bold mb-1">Auslegung</div>
+                        <div className="text-[10px] uppercase text-slate-500 font-bold mb-1">Gebäude</div>
                         <div className="font-bold text-slate-900 text-sm md:text-base leading-tight truncate">
-                          A-7/W{result?.designWaterTemp}
+                          {result?.buildingLabel}
                         </div>
                       </div>
                     </div>
@@ -345,7 +357,7 @@ export default function Home() {
                     ) : (
                       <div className="bg-amber-50 border border-amber-200 rounded-lg p-4 space-y-2">
                         <p className="text-sm text-amber-800 leading-relaxed text-center">
-                          Der Wärmebedarf liegt über dem 10-kW-Paketbereich bei A-7/W55. Fragen Sie unser 16-kW CHOFU Modell an (nicht im Paket).
+                          Der Wärmebedarf liegt über dem 10-kW-Paketbereich. Fragen Sie unser 16-kW CHOFU Modell an (nicht im Paket).
                         </p>
                       </div>
                     )}
@@ -354,13 +366,13 @@ export default function Home() {
                     <div className="space-y-3 pt-2">
                       {result?.status === "exceeds_10kw_package" ? (
                         <Button asChild className="w-full h-12 rounded-lg font-bold shadow-md hover:shadow-lg transition-all bg-amber-600 hover:bg-amber-700">
-                          <Link href={`/kontakt?area=${calcData.size}&type=${BUILDING_STANDARDS[calcData.buildingStandard].label}&recommendation=16kW&interestModel=16kW`}>
+                          <Link href={`/kontakt?area=${calcData.size}&type=${result?.buildingLabel}&recommendation=16kW&interestModel=16kW`}>
                             16-kW Modell anfragen
                           </Link>
                         </Button>
                       ) : (
                         <Button asChild className="w-full h-12 rounded-lg font-bold shadow-md hover:shadow-lg transition-all">
-                          <Link href={`/kontakt?area=${calcData.size}&type=${BUILDING_STANDARDS[calcData.buildingStandard].label}&recommendation=${encodeURIComponent(result?.recommendation || "")}`}>
+                          <Link href={`/kontakt?area=${calcData.size}&type=${result?.buildingLabel}&recommendation=${encodeURIComponent(result?.recommendation || "")}`}>
                             Kostenlosen Besichtigungstermin
                           </Link>
                         </Button>
