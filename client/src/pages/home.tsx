@@ -456,15 +456,26 @@ export default function Home() {
                 >
                   Mehr Informationen zur Förderung <ArrowRight size={16} />
                 </a>
-                <div className="flex gap-8 pt-4">
-                  <div>
-                    <span className="block text-4xl font-heading font-bold text-slate-900">€{SUBSIDIES.base.toLocaleString()}</span>
-                    <span className="text-sm text-slate-500 uppercase tracking-wide font-medium">Basis-Förderung</span>
+                <div className="pt-4 space-y-3">
+                  <div className="flex items-baseline gap-2">
+                    <span className="text-4xl font-heading font-bold text-slate-900">Bis zu €{SUBSIDIES.base.toLocaleString()}</span>
+                    <span className="text-lg text-slate-600 font-medium">Förderung*</span>
+                    <div className="relative group">
+                      <Info size={18} className="text-slate-400 hover:text-primary cursor-help" />
+                      <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 w-72 p-4 bg-slate-900 text-white text-sm rounded-lg opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all z-50 shadow-xl">
+                        <p className="font-semibold mb-2">Förderung „Kesseltausch 2026":</p>
+                        <ul className="space-y-1 text-slate-300">
+                          <li>• Wärmepumpe: bis zu 7.500 €</li>
+                          <li>• Solarbonus: bis zu 2.500 €</li>
+                          <li>• Gesamtförderung: max. 30 % der förderungsfähigen Investitionskosten</li>
+                        </ul>
+                        <p className="mt-2 text-xs text-slate-400">Details abhängig von Ihren Projektkosten und Förderbedingungen.</p>
+                        <div className="absolute bottom-0 left-1/2 -translate-x-1/2 translate-y-1/2 rotate-45 w-2 h-2 bg-slate-900"></div>
+                      </div>
+                    </div>
                   </div>
-                  <div>
-                    <span className="block text-4xl font-heading font-bold text-slate-900">+€{SUBSIDIES.solar.toLocaleString()}</span>
-                    <span className="text-sm text-slate-500 uppercase tracking-wide font-medium">Solar-Bonus</span>
-                  </div>
+                  <p className="text-base text-slate-500">+ möglicher Solarbonus bis zu €{SUBSIDIES.solar.toLocaleString()}</p>
+                  <p className="text-xs text-slate-400">*Maximal 30 % der förderungsfähigen Investitionskosten (Förderaktion „Kesseltausch 2026").</p>
                 </div>
              </div>
              
