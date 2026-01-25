@@ -176,3 +176,33 @@ Preferred communication style: Simple, everyday language.
 5. Backend creates HubSpot contact via official API client
 6. HubSpot contact ID linked back to database record
 7. Success response to frontend with toast notification
+
+## Recent Changes (January 25, 2026)
+
+### CHOFU Capacity Module (client/src/lib/chofuCapacity.ts)
+- **New module** for CHOFU R290 heat pump capacity calculations
+- Bilinear interpolation on capacity data grid (air temp -7 to 15°C, water temp 35-55°C)
+- Model recommendation based on heat load and design temperatures
+- Returns model ID, label, capacity, and margin percentage
+- Handles "exceeds_10kw_package" status for large buildings
+
+### Effizienz-Check (home.tsx) - Redesigned
+- **3 building type tiles** instead of dropdown: Altbau, Teilsaniert, Neubau
+- Each type has internal parameters:
+  - Altbau: 100 W/m², designWaterTemp=55°C
+  - Teilsaniert: 70 W/m², designWaterTemp=45°C
+  - Neubau: 40 W/m², designWaterTemp=35°C
+- Heat load calculation: heizlastKw = (area × specificHeatLoad) / 1000
+- Range display: ±15% around calculated heat load
+- **Result tiles**: Heizlast (range), Empfehlung (model), Gebäude (building type)
+- **Removed "Auslegung" display** - designWaterTemp is internal only
+- 16kW CTA appears when load exceeds 10kW package range
+
+### Heizkostenrechner (calculator.tsx) - Major Fixes
+- **Solar thermal fix**: Only reduces hot water portion (warmwasserAnteilPct, default 20%, range 10-35%)
+- **Floor heating effect**: anteilFussboden reduces effective flow temperature and improves SCOP
+- **"keine" heating system**: Forces area-based calculation, consumption input hidden
+- **Auto-defaults**: Price and efficiency auto-update when switching heating systems (unless manually modified)
+- **Investment display**: Net investment clamped to ≥0, amortization shows "k.A." when savings ≤0
+- **Energy demand**: Derived from specificHeatLoad (100/70/50/40/30 W/m²) × 2000 heating hours
+- **Updated building class descriptions**: ~200/140/100/80/60 kWh/m²·a to match derived values
