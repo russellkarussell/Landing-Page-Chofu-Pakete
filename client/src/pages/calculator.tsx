@@ -568,6 +568,9 @@ export default function Heizkostenrechner() {
         </div>
 
         <Card className="border-0 shadow-xl overflow-hidden">
+          {/* Hidden Turnstile container - always rendered so widget initializes on page load */}
+          <div ref={turnstileRef} className="hidden" />
+          
           <CardContent className="p-6 md:p-10 min-h-[500px] flex flex-col">
             <AnimatePresence mode="wait">
               
@@ -1011,11 +1014,6 @@ export default function Heizkostenrechner() {
                     className="space-y-8 flex-grow"
                   >
                     <StepHeader step={4} title={isNewBuildMode ? "Ihre Wärmepumpen-Lösung" : "Ihr Sparpotenzial"} />
-
-                    {/* Turnstile captcha - shared widget for both form variants */}
-                    {!leadSubmitted && (
-                      <div ref={turnstileRef} className="flex justify-center" />
-                    )}
 
                     {/* Recommended Solution Section - only show when a package is selected */}
                     {derivedPackage.package && productImages[derivedPackage.package] && (
