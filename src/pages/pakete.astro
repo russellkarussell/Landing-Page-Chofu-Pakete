@@ -1,0 +1,236 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import { PACKAGES, SUBSIDIES, formatEUR, getSubsidy, getNetPrice } from "../lib/constants";
+import chofu4kw from "@assets/chofu-4kw-product.webp";
+import chofu6kw from "@assets/chofu-6kw-product.webp";
+import chofu10kw from "@assets/chofu-10kw.webp";
+
+const includeSolar = false;
+
+const packageImages: Record<number, ImageMetadata> = {
+  4: chofu4kw,
+  6: chofu6kw,
+  10: chofu10kw,
+};
+
+const packagesWithPricing = PACKAGES.map((pkg) => {
+  const subsidy = getSubsidy(pkg.price, includeSolar);
+  const netPrice = getNetPrice(pkg.price, subsidy);
+  const fundingPotential = SUBSIDIES.base + (includeSolar ? SUBSIDIES.solar : 0);
+  const cap = pkg.price * SUBSIDIES.maxPercentage;
+  const isCapped = subsidy === cap && cap < fundingPotential;
+  return { ...pkg, subsidy, netPrice, isCapped, image: packageImages[pkg.kw] || chofu6kw };
+});
+
+const PACKAGE_CONTENTS: Record<number, { category: string; items: string[] }[]> = {
+  4: [
+    { category: "Wärmepumpe & Regelung", items: ["CHOFU AEYC-0449ZU-CH1 – 4 kW R290 Monoblock (Made in Japan, Inverter, bis 75 °C)", "CHOFU Steuerung CMR-4100M – Touchdisplay mit WLAN"] },
+    { category: "Hydraulik / Innenmodul", items: ["HEIZKRAFT compact² Hydrobox", "1,6 m² Edelstahl-Plattenwärmetauscher", "3 kW Heizstab", "3-Wege-Ventil (Danfoss)", "10 l Ausdehnungsgefäß + Sicherheitstechnik", "2 Umwälzpumpen (je 4,2 m³/h)"] },
+    { category: "Speicher & Systemschutz", items: ["HEIZKRAFT WP1 300-GR – 300 l Wärmepumpenspeicher", "Fish S4 30 – 30 l Rücklaufspeicher", "IVAR Dirtstop 1″ Magnetfilter"] },
+    { category: "Verbindungskomponenten", items: ["Solarleitung DN20 (2×) inkl. Verschraubungssatz", "Reduzierstück 1″ AG × 3/4″ IG", "Frostschutz-Konzentrat 10 l", "Dämpfungssockel Set (2 Stk.)"] },
+  ],
+  6: [
+    { category: "Wärmepumpe & Regelung", items: ["CHOFU AEYC-0649ZU-CH1 – 6 kW R290 Monoblock (Made in Japan, Inverter, bis 75 °C)", "CHOFU Steuerung CMR-4100M – Touchdisplay mit WLAN"] },
+    { category: "Hydraulik / Innenmodul", items: ["HEIZKRAFT compact² Hydrobox", "1,6 m² Edelstahl-Plattenwärmetauscher", "3 kW Heizstab integriert", "3-Wege-Ventil (Danfoss)", "10 l Ausdehnungsgefäß + Sicherheitstechnik", "2 Umwälzpumpen (je 4,2 m³/h)"] },
+    { category: "Speicher & Systemschutz", items: ["HEIZKRAFT WP1 300-GR – 300 l Wärmepumpenspeicher", "Fish S4 30 – 30 l Rücklaufspeicher", "IVAR Dirtstop 1″ Magnetfilter"] },
+    { category: "Verbindungskomponenten", items: ["Solarleitung DN20 (2×) inkl. Verschraubungssatz", "Reduzierstück 1″ AG × 3/4″ IG", "Frostschutz-Konzentrat 10 l", "Dämpfungssockel Set (2 Stk.)"] },
+  ],
+  10: [
+    { category: "Wärmepumpe & Regelung", items: ["CHOFU AEYC-1049ZU-CH1 – 10 kW R290 Monoblock (Made in Japan, Inverter, bis 75 °C)", "CHOFU Steuerung CMR-4100M – Touchdisplay mit WLAN"] },
+    { category: "Hydraulik / Innenmodul", items: ["HEIZKRAFT compact² Hydrobox", "1,6 m² Edelstahl-Plattenwärmetauscher", "3 kW Heizstab integriert", "3-Wege-Ventil (Danfoss)", "10 l Ausdehnungsgefäß + Sicherheitstechnik", "2 Umwälzpumpen (je 4,2 m³/h)"] },
+    { category: "Speicher & Systemschutz", items: ["HEIZKRAFT WP1 300-GR – 300 l Wärmepumpenspeicher", "Fish S4 30 – 30 l Rücklaufspeicher", "IVAR Dirtstop 1″ Magnetfilter"] },
+    { category: "Verbindungskomponenten", items: ["Solarleitung DN20 (2×) inkl. Verschraubungssatz", "Reduzierstück 1″ AG × 3/4″ IG", "Frostschutz-Konzentrat 10 l", "Dämpfungssockel Set (2 Stk.)"] },
+  ],
+};
+
+const includedServices = [
+  "Lieferung und Einbringung der Wärmepumpe",
+  "Montage des Monoblocks auf vorbereitetem Fundament",
+  "Anschluss an das bestehende Heizungssystem (bis 5m)",
+  "Elektrischer Anschluss (ab Sicherheitsschalter)",
+  "Inbetriebnahme durch zertifizierten Techniker",
+  "Einschulung in die Bedienung",
+  "Entsorgung der Verpackungsmaterialien",
+];
+
+const notIncluded = [
+  "Betonfundament für Außeneinheit",
+  "Hauptstromzuleitung bis zum Aufstellort",
+  "Demontage & Entsorgung des alten Kessels",
+  "Hydraulischer Abgleich der Heizkörper",
+  "Wanddurchbrüche (falls notwendig)",
+  "Stemmarbeiten und Wiederherstellung",
+];
+---
+
+<BaseLayout
+  title="Wärmepumpen-Pakete | CHOFU Partner Österreich"
+  description="Transparente CHOFU Wärmepumpen-Pakete: 4 kW, 6 kW und 10 kW. Faire Paketpreise inklusive Montage, Inbetriebnahme und Einschulung."
+  ogTitle="CHOFU Wärmepumpen Pakete | Österreich"
+>
+  <div class="bg-slate-50 min-h-screen py-12">
+    <div class="container mx-auto px-4">
+
+      {/* Header */}
+      <div class="text-center max-w-3xl mx-auto mb-12">
+        <span class="inline-block mb-4 bg-primary/10 text-primary px-4 py-1 text-sm font-medium rounded-full">
+          Faire Paketpreise
+        </span>
+        <h1 class="text-4xl md:text-5xl font-heading font-bold text-slate-900 mb-6">
+          Transparente Pakete für jedes Haus
+        </h1>
+        <p class="text-xl text-slate-600">
+          Wählen Sie das passende System für Ihre Bedürfnisse. Inklusive Montage, Inbetriebnahme und Einschulung durch zertifizierte Fachpartner.
+        </p>
+      </div>
+
+      {/* Packages Grid */}
+      <div class="grid lg:grid-cols-3 gap-8 mb-12">
+        {packagesWithPricing.map((pkg) => (
+          <div class:list={["flex flex-col border-0 shadow-xl overflow-hidden rounded-lg bg-white", pkg.highlight && "ring-2 ring-primary relative scale-[1.02] z-10"]}>
+            {pkg.highlight && (
+              <div class="bg-primary text-white text-center py-2 text-sm font-bold uppercase tracking-wider">
+                Bestseller
+              </div>
+            )}
+            {/* Product Image */}
+            <div class="h-64 w-full relative overflow-hidden bg-slate-100 border-b border-slate-100">
+              <img
+                src={pkg.image.src}
+                alt={`CHOFU Wärmepumpe Außeneinheit – ${pkg.kw} kW Paket`}
+                class="w-full h-full object-cover object-center hover:scale-105 transition-transform duration-500"
+                loading="lazy"
+              />
+            </div>
+
+            {/* Pricing Header */}
+            <div class="bg-slate-50 border-b border-slate-100 pb-8 pt-6 px-6">
+              <div class="flex justify-between items-start mb-4">
+                <h3 class="text-2xl font-bold text-slate-900">{pkg.name}</h3>
+                <span class="border border-slate-200 rounded px-2 py-0.5 text-sm font-mono text-slate-600">{pkg.kw} kW</span>
+              </div>
+              <div class="space-y-1 mb-4">
+                <div class="text-slate-400 line-through text-lg">{formatEUR(pkg.price)}</div>
+                <div class="flex items-baseline gap-2">
+                  <span class="text-4xl font-heading font-bold text-primary">{formatEUR(pkg.netPrice)}</span>
+                  <span class="text-slate-500 font-medium">*</span>
+                </div>
+                <p class="text-sm text-slate-500">Endpreis ab (nach Förderung)</p>
+              </div>
+              <div class="bg-green-100/50 text-green-800 text-xs font-bold px-3 py-2 rounded-lg border border-green-200 w-full">
+                <div class="flex justify-between items-center w-full">
+                  <span>Abzgl. Förderung:</span>
+                  <span>− {formatEUR(pkg.subsidy)}</span>
+                </div>
+                {pkg.isCapped && (
+                  <div class="text-amber-700 font-normal mt-1 border-t border-green-200 pt-1 text-[10px] leading-tight">
+                    Maximal 30% der Investitionskosten förderbar.
+                  </div>
+                )}
+              </div>
+            </div>
+
+            {/* Content */}
+            <div class="flex-grow pt-8 px-6 space-y-8">
+              <div>
+                <h4 class="font-bold text-slate-900 mb-3">Geeignet für:</h4>
+                <div class="flex flex-wrap gap-2">
+                  {pkg.suitability.map((tag) => (
+                    <span class="bg-slate-100 text-slate-700 px-2.5 py-1 rounded text-sm">{tag}</span>
+                  ))}
+                </div>
+              </div>
+
+              {/* Package Contents Accordion (native HTML) */}
+              <details class="w-full border-t border-slate-100">
+                <summary class="cursor-pointer py-3 text-slate-900 font-bold text-sm hover:text-primary transition-colors list-none flex justify-between items-center">
+                  <span>Im Paket enthalten</span>
+                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="transition-transform details-open:rotate-180"><path d="m6 9 6 6 6-6"/></svg>
+                </summary>
+                <div class="space-y-4 pt-1 pb-4">
+                  {PACKAGE_CONTENTS[pkg.kw]?.map((section) => (
+                    <div>
+                      <h5 class="font-semibold text-xs text-slate-500 uppercase tracking-wider mb-2">{section.category}</h5>
+                      <ul class="space-y-2">
+                        {section.items.map((item) => (
+                          <li class="flex items-start gap-2.5 text-sm text-slate-700 leading-snug">
+                            <div class="mt-0.5 rounded-full bg-slate-100 p-0.5 shrink-0">
+                              <svg xmlns="http://www.w3.org/2000/svg" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" class="text-slate-600"><path d="M20 6 9 17l-5-5"/></svg>
+                            </div>
+                            <span>{item}</span>
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+                  ))}
+                </div>
+              </details>
+            </div>
+
+            {/* Footer CTA */}
+            <div class="pb-8 pt-4 px-6 bg-slate-50/50 border-t border-slate-100 flex flex-col gap-3">
+              <a href="/kontakt" class:list={["w-full h-12 text-lg font-bold shadow-md hover:shadow-lg transition-all inline-flex items-center justify-center rounded", pkg.highlight ? "bg-primary text-white hover:bg-primary/90" : "border-2 border-slate-200 text-slate-700 hover:border-primary hover:text-primary"]}>
+                Termin vereinbaren
+              </a>
+              <a href={`/waermepumpe/${pkg.kw}kw`} class="w-full text-center text-sm text-slate-500 hover:text-primary hover:bg-primary/5 py-2 transition-colors">
+                Details zur {pkg.kw} kW Wärmepumpe &rarr;
+              </a>
+            </div>
+          </div>
+        ))}
+      </div>
+
+      {/* Price Disclaimer */}
+      <div class="max-w-3xl mx-auto text-center py-8">
+        <p class="text-xs text-slate-400 leading-relaxed">
+          <span class="font-semibold text-slate-500">Preishinweis:</span> Bei den dargestellten Preisen handelt es sich um unverbindliche Preisempfehlungen (UVP). Die endgültige Preisgestaltung erfolgt individuell durch den ausführenden Fachbetrieb.
+        </p>
+      </div>
+
+      {/* Detailed Comparison Table */}
+      <div class="max-w-4xl mx-auto bg-white rounded-2xl shadow-lg overflow-hidden border border-slate-200">
+        <div class="p-8 border-b border-slate-200 bg-slate-50">
+          <h3 class="text-2xl font-bold text-slate-900">Leistungsumfang im Detail</h3>
+          <p class="text-slate-500">Was Sie bekommen – und was bauseits zu erledigen ist.</p>
+        </div>
+        <div class="grid md:grid-cols-2">
+          <div class="p-8 space-y-6">
+            <h4 class="font-bold text-green-700 flex items-center gap-2 text-lg">
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>
+              Enthaltene Leistungen
+            </h4>
+            <ul class="space-y-4">
+              {includedServices.map((item) => (
+                <li class="flex gap-3 text-slate-700">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-green-600 flex-shrink-0"><path d="M20 6 9 17l-5-5"/></svg>
+                  <span>{item}</span>
+                </li>
+              ))}
+            </ul>
+          </div>
+          <div class="p-8 space-y-6 bg-slate-50/50 border-l border-slate-200">
+            <h4 class="font-bold text-slate-700 flex items-center gap-2 text-lg">
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-slate-400"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>
+              Bauseits zu leisten / Nicht enthalten
+            </h4>
+            <ul class="space-y-4">
+              {notIncluded.map((item) => (
+                <li class="flex gap-3 text-slate-500">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-slate-300 flex-shrink-0"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>
+                  <span>{item}</span>
+                </li>
+              ))}
+            </ul>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</BaseLayout>
+
+<style>
+  details[open] summary svg {
+    transform: rotate(180deg);
+  }
+</style>

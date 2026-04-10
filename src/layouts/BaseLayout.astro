@@ -1,0 +1,225 @@
+---
+export interface Props {
+  title: string;
+  description?: string;
+  ogTitle?: string;
+  ogDescription?: string;
+  ogImage?: string;
+  canonical?: string;
+}
+
+const {
+  title,
+  description = "Hochwertige Chofu Wärmepumpen mit fairen Paketpreisen. Japanische Präzisionstechnologie, installiert von regionalen Fachpartnern in Österreich.",
+  ogTitle,
+  ogDescription,
+  ogImage = "/opengraph.jpg",
+  canonical,
+} = Astro.props;
+
+const currentPath = Astro.url.pathname;
+const siteUrl = "https://meine-waermepumpe.at";
+const canonicalUrl = canonical || `${siteUrl}${currentPath}`;
+const resolvedOgTitle = ogTitle || title;
+const resolvedOgDescription = ogDescription || description;
+
+import logoUrl from "@assets/meine-waermepumpe.at-logo-banner-transparent_1767782595991.png";
+---
+
+<html lang="de">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1" />
+
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={canonicalUrl} />
+    <link rel="alternate" hreflang="de-AT" href={canonicalUrl} />
+
+    <meta property="og:title" content={resolvedOgTitle} />
+    <meta property="og:description" content={resolvedOgDescription} />
+    <meta property="og:type" content="website" />
+    <meta property="og:image" content={`${siteUrl}${ogImage}`} />
+    <meta property="og:url" content={canonicalUrl} />
+
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={resolvedOgTitle} />
+    <meta name="twitter:description" content={resolvedOgDescription} />
+
+    <link rel="icon" type="image/png" href="/favicon.png" />
+  </head>
+  <body class="min-h-screen flex flex-col font-sans bg-slate-50 overflow-x-hidden">
+    {/* Navbar */}
+    <header id="main-header" class="fixed top-0 left-0 right-0 z-50 transition-all duration-300 bg-transparent py-5">
+      <div class="container mx-auto px-4 flex items-center justify-between">
+        <a href="/" class="flex flex-col items-start gap-0 group">
+          <div class="h-10 w-auto">
+            <img
+              src={logoUrl.src}
+              alt="meine-waermepumpe.at"
+              class="h-full w-auto object-contain"
+              width="200"
+              height="40"
+            />
+          </div>
+          <span class="text-[10px] font-bold tracking-widest uppercase whitespace-nowrap ml-1 mt-1">
+            <span class="text-slate-900">POWERED BY</span> <span class="text-[#E60012]">CHOFU</span>
+          </span>
+        </a>
+
+        {/* Desktop Nav */}
+        <nav class="hidden md:flex items-center gap-8">
+          <a href="/pakete" class:list={["text-sm font-bold uppercase tracking-wide transition-colors hover:text-primary", currentPath === "/pakete" ? "text-primary border-b-2 border-primary" : "text-slate-600"]}>
+            Pakete
+          </a>
+          <a href="/waermepumpen" class:list={["text-sm font-bold uppercase tracking-wide transition-colors hover:text-primary", currentPath === "/waermepumpen" ? "text-primary border-b-2 border-primary" : "text-slate-600"]}>
+            Wärmepumpen
+          </a>
+          <a href="/rechner" class:list={["text-sm font-bold uppercase tracking-wide transition-colors hover:text-primary", currentPath === "/rechner" ? "text-primary border-b-2 border-primary" : "text-slate-600"]}>
+            Heizkostenrechner
+          </a>
+          <a href="/fachpartner" class:list={["text-sm font-bold uppercase tracking-wide transition-colors hover:text-primary", currentPath === "/fachpartner" ? "text-primary border-b-2 border-primary" : "text-slate-600"]}>
+            Partner
+          </a>
+          <a href="/kontakt" class="inline-flex items-center justify-center bg-primary text-primary-foreground shadow-none rounded-none font-bold uppercase tracking-wider px-4 py-2 text-sm hover:bg-primary/90 transition-colors">
+            Termin vereinbaren
+          </a>
+        </nav>
+
+        {/* Mobile Nav Toggle */}
+        <button id="mobile-menu-btn" class="md:hidden p-2 text-slate-800" aria-label="Menü öffnen">
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="4" x2="20" y1="12" y2="12"/><line x1="4" x2="20" y1="6" y2="6"/><line x1="4" x2="20" y1="18" y2="18"/></svg>
+        </button>
+      </div>
+    </header>
+
+    {/* Mobile Menu Overlay */}
+    <div id="mobile-menu" class="fixed inset-0 z-50 hidden">
+      <div class="absolute inset-0 bg-black/50" id="mobile-menu-backdrop"></div>
+      <div class="absolute right-0 top-0 bottom-0 w-72 bg-white shadow-xl p-6">
+        <button id="mobile-menu-close" class="absolute top-4 right-4 p-2 text-slate-600" aria-label="Menü schließen">
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>
+        </button>
+        <nav class="flex flex-col gap-6 mt-10">
+          <a href="/pakete" class:list={["text-lg font-medium flex items-center gap-3", currentPath === "/pakete" ? "text-primary" : "text-slate-600"]}>Pakete</a>
+          <a href="/waermepumpen" class:list={["text-lg font-medium flex items-center gap-3", currentPath === "/waermepumpen" ? "text-primary" : "text-slate-600"]}>Wärmepumpen</a>
+          <a href="/rechner" class:list={["text-lg font-medium flex items-center gap-3", currentPath === "/rechner" ? "text-primary" : "text-slate-600"]}>Heizkostenrechner</a>
+          <a href="/fachpartner" class:list={["text-lg font-medium flex items-center gap-3", currentPath === "/fachpartner" ? "text-primary" : "text-slate-600"]}>Partner</a>
+          <a href="/kontakt" class="inline-flex items-center justify-center w-full mt-4 bg-primary text-white font-bold px-4 py-2.5 rounded-none hover:bg-primary/90 transition-colors">Termin vereinbaren</a>
+        </nav>
+      </div>
+    </div>
+
+    {/* Main Content */}
+    <main class="flex-grow pt-20">
+      <slot />
+    </main>
+
+    {/* Footer */}
+    <footer class="bg-slate-900 text-slate-300 py-16 border-t border-slate-800">
+      <div class="container mx-auto px-4 grid md:grid-cols-4 gap-12">
+        <div class="col-span-1 md:col-span-2">
+          <div class="mb-6">
+            <img
+              src={logoUrl.src}
+              alt="meine-waermepumpe.at"
+              class="h-12 w-auto object-contain bg-white/90 p-2 rounded-lg"
+              width="200"
+              height="48"
+              loading="lazy"
+            />
+          </div>
+          <p class="text-sm text-slate-400 max-w-sm mb-6 leading-relaxed">
+            Exklusiver Partner für Chofu Wärmepumpen-Systeme in Österreich.
+            Wir verbinden japanische Ingenieurskunst mit regionaler Handwerksqualität.
+          </p>
+        </div>
+
+        <div>
+          <h4 class="text-white font-bold mb-4">Navigation</h4>
+          <ul class="space-y-2 text-sm">
+            <li><a href="/" class="hover:text-primary transition-colors">Startseite</a></li>
+            <li><a href="/pakete" class="hover:text-primary transition-colors">Pakete</a></li>
+            <li><a href="/rechner" class="hover:text-primary transition-colors">Heizkostenrechner</a></li>
+            <li><a href="/fachpartner" class="hover:text-primary transition-colors">Partner</a></li>
+            <li><a href="/kontakt" class="hover:text-primary transition-colors">Kontakt</a></li>
+          </ul>
+        </div>
+
+        <div>
+          <h4 class="text-white font-bold mb-4">Rechtliches</h4>
+          <ul class="space-y-2 text-sm">
+            <li><a href="/impressum" class="hover:text-primary transition-colors">Impressum</a></li>
+            <li><a href="/datenschutz" class="hover:text-primary transition-colors">Datenschutz</a></li>
+            <li><a href="/agb" class="hover:text-primary transition-colors">AGB</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="container mx-auto px-4 mt-12 pt-8 border-t border-slate-800 text-center text-xs text-slate-500">
+        &copy; {new Date().getFullYear()} meine-waermepumpe.at. Alle Rechte vorbehalten.
+      </div>
+    </footer>
+
+    {/* Cookie Banner (React Island) */}
+    <script>
+      // Header scroll effect
+      const header = document.getElementById("main-header");
+      window.addEventListener("scroll", () => {
+        if (window.scrollY > 10) {
+          header?.classList.remove("bg-transparent", "py-5");
+          header?.classList.add("bg-white/90", "backdrop-blur-md", "shadow-sm", "py-3");
+        } else {
+          header?.classList.remove("bg-white/90", "backdrop-blur-md", "shadow-sm", "py-3");
+          header?.classList.add("bg-transparent", "py-5");
+        }
+      });
+
+      // Mobile menu
+      const menuBtn = document.getElementById("mobile-menu-btn");
+      const menu = document.getElementById("mobile-menu");
+      const menuClose = document.getElementById("mobile-menu-close");
+      const menuBackdrop = document.getElementById("mobile-menu-backdrop");
+
+      menuBtn?.addEventListener("click", () => menu?.classList.remove("hidden"));
+      menuClose?.addEventListener("click", () => menu?.classList.add("hidden"));
+      menuBackdrop?.addEventListener("click", () => menu?.classList.add("hidden"));
+
+      // Cookie Banner
+      const CONSENT_KEY = "cookie-consent";
+      if (!localStorage.getItem(CONSENT_KEY)) {
+        setTimeout(() => {
+          const banner = document.getElementById("cookie-banner");
+          if (banner) banner.classList.remove("hidden");
+        }, 1500);
+      }
+      document.getElementById("cookie-accept")?.addEventListener("click", () => {
+        localStorage.setItem(CONSENT_KEY, "accepted");
+        document.getElementById("cookie-banner")?.classList.add("hidden");
+      });
+      document.getElementById("cookie-decline")?.addEventListener("click", () => {
+        localStorage.setItem(CONSENT_KEY, "declined");
+        document.getElementById("cookie-banner")?.classList.add("hidden");
+      });
+    </script>
+
+    {/* Cookie Banner (pure HTML, no React needed) */}
+    <div id="cookie-banner" class="fixed bottom-0 left-0 right-0 z-50 p-4 md:p-0 hidden">
+      <div class="container mx-auto md:px-4 md:pb-4">
+        <div class="bg-white border border-slate-200 shadow-lg rounded-lg p-4 md:p-5 flex flex-col sm:flex-row items-start sm:items-center gap-3 sm:gap-4 max-w-2xl ml-auto">
+          <p class="text-sm text-slate-600 leading-relaxed flex-1">
+            Diese Website verwendet technisch notwendige Cookies.
+            <a href="/datenschutz" class="text-primary hover:underline">Datenschutz</a>
+          </p>
+          <div class="flex items-center gap-2 shrink-0">
+            <button id="cookie-decline" class="text-xs text-slate-400 hover:text-slate-600 transition-colors px-3 py-1.5">Ablehnen</button>
+            <button id="cookie-accept" class="bg-primary text-white text-sm font-medium px-4 py-1.5 rounded hover:bg-primary/90 transition-colors">OK</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>
+
+<style is:global>
+  @import "../styles/global.css";
+</style>

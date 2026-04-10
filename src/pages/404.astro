@@ -1,0 +1,20 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+---
+
+<BaseLayout title="Seite nicht gefunden | meine-waermepumpe.at" description="Die angeforderte Seite konnte nicht gefunden werden.">
+  <div class="min-h-[60vh] w-full flex items-center justify-center bg-slate-50">
+    <div class="w-full max-w-md mx-4 bg-white rounded-lg shadow-sm border border-slate-200 p-8">
+      <div class="flex mb-4 gap-3 items-center">
+        <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-red-500"><circle cx="12" cy="12" r="10"/><line x1="12" x2="12" y1="8" y2="12"/><line x1="12" x2="12.01" y1="16" y2="16"/></svg>
+        <h1 class="text-2xl font-heading font-bold text-slate-900">Seite nicht gefunden</h1>
+      </div>
+      <p class="text-sm text-slate-600 mb-6">
+        Die angeforderte Seite existiert leider nicht.
+      </p>
+      <a href="/" class="inline-flex items-center justify-center bg-primary text-white font-medium px-6 py-2.5 rounded hover:bg-primary/90 transition-colors">
+        Zur Startseite
+      </a>
+    </div>
+  </div>
+</BaseLayout>

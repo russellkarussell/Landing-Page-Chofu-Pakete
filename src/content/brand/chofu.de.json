@@ -1,0 +1,137 @@
+{
+  "brand": {
+    "name": "CHOFU",
+    "fullName": "CHOFU SEISAKUSHO CO., LTD.",
+    "founded": "1954",
+    "origin": "Shimonoseki, Japan",
+    "tagline": "Präzision aus Japan. Zuhause in Österreich."
+  },
+  "pageTitle": "CHOFU – Wärmepumpentechnik aus Japan",
+  "pageIntro": [
+    "CHOFU SEISAKUSHO CO., LTD. wurde 1954 gegründet und gehört zu den renommiertesten Herstellern für Haustechnik in Japan. Das Unternehmen steht für eine Ingenieurskultur, die Langlebigkeit und Präzision in den Mittelpunkt stellt.",
+    "In Österreich arbeiten wir als spezialisierter Partner eng mit CHOFU zusammen, um diese Technologie für den heimischen Markt nutzbar zu machen."
+  ],
+  "sections": [
+    {
+      "id": "who",
+      "title": "Wer ist CHOFU?",
+      "text": [
+        "CHOFU ist ein japanischer Traditionshersteller mit Hauptsitz in Shimonoseki. Seit über 70 Jahren entwickelt das Unternehmen Lösungen für Heizung und Warmwasserbereitung.",
+        "Im Gegensatz zu vielen Massenherstellern konzentriert sich CHOFU auf eine hohe Fertigungstiefe. Viele Kernkomponenten werden im eigenen Haus entwickelt und produziert, um die Qualitätsstandards lückenlos zu überwachen."
+      ]
+    },
+    {
+      "id": "why",
+      "title": "Warum CHOFU?",
+      "text": [
+        "Produkte 'Made in Japan' genießen weltweit einen Ruf für Zuverlässigkeit. Bei CHOFU wird dieser Anspruch täglich gelebt. Jedes Gerät durchläuft strenge Qualitätskontrollen, bevor es das Werk verlässt.",
+        "Die Philosophie ist einfach: Ein Heizsystem muss über viele Jahre hinweg unauffällig und effizient funktionieren. Robuste Materialien und durchdachte Konstruktionen haben daher Vorrang vor kurzfristigen Trends."
+      ]
+    },
+    {
+      "id": "technology",
+      "title": "Technologie & Effizienz",
+      "text": [
+        "Die Wärmepumpen arbeiten mit moderner Inverter-Technologie, die die Leistung stufenlos an den tatsächlichen Bedarf anpasst. Das sorgt für einen ruhigen Lauf und hohe Effizienz im Teillastbereich.",
+        "Zum Einsatz kommen zukunftssichere Kältemittel wie R32 und R290 (Propan), die nicht nur umweltfreundlich sind, sondern auch hohe Vorlauftemperaturen ermöglichen – ideal für den Einsatz in sanierten Bestandsgebäuden."
+      ]
+    },
+    {
+      "id": "europe",
+      "title": "CHOFU in Europa",
+      "text": [
+        "Auch wenn die Marke in Österreich für Endkunden oft noch neu klingt: Die Technik ist längst bewährt. Als spezialisierter Anbieter betreuen wir bereits über 5.000 installierte CHOFU-Systeme im Feldbetrieb.",
+        "Diese hohe Zahl an Bestandsanlagen bestätigt die Alltagstauglichkeit der Systeme unter europäischen Klimabedingungen."
+      ]
+    },
+    {
+      "id": "service",
+      "title": "Service & Ersatzteile in Österreich",
+      "text": [
+        "Ein gutes Produkt benötigt einen ebenso guten Service. Wir gewährleisten eine österreichweite Betreuung durch unser Netzwerk an geschulten Partnerbetrieben.",
+        "Zudem betreiben wir ein eigenes Ersatzteillager direkt in Österreich. Damit stellen wir sicher, dass im Servicefall alle notwendigen Komponenten schnell verfügbar sind und Ihre Heizung zuverlässig läuft."
+      ]
+    }
+  ],
+  "faq": [
+    {
+      "question": "Wo werden CHOFU Geräte gefertigt?",
+      "answer": "Die Produktion findet in den eigenen Werken von CHOFU in Japan statt. Dort werden die Geräte unter strengen Qualitätsvorgaben gefertigt und geprüft."
+    },
+    {
+      "question": "Was bedeutet 'Made in Japan' konkret?",
+      "answer": "Es steht für eine Fertigungsphilosophie, die Präzision und Langlebigkeit priorisiert. Hohe Fertigungstiefe und strikte Endkontrollen sichern die Qualität jedes einzelnen Geräts."
+    },
+    {
+      "question": "Wie läuft ein Servicefall in Österreich ab?",
+      "answer": "Melden Sie sich einfach bei uns oder Ihrem Installateur. Wir koordinieren den Einsatz durch unser geschultes Techniker-Netzwerk."
+    },
+    {
+      "question": "Gibt es Ersatzteile in Österreich?",
+      "answer": "Ja, wir führen ein umfangreiches Ersatzteillager in Österreich. Gängige Teile sind sofort verfügbar, um Wartezeiten zu minimieren."
+    },
+    {
+      "question": "Wer ist Vertragspartner für die Montage?",
+      "answer": "Die Montage erfolgt durch zertifizierte Fachhandwerker aus Ihrer Region, mit denen wir eng zusammenarbeiten."
+    },
+    {
+      "question": "Wie geht es nach dem Besichtigungstermin weiter?",
+      "answer": "Nach der Bestandsaufnahme erhalten Sie ein detailliertes Festpreis-Angebot. Bei Auftragserteilung kümmern wir uns um die gesamte Abwicklung bis zur Inbetriebnahme."
+    }
+  ],
+  "homepage": {
+    "title": "CHOFU – Wärmepumpentechnik aus Japan",
+    "intro": [
+      "CHOFU wurde 1954 in Japan gegründet und steht für Ingenieurskunst auf höchstem Niveau. Als Spezialist für langlebige Haustechnik entwickelt CHOFU Wärmepumpen, die auch unter extremen Bedingungen zuverlässig arbeiten.",
+      "Entscheiden Sie sich für bewährte Qualität: Systeme von CHOFU sind weltweit im Einsatz und zeichnen sich durch robuste Bauweise, flüsterleisen Betrieb und höchste Effizienz aus."
+    ],
+    "benefits": [
+      {
+        "icon": "Award",
+        "text": "Hersteller-Erfahrung seit 1954"
+      },
+      {
+        "icon": "Globe",
+        "text": "Made in Japan Fertigung"
+      },
+      {
+        "icon": "Zap",
+        "text": "Bewährte Systemtechnik"
+      },
+      {
+        "icon": "CheckCircle",
+        "text": "> 5.000 installierte Systeme (Partner-Erfahrung)"
+      },
+      {
+        "icon": "Wrench",
+        "text": "Österreichweiter Service & Wartung"
+      },
+      {
+        "icon": "Package",
+        "text": "Ersatzteilverfügbarkeit in Österreich"
+      }
+    ],
+    "ctaPrimary": "Kostenlosen Besichtigungstermin vereinbaren",
+    "ctaSecondary": "Mehr über CHOFU"
+  },
+  "packagesTrust": {
+    "title": "CHOFU Qualität – kurz erklärt",
+    "text": [
+      "Seit 1954 fertigt CHOFU in Japan Haustechnik mit höchster Präzision.",
+      "Wir betreuen bereits über 5.000 installierte Systeme im österreichischen Feldbetrieb.",
+      "Österreichweiter Service und gesicherte Ersatzteilversorgung sind garantiert."
+    ],
+    "linkLabel": "Mehr über CHOFU",
+    "ctaLabel": "Kostenlosen Besichtigungstermin vereinbaren"
+  },
+  "packagesFundingNotice": {
+    "title": "Förderung berücksichtigt",
+    "text": "Die Förderlogik ist bereits im Heizkostenrechner berücksichtigt und im ‚effektiven Preis nach Förderung‘ der Pakete enthalten.",
+    "linkLabel": "Zum Heizkostenrechner"
+  },
+  "packagesChofuTrust": {
+    "title": "CHOFU Qualität",
+    "text": "Japanischer Hersteller seit 1954 – über 5.000 betreute Systeme sowie Service und Ersatzteile in Österreich.",
+    "linkLabel": "Mehr über CHOFU"
+  }
+}

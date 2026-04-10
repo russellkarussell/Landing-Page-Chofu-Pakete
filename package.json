@@ -12,6 +12,8 @@
     "db:push": "drizzle-kit push"
   },
   "dependencies": {
+    "@astrojs/react": "^5.0.3",
+    "@astrojs/sitemap": "^3.7.2",
     "@hookform/resolvers": "^3.10.0",
     "@hubspot/api-client": "^12.0.1",
     "@jridgewell/trace-mapping": "^0.3.25",
@@ -45,6 +47,7 @@
     "@supabase/supabase-js": "^2.91.1",
     "@tanstack/react-query": "^5.60.5",
     "@types/multer": "^2.0.0",
+    "astro": "^6.1.5",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
     "cmdk": "^1.1.1",
