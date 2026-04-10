@@ -5,6 +5,7 @@ import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import meineWaermepumpeLogo from "@assets/meine-waermepumpe.at-logo-banner-transparent_1767782595991.png";
+import { CookieBanner } from "@/components/cookie-banner";
 
 export default function Layout({ children }: { children: React.ReactNode }) {
   const [location] = useLocation();
@@ -141,6 +142,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
           © {new Date().getFullYear()} meine-waermepumpe.at. Alle Rechte vorbehalten.
         </div>
       </footer>
+      <CookieBanner />
     </div>
   );
 }
