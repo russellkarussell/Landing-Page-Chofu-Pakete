@@ -4,8 +4,6 @@ import { Leaf, Menu, X, Phone, Calculator, Package, Home, Zap, LayoutGrid, Users
 import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
-import headerLogo from "@assets/Heizkraft_Banner_1767187239440.png";
-
 import meineWaermepumpeLogo from "@assets/meine-waermepumpe.at-logo-banner-transparent_1767782595991.png";
 
 export default function Layout({ children }: { children: React.ReactNode }) {
@@ -133,9 +131,9 @@ export default function Layout({ children }: { children: React.ReactNode }) {
           <div>
             <h4 className="text-white font-bold mb-4">Rechtliches</h4>
             <ul className="space-y-2 text-sm">
-              <li><a href="/impressum" className="hover:text-primary transition-colors">Impressum</a></li>
-              <li><a href="/datenschutz" className="hover:text-primary transition-colors">Datenschutz</a></li>
-              <li><a href="/agb" className="hover:text-primary transition-colors">AGB</a></li>
+              <li><Link href="/impressum" className="hover:text-primary transition-colors">Impressum</Link></li>
+              <li><Link href="/datenschutz" className="hover:text-primary transition-colors">Datenschutz</Link></li>
+              <li><Link href="/agb" className="hover:text-primary transition-colors">AGB</Link></li>
             </ul>
           </div>
         </div>

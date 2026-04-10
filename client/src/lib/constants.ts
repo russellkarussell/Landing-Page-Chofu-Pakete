@@ -72,7 +72,7 @@ export const PACKAGES = [
     price: 20490,
     kw: 10,
     description: "Maximale Leistung für größere Gebäude oder Bestandsbauten.",
-    details: "Leistungsstarkes 10kW Wärmepumpen-System (Mockup).",
+    details: "Chofu 10kW R290 Wärmepumpen-Komplettpaket.",
     suitability: ["Bestandsgebäude", "Zweifamilienhaus", "Bis ca. 250m²"],
     features: [
       "Hochleistungs-Wärmepumpe 10kW",
