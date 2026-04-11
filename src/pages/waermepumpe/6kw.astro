@@ -1,0 +1,276 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import heroImage from "@assets/chofu-6kw-hero.webp";
+import closeupImage from "@assets/japan-map-icon.webp";
+import controllerImage from "@assets/cmr-controller.webp";
+
+const productSchema = JSON.stringify({
+  "@context": "https://schema.org/",
+  "@type": "Product",
+  name: "CHOFU AEYC-0649ZU-CH1",
+  description: "6 kW R290 Monoblock Wärmepumpe (Heizen & Kühlen). Made in Japan.",
+  brand: { "@type": "Brand", name: "CHOFU" },
+  category: "Heat Pump",
+  model: "AEYC-0649ZU-CH1",
+  offers: { "@type": "Offer", priceCurrency: "EUR", availability: "https://schema.org/InStock" }
+});
+
+const specs = [
+  { label: "Typ", value: "Luft/Wasser Wärmepumpe, Monoblock, DC-Inverter" },
+  { label: "Netzspannung", value: "230 V / 50 Hz / 1-phasig" },
+  { label: "Heizleistung A7/W35", value: "6.0 kW" },
+  { label: "COP A7/W35", value: "4.88", highlight: true },
+  { label: "SCOP (35 °C)", value: "4.46" },
+  { label: "Max. Vorlauftemperatur", value: "75 °C" },
+  { label: "Kühlleistung A35/W18", value: "6.0 kW" },
+  { label: "EER A35/W18", value: "4.44", highlight: true },
+  { label: "Kältemittel", value: "R290 (Propan), GWP ≈ 3" },
+  { label: "Schalldruckpegel Nachtmodus (5 m)", value: "33 dB(A)" },
+  { label: "Abmessungen (H×B×T)", value: "886 × 1000 × 330 mm" },
+  { label: "Gewicht", value: "82 kg" },
+  { label: "Betriebsbereich Heizen", value: "–20 °C bis +45 °C" },
+  { label: "Energieeffizienzklasse", value: "A+++ (35 °C) / A++ (55 °C)", highlight: true },
+  { label: "Wasseranschlüsse", value: "R 3/4\" (20A)" },
+];
+
+const features = [
+  { title: "Heizen", text: "Effizient für Radiatoren und Fußbodenheizung.", color: "text-orange-500" },
+  { title: "Kühlen", text: "Aktive Kühlung über Fan-Coils oder Flächensysteme.", color: "text-blue-500" },
+  { title: "Warmwasser", text: "Bereitung über Speicher & 3-Wege-Ventil möglich.", color: "text-cyan-500" },
+  { title: "Smart Control", text: "WLAN integriert für Zugriff über Comfy Connect CHOFU.", color: "text-primary" },
+];
+
+const controllerFeatures = [
+  "WLAN (2.4 GHz) und Online-Steuerung über Comfy Connect CHOFU",
+  "Heiz- und Kühlbetrieb einfach umschaltbar",
+  "Zeitprogramme für Heizen, Kühlen und Warmwasser",
+  "Heizkurve (Climatic Curve) für witterungsgeführten Betrieb",
+  "Nachtmodus & Low-Tarif Zeitfenster konfigurierbar",
+  "Umfassende Frostschutzfunktionen",
+];
+
+const useCases = [
+  { title: "Standard-Einfamilienhaus", text: "Die ideale Lösung für den klassischen Neubau und gut gedämmte Gebäude.", color: "text-green-600" },
+  { title: "Sanierter Altbau", text: "Passt perfekt, wenn thermisch saniert wurde (Auslegung durch Fachpartner).", color: "text-blue-600" },
+  { title: "Zweifamilienhaus", text: "Möglich bei entsprechenden Dämmstandards (Projektcheck erforderlich).", color: "text-amber-600" },
+];
+
+const faqs = [
+  { q: "Ist das eine Monoblock-Wärmepumpe?", a: "Ja, der Kältekreis ist komplett in der Außeneinheit geschlossen. Es führen nur Wasserleitungen ins Haus." },
+  { q: "Kann sie auch kühlen?", a: "Ja, das Modell AEYC-0649ZU-CH1 ist serienmäßig für aktives Kühlen (Reverse Cycle) ausgestattet." },
+  { q: "Wie laut ist sie?", a: "Das Gerät ist sehr leise. Detaillierte Schallwerte finden Sie im Datenblatt." },
+  { q: "Brauche ich einen Pufferspeicher?", a: "Systemabhängig. Für Abtauvorgänge wird oft ein kleiner Rücklaufspeicher empfohlen." },
+  { q: "Wie läuft die Steuerung?", a: "Über den Touch-Controller CMR-4100M sowie per App über Comfy Connect CHOFU (WLAN integriert)." },
+  { q: "Was passiert bei Frost?", a: "Mehrstufige Frostschutzfunktionen. Bei Monoblock-Systemen empfehlen wir zusätzlich Frostschutzventile oder Glykol-Gemisch." },
+];
+
+const downloads = [
+  { title: "Bedienungsanleitung", sub: "Installations- & Bedienungsanleitung (DE)", href: "https://yeaxuexfornuxvcldtux.supabase.co/storage/v1/object/public/documents/02072025%20Final%20R290%20Manual%20DE.pdf" },
+  { title: "Produktdatenblatt", sub: "Technische Spezifikationen", href: "https://yeaxuexfornuxvcldtux.supabase.co/storage/v1/object/public/documents/Chofu%20R290%20Produktdatenblatt.pdf" },
+  { title: "Produktflyer", sub: "CHOFU R290 Monoblock Serie", href: "https://yeaxuexfornuxvcldtux.supabase.co/storage/v1/object/public/documents/Chofu%20R290Flyer%20DE.pdf" },
+  { title: "EHPA Gütesiegel", sub: "Zertifikat AT-HP-01236", href: "https://yeaxuexfornuxvcldtux.supabase.co/storage/v1/object/public/documents/AT-HP-01236.pdf" },
+  { title: "SG Ready Zertifikat", sub: "Smart-Grid-Kompatibilität", href: "https://yeaxuexfornuxvcldtux.supabase.co/storage/v1/object/public/documents/SG-R_H0817.pdf" },
+];
+---
+
+<BaseLayout
+  title="CHOFU AEYC-0649ZU-CH1 – 6 kW R290 Wärmepumpe | meine-waermepumpe.at"
+  description="6 kW CHOFU R290 Monoblock Wärmepumpe. COP 4.88, A+++, 33 dB(A) Nachtmodus. Made in Japan. Technische Daten & Beratung."
+>
+  <div class="bg-white min-h-screen">
+    <script type="application/ld+json" set:html={productSchema} />
+
+    {/* A) Hero */}
+    <section class="relative bg-slate-50 pt-12 pb-20 overflow-hidden">
+      <div class="container mx-auto px-4">
+        <div class="grid lg:grid-cols-2 gap-12 items-center">
+          <div class="space-y-6 z-10">
+            <span class="inline-block bg-[#E60012]/10 text-[#E60012] px-4 py-1 text-sm font-bold uppercase tracking-wider">Made in Japan</span>
+            <h1 class="text-4xl md:text-5xl lg:text-6xl font-heading font-bold text-slate-900 leading-tight">
+              CHOFU AEYC-0649ZU-CH1 <span class="text-slate-400 block text-3xl mt-2 font-normal">6 kW R290 Wärmepumpe</span>
+            </h1>
+            <p class="text-xl text-slate-600 leading-relaxed max-w-lg">Monoblock Luft/Wasser – Heizen & Kühlen. Der Allrounder für Einfamilienhäuser und sanierten Altbau. Leise im Nachtmodus.</p>
+            <div class="flex flex-wrap gap-2 pt-2">
+              {["R290 (Propan)", "Monoblock", "Heizen & Kühlen", "DC Inverter", "Made in Japan"].map(tag => (
+                <span class="bg-white border border-slate-200 text-slate-700 px-3 py-1.5 text-sm rounded">{tag}</span>
+              ))}
+            </div>
+            <div class="flex flex-col sm:flex-row gap-4 pt-4">
+              <a href="/kontakt" class="h-14 text-lg px-8 font-bold bg-primary text-white hover:bg-primary/90 inline-flex items-center justify-center transition-colors shadow-lg">Kostenlose Beratung</a>
+              <a href="/pakete" class="h-14 text-lg px-8 border-2 border-slate-300 text-slate-600 hover:text-slate-900 inline-flex items-center justify-center transition-colors">Pakete ansehen</a>
+            </div>
+          </div>
+          <div class="relative">
+            <div class="absolute inset-0 bg-gradient-to-tr from-primary/5 to-transparent rounded-3xl transform rotate-3 scale-105"></div>
+            <img src={heroImage.src} alt="CHOFU 6 kW R290 Monoblock Wärmepumpe" class="relative rounded-3xl shadow-2xl w-full object-cover aspect-[4/3] z-10" />
+          </div>
+        </div>
+      </div>
+    </section>
+
+    {/* B) Trust Strip */}
+    <section class="bg-white border-y border-slate-100 py-6">
+      <div class="container mx-auto px-4">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-4xl mx-auto">
+          <div class="flex items-center gap-4 bg-slate-50 p-4 rounded-xl border border-slate-100">
+            <div class="w-16 h-16 rounded-lg overflow-hidden shrink-0 border border-slate-200">
+              <img src={closeupImage.src} alt="CHOFU Made in Japan" class="w-full h-full object-cover" loading="lazy" />
+            </div>
+            <div>
+              <h3 class="font-bold text-slate-900">Made in Japan / CHOFU Qualität</h3>
+              <p class="text-sm text-slate-500">Präzisionsfertigung für höchste Langlebigkeit.</p>
+            </div>
+          </div>
+          <div class="flex items-center gap-4 bg-slate-50 p-4 rounded-xl border border-slate-100">
+            <div class="w-16 h-16 rounded-lg overflow-hidden shrink-0 border border-slate-200 bg-white flex items-center justify-center">
+              <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-primary"><rect width="14" height="20" x="5" y="2" rx="2" ry="2"/><path d="M12 18h.01"/></svg>
+            </div>
+            <div>
+              <h3 class="font-bold text-slate-900">Steuerung & App</h3>
+              <p class="text-sm text-slate-500">Smarter Zugriff jederzeit via Comfy Connect.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    {/* C) Features */}
+    <section class="py-20 bg-white">
+      <div class="container mx-auto px-4">
+        <div class="text-center max-w-2xl mx-auto mb-16">
+          <h2 class="text-3xl font-bold text-slate-900 mb-4">Kurz erklärt: Was kann diese Wärmepumpe?</h2>
+          <p class="text-slate-600">Alles was Sie für modernen Wohnkomfort brauchen.</p>
+        </div>
+        <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
+          {features.map(f => (
+            <div class="bg-slate-50 p-6 rounded-xl border border-slate-100 hover:shadow-md transition-shadow">
+              <div class="mb-4 bg-white w-12 h-12 rounded-lg flex items-center justify-center border border-slate-100 shadow-sm">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class={f.color}><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+              </div>
+              <h3 class="font-bold text-slate-900 mb-2">{f.title}</h3>
+              <p class="text-sm text-slate-600 leading-relaxed">{f.text}</p>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+
+    {/* D) Controller */}
+    <section class="py-20 bg-slate-50 overflow-hidden">
+      <div class="container mx-auto px-4">
+        <div class="grid lg:grid-cols-2 gap-16 items-center">
+          <div class="order-2 lg:order-1">
+            <h2 class="text-3xl font-bold text-slate-900 mb-6">CMR-4100M Steuerung – <span class="text-primary">Bedienung & Automatik</span></h2>
+            <div class="space-y-4">
+              {controllerFeatures.map(item => (
+                <div class="flex items-start gap-3">
+                  <div class="mt-1 bg-green-100 text-green-600 rounded-full p-1">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>
+                  </div>
+                  <span class="text-slate-700">{item}</span>
+                </div>
+              ))}
+            </div>
+          </div>
+          <div class="order-1 lg:order-2 relative">
+            <div class="absolute -inset-4 bg-white rounded-2xl shadow-xl transform rotate-2"></div>
+            <div class="relative rounded-xl overflow-hidden shadow-lg border border-slate-200">
+              <img src={controllerImage.src} alt="CMR-4100M Controller" class="w-full h-auto" loading="lazy" />
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    {/* E) Technical Data */}
+    <section class="py-20 bg-white">
+      <div class="container mx-auto px-4 max-w-4xl">
+        <h2 class="text-3xl font-bold text-slate-900 mb-10 text-center">Technische Daten – AEYC-0649ZU-CH1</h2>
+        <div class="bg-white rounded-xl shadow-lg border border-slate-200 overflow-hidden">
+          <table class="w-full text-sm text-left">
+            <tbody class="divide-y divide-slate-100">
+              {specs.map(s => (
+                <tr class={s.highlight ? "bg-slate-50" : ""}>
+                  <td class="py-3 px-4 font-medium text-slate-600 w-1/2 border-r border-slate-50">{s.label}</td>
+                  <td class:list={["py-3 px-4", s.highlight ? "font-bold text-slate-900" : "text-slate-800"]}>{s.value}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+        <p class="text-xs text-slate-400 mt-4 text-center">Technische Änderungen und Irrtümer vorbehalten. Werte gemäß EN14511.</p>
+      </div>
+    </section>
+
+    {/* F) Downloads */}
+    <section class="py-16 bg-slate-50 border-t border-slate-200">
+      <div class="container mx-auto px-4 max-w-4xl">
+        <h2 class="text-2xl font-bold text-slate-900 mb-8">Downloads & Dokumente</h2>
+        <div class="grid md:grid-cols-2 gap-4">
+          {downloads.map(d => (
+            <a href={d.href} target="_blank" rel="noopener noreferrer" class="flex items-center justify-between bg-white p-5 border border-slate-200 hover:border-primary/50 hover:shadow-md transition-all group">
+              <div class="flex items-center gap-4">
+                <div class="bg-slate-100 p-3 text-slate-500 group-hover:bg-primary/10 group-hover:text-primary transition-colors">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7Z"/><path d="M14 2v4a2 2 0 0 0 2 2h4"/></svg>
+                </div>
+                <div>
+                  <h3 class="font-bold text-slate-900 group-hover:text-primary transition-colors">{d.title}</h3>
+                  <p class="text-sm text-slate-500">{d.sub}</p>
+                </div>
+              </div>
+              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-slate-400 group-hover:text-primary transition-colors"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" x2="12" y1="15" y2="3"/></svg>
+            </a>
+          ))}
+        </div>
+      </div>
+    </section>
+
+    {/* G) Ideal For */}
+    <section class="py-20 bg-white">
+      <div class="container mx-auto px-4">
+        <h2 class="text-2xl font-bold text-slate-900 mb-10 text-center">Ideal geeignet für</h2>
+        <div class="grid md:grid-cols-3 gap-6 max-w-5xl mx-auto">
+          {useCases.map(uc => (
+            <div class="bg-slate-50 p-6 rounded-xl text-center border border-slate-100">
+              <div class="inline-flex justify-center items-center mb-4 bg-white p-3 rounded-full shadow-sm">
+                <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class={uc.color}><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+              </div>
+              <h3 class="font-bold text-slate-900 mb-2">{uc.title}</h3>
+              <p class="text-sm text-slate-600">{uc.text}</p>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+
+    {/* H) FAQ */}
+    <section class="py-20 bg-slate-50">
+      <div class="container mx-auto px-4 max-w-3xl">
+        <h2 class="text-3xl font-bold text-slate-900 mb-10 text-center">Häufige Fragen</h2>
+        <div class="space-y-4">
+          {faqs.map(f => (
+            <details class="bg-white rounded-xl border border-slate-100 shadow-sm group">
+              <summary class="font-bold text-slate-900 p-6 cursor-pointer list-none flex justify-between items-center hover:text-primary transition-colors">
+                <span>{f.q}</span>
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="shrink-0 ml-4 transition-transform group-open:rotate-180"><path d="m6 9 6 6 6-6"/></svg>
+              </summary>
+              <p class="text-slate-600 text-sm leading-relaxed px-6 pb-6">{f.a}</p>
+            </details>
+          ))}
+        </div>
+      </div>
+    </section>
+
+    {/* I) Bottom CTA */}
+    <section class="py-24 bg-slate-900 text-white text-center">
+      <div class="container mx-auto px-4">
+        <h2 class="text-3xl md:text-4xl font-bold mb-6">Interesse an der 6 kW Lösung?</h2>
+        <p class="text-slate-300 mb-8 max-w-2xl mx-auto text-lg">Lassen Sie sich von unseren Experten beraten und erhalten Sie ein Festpreis-Angebot inklusive Montage.</p>
+        <div class="flex flex-col sm:flex-row gap-4 justify-center">
+          <a href="/kontakt" class="h-14 text-lg px-8 font-bold bg-primary hover:bg-primary/90 text-white inline-flex items-center justify-center transition-colors">Kostenlose Beratung</a>
+          <a href="/pakete" class="h-14 text-lg px-8 border border-slate-700 text-slate-300 hover:text-white hover:bg-slate-800 inline-flex items-center justify-center transition-colors">Pakete vergleichen</a>
+        </div>
+      </div>
+    </section>
+  </div>
+</BaseLayout>
