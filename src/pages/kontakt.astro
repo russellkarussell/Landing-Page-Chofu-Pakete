@@ -1,0 +1,29 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+---
+
+<BaseLayout
+  title="Kontakt | Kostenloses Erstgespräch | meine-waermepumpe.at"
+  description="Starten Sie jetzt Ihr Wärmepumpen-Projekt. Wir verbinden Sie mit einem geprüften Installationspartner in Ihrer Region."
+>
+  <div class="bg-slate-50 min-h-screen py-12">
+    <div class="container mx-auto px-4">
+      <div class="text-center max-w-2xl mx-auto mb-12">
+        <h1 class="text-4xl font-heading font-bold text-slate-900 mb-4">
+          Kostenloses Erstgespräch vereinbaren
+        </h1>
+        <p class="text-lg text-slate-600">
+          Starten Sie jetzt Ihr Wärmepumpen-Projekt. Wir verbinden Sie mit einem geprüften Installationspartner in Ihrer Region.
+        </p>
+      </div>
+      <div id="contact-form-container">
+        <!-- Contact form will be loaded as React island -->
+        <noscript>
+          <p class="text-center text-slate-500">Bitte aktivieren Sie JavaScript, um das Kontaktformular zu nutzen. Alternativ erreichen Sie uns unter office@westech-solar.at oder +43 (0)660 120 91 09.</p>
+        </noscript>
+      </div>
+    </div>
+  </div>
+  <!-- Load Turnstile only on this page -->
+  <script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
+</BaseLayout>

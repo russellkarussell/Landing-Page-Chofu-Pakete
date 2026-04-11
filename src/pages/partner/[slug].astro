@@ -1,0 +1,24 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+
+// In SSR mode, we get the slug from params
+// For SSG, we'd need getStaticPaths - this page needs SSR for dynamic partner data
+export const prerender = false;
+
+const { slug } = Astro.params;
+---
+
+<BaseLayout
+  title={`Fachpartner | meine-waermepumpe.at`}
+  description="Detailseite eines zertifizierten CHOFU Wärmepumpen-Installateurs."
+>
+  <div class="bg-slate-50 min-h-screen py-12">
+    <div class="container mx-auto px-4">
+      <div id="partner-profile" data-slug={slug}>
+        <noscript>
+          <p class="text-center text-slate-500 py-20">Bitte aktivieren Sie JavaScript, um das Partner-Profil zu laden.</p>
+        </noscript>
+      </div>
+    </div>
+  </div>
+</BaseLayout>
