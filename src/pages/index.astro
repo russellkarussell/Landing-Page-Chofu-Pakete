@@ -1,0 +1,244 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import EfficiencyCheck from "../components/react/EfficiencyCheck";
+import { PACKAGES, SUBSIDIES, formatEUR, getSubsidy, getNetPrice } from "../lib/constants";
+import heroImage from "@assets/hero-modern-house-bg.webp";
+import ehpaLabel from "@assets/ehpa-label.webp";
+import chofuPremiumImage from "@assets/chofu-premium.webp";
+import chofuData from "../content/brand/chofu.de.json";
+
+const homepage = (chofuData as any).homepage;
+const packagesWithPricing = PACKAGES.map((pkg) => {
+  const subsidy = getSubsidy(pkg.price);
+  const netPrice = getNetPrice(pkg.price, subsidy);
+  return { ...pkg, subsidy, netPrice };
+});
+---
+
+<BaseLayout
+  title="CHOFU Wärmepumpen | Japanische Präzision | meine-waermepumpe.at"
+  description="Hocheffiziente CHOFU R290 Monoblock-Wärmepumpen. Japanische Technologie, installiert von zertifizierten Partnern in Österreich. Faire Paketpreise ab € 10.790."
+  ogTitle="CHOFU Wärmepumpen | Japanische Präzision"
+>
+  <div class="flex flex-col gap-0">
+    {/* Hero Section */}
+    <section class="relative min-h-[70vh] md:min-h-[90vh] flex items-center bg-slate-50 overflow-hidden">
+      <div class="absolute inset-0 z-0 bg-grid-pattern opacity-[0.03] pointer-events-none"></div>
+      <div class="absolute inset-0 z-0">
+        <div class="absolute inset-0 bg-gradient-to-r from-slate-50 via-slate-50/90 to-transparent z-10 hidden md:block"></div>
+        <div class="absolute inset-0 bg-slate-50 md:hidden"></div>
+        <img src={heroImage.src} alt="Moderne Wärmepumpe Österreich" class="hidden md:block w-full h-full object-cover object-center grayscale-[10%]" />
+      </div>
+
+      <div class="container mx-auto px-4 relative z-10 grid lg:grid-cols-2 gap-12 items-center pt-20">
+        {/* Left: Text */}
+        <div class="space-y-8">
+          <div class="inline-flex items-center gap-3 bg-white text-slate-700 px-4 py-2 text-sm font-bold border border-slate-200 shadow-sm rounded-none tracking-wide">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" stroke-width="0" class="text-amber-500"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+            <span>JAPANISCHE TECHNOLOGIE. ÖSTERREICHISCHER SERVICE.</span>
+          </div>
+
+          <h1 class="text-5xl md:text-6xl lg:text-7xl font-heading font-extrabold leading-[1.1] tracking-tight text-[#e5232b]">
+            <span class="font-black">CHOFU</span> Wärmepumpen. <br/>
+            <span class="text-primary">Japanische Präzision.</span>
+          </h1>
+
+          <p class="text-xl text-slate-600 max-w-xl leading-relaxed">
+            Hocheffiziente R290 Monoblock-Systeme. Robust, langlebig und perfekt abgestimmt auf Ihr Zuhause. Inklusive Installation durch zertifizierte Partner.
+          </p>
+
+          <div class="flex flex-col sm:flex-row gap-4">
+            <a href="/kontakt" class="h-14 px-8 text-lg font-bold shadow-none rounded-none bg-primary hover:bg-primary/90 text-white inline-flex items-center justify-center transition-colors">
+              Beratung anfordern
+            </a>
+            <a href="/pakete" class="h-14 px-8 text-lg border-2 border-slate-200 text-slate-700 hover:border-primary hover:text-primary hover:bg-white rounded-none inline-flex items-center justify-center transition-colors">
+              Modelle & Preise
+            </a>
+          </div>
+        </div>
+
+        {/* Right: Efficiency Check (React Island) */}
+        <div class="lg:pl-12">
+          <EfficiencyCheck client:visible />
+        </div>
+      </div>
+    </section>
+
+    {/* CHOFU Brand Teaser */}
+    <section class="py-24 bg-slate-50 border-y border-slate-200">
+      <div class="container mx-auto px-4">
+        <div class="grid lg:grid-cols-2 gap-12 lg:gap-16 items-center mb-16">
+          <div class="text-center lg:text-left">
+            <div class="inline-flex items-center gap-2 text-primary font-bold uppercase tracking-wider text-sm mb-4">
+              <div class="h-px w-8 bg-primary"></div>
+              <span>CHOFU Japan</span>
+              <div class="h-px w-8 bg-primary"></div>
+            </div>
+            <h2 class="text-3xl md:text-4xl font-heading font-extrabold text-slate-900 mb-6 leading-tight">
+              {homepage?.title || "CHOFU – Wärmepumpentechnik aus Japan"}
+            </h2>
+            <div class="space-y-4 text-lg text-slate-600 leading-relaxed">
+              {homepage?.intro?.map((p: string) => <p>{p}</p>)}
+            </div>
+          </div>
+          <div class="mt-8 lg:mt-0">
+            <img src={chofuPremiumImage.src} alt="CHOFU Wärmepumpe – Premium Made in Japan" class="w-full h-auto rounded-xl shadow-lg object-contain" loading="lazy" />
+          </div>
+        </div>
+
+        <div class="grid md:grid-cols-3 gap-6 mb-12 max-w-5xl mx-auto">
+          {homepage?.benefits?.slice(0, 3).map((b: any) => (
+            <div class="border border-slate-200 bg-white shadow-sm hover:shadow-md transition-shadow rounded-none flex items-center p-4">
+              <div class="w-12 h-12 bg-primary/5 text-primary rounded-full flex items-center justify-center mr-4 flex-shrink-0">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>
+              </div>
+              <span class="font-bold text-slate-900 text-sm uppercase tracking-wide">{b.text}</span>
+            </div>
+          ))}
+        </div>
+
+        <div class="flex flex-col sm:flex-row justify-center gap-4">
+          <a href="/kontakt" class="h-14 px-8 font-bold uppercase tracking-wide rounded-none shadow-lg bg-primary text-white hover:bg-primary/90 inline-flex items-center justify-center transition-colors">
+            {homepage?.ctaPrimary || "Kostenlosen Besichtigungstermin vereinbaren"}
+          </a>
+          <a href="/chofu" class="h-14 px-8 font-bold uppercase tracking-wide rounded-none border-2 border-slate-300 text-slate-700 hover:border-primary hover:text-primary inline-flex items-center justify-center gap-2 transition-colors">
+            {homepage?.ctaSecondary || "Mehr über CHOFU"} &rarr;
+          </a>
+        </div>
+      </div>
+    </section>
+
+    {/* Subsidy Info Section */}
+    <section class="py-16 bg-white border-b border-slate-100">
+      <div class="container mx-auto px-4">
+        <div class="flex flex-col md:flex-row gap-12 items-center justify-between">
+          <div class="space-y-6 max-w-2xl">
+            <div class="flex items-center gap-3 text-primary font-bold uppercase tracking-wider text-sm">
+              <div class="h-px w-8 bg-primary"></div>
+              <span>Förderoffensive 2026</span>
+            </div>
+            <h2 class="text-3xl font-heading font-extrabold text-slate-900 leading-tight">
+              Staatliche Förderung für <br/>klimafreundliche Technologie.
+            </h2>
+            <p class="text-lg text-slate-600 leading-relaxed">
+              Nutzen Sie die aktuelle Förderaktion "Kesseltausch". Chofu Wärmepumpen erfüllen alle technischen Voraussetzungen für die maximale Förderhöhe.
+            </p>
+            <a href="https://www.sanierungsoffensive.gv.at/kesseltausch/ein-zweifamilienhaus-oder-reihenhaus" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-2 text-primary font-bold hover:underline">
+              Mehr Informationen zur Förderung &rarr;
+            </a>
+            <div class="pt-4 space-y-3">
+              <div class="flex items-baseline gap-2">
+                <span class="text-4xl font-heading font-bold text-slate-900">Bis zu €{SUBSIDIES.base.toLocaleString()}</span>
+                <span class="text-lg text-slate-600 font-medium">Förderung*</span>
+              </div>
+              <p class="text-base text-slate-500">+ möglicher Solarbonus bis zu €{SUBSIDIES.solar.toLocaleString()}</p>
+              <p class="text-xs text-slate-400">*Maximal 30 % der förderungsfähigen Investitionskosten (Förderaktion „Kesseltausch 2026").</p>
+            </div>
+          </div>
+          <div class="relative p-1 bg-gradient-to-br from-slate-100 to-slate-200 rounded-none border border-slate-200 w-full max-w-sm">
+            <div class="bg-white p-6 text-center space-y-4">
+              <img src={ehpaLabel.src} alt="EHPA Gütesiegel" class="h-32 w-auto object-contain mx-auto" loading="lazy" />
+              <h3 class="font-bold text-slate-900 text-lg uppercase tracking-wide">EHPA Gütesiegel</h3>
+              <p class="text-sm text-slate-500">Unsere Anlagen sind zertifiziert und voll förderfähig in ganz Österreich.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    {/* Packages Preview */}
+    <section class="py-24 bg-slate-50 relative">
+      <div class="absolute inset-0 bg-grid-pattern opacity-[0.03] pointer-events-none"></div>
+      <div class="container mx-auto px-4 relative z-10">
+        <div class="text-center max-w-3xl mx-auto mb-16">
+          <h2 class="text-3xl md:text-4xl font-heading font-extrabold text-slate-900 mb-4 uppercase tracking-tight">Modelle & Ausstattung</h2>
+          <p class="text-lg text-slate-600">Wählen Sie die passende Leistungsklasse für Ihr Objekt.</p>
+        </div>
+        <div class="grid md:grid-cols-3 gap-8">
+          {packagesWithPricing.map((pkg) => (
+            <div class:list={["flex flex-col border border-slate-200 shadow-sm hover:shadow-xl transition-all duration-300 relative rounded-none bg-white", pkg.highlight && "ring-2 ring-primary z-10"]}>
+              {pkg.highlight && <div class="absolute top-0 right-0 bg-primary text-white px-3 py-1 text-xs font-bold uppercase tracking-widest">Empfehlung</div>}
+              <div class="bg-white border-b border-slate-100 pt-8 pb-6 px-6">
+                <div class="mb-2 text-primary font-mono text-sm font-bold uppercase tracking-wider">Serie {pkg.kw}KW</div>
+                <h3 class="text-2xl font-bold text-slate-900 uppercase tracking-tight">{pkg.name}</h3>
+                <div class="mt-6 flex flex-col gap-1">
+                  <div class="flex items-baseline gap-2">
+                    <span class="text-sm text-slate-500 font-medium uppercase">ab</span>
+                    <span class="text-2xl font-bold text-slate-700">{formatEUR(pkg.price)}</span>
+                  </div>
+                  <div class="text-sm text-green-600 font-bold">abzgl. Förderung: − {formatEUR(pkg.subsidy)}</div>
+                  <div class="flex items-baseline gap-2 mt-2 pt-2 border-t border-slate-100">
+                    <span class="text-sm text-slate-500 font-bold uppercase">Endpreis ab:</span>
+                    <span class="text-4xl font-heading font-extrabold text-primary">{formatEUR(pkg.netPrice)}</span>
+                  </div>
+                </div>
+              </div>
+              <div class="flex-grow pt-8 px-6 bg-slate-50/50">
+                <ul class="space-y-4">
+                  {pkg.features.slice(0, 5).map((feat) => (
+                    <li class="flex items-start gap-3 text-sm text-slate-700 font-medium">
+                      <div class="w-1.5 h-1.5 bg-primary mt-2 flex-shrink-0"></div>
+                      {feat}
+                    </li>
+                  ))}
+                </ul>
+              </div>
+              <div class="pt-6 pb-8 px-6 bg-white border-t border-slate-100">
+                <a href="/pakete" class:list={["w-full h-12 rounded-none font-bold uppercase tracking-wide inline-flex items-center justify-center transition-colors", pkg.highlight ? "bg-primary text-white hover:bg-primary/90" : "border-2 border-slate-300 text-slate-700 hover:border-primary hover:text-primary"]}>
+                  Details ansehen
+                </a>
+              </div>
+            </div>
+          ))}
+        </div>
+        <div class="text-center text-slate-500 text-sm mt-6 mb-4 px-4 max-w-2xl mx-auto">
+          <p class="font-medium text-slate-600 mb-1">Preishinweis</p>
+          <p>Bei den dargestellten Preisen handelt es sich um unverbindliche Preisempfehlungen (UVP). Die endgültige Preisgestaltung erfolgt individuell durch den ausführenden Fachbetrieb.</p>
+        </div>
+      </div>
+    </section>
+
+    {/* Partners Section */}
+    <section class="py-24 bg-white border-t border-slate-200">
+      <div class="container mx-auto px-4">
+        <div class="grid md:grid-cols-2 gap-16 items-start">
+          <div>
+            <div class="flex items-center gap-3 text-primary font-bold uppercase tracking-wider text-sm mb-4">
+              <div class="h-px w-8 bg-primary"></div>
+              <span>Installation & Service</span>
+            </div>
+            <h2 class="text-3xl md:text-4xl font-heading font-extrabold text-slate-900 mb-6 leading-tight">Zertifizierte <br/>Fachpartner.</h2>
+            <p class="text-lg text-slate-600 mb-8 leading-relaxed">Die Qualität der Installation ist entscheidend für die Effizienz der Anlage. Deshalb arbeiten wir nur mit geschulten Fachbetrieben.</p>
+            <div class="grid grid-cols-2 gap-6">
+              <div class="p-4 border border-slate-200 bg-slate-50">
+                <h4 class="font-bold text-slate-900 mb-2 uppercase text-sm">Meisterbetriebe</h4>
+                <p class="text-sm text-slate-500">Ausgewählte Partner mit langjähriger Erfahrung.</p>
+              </div>
+              <div class="p-4 border border-slate-200 bg-slate-50">
+                <h4 class="font-bold text-slate-900 mb-2 uppercase text-sm">Faire Preise</h4>
+                <p class="text-sm text-slate-500">Transparente Kosten für Material und Arbeit.</p>
+              </div>
+            </div>
+          </div>
+          <div class="bg-slate-900 p-8 rounded-none text-white">
+            <h3 class="text-2xl font-bold mb-4 font-heading">Partner finden</h3>
+            <p class="text-slate-400 mb-6">Finden Sie zertifizierte Installateure in Ihrer Region.</p>
+            <a href="/fachpartner" class="w-full h-12 bg-primary text-white font-bold uppercase tracking-wide rounded-none inline-flex items-center justify-center hover:bg-primary/90 transition-colors">
+              Alle Partner ansehen &rarr;
+            </a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    {/* CTA Section */}
+    <section class="py-20 bg-primary text-white relative overflow-hidden">
+      <div class="container mx-auto px-4 text-center relative z-10">
+        <h2 class="text-3xl md:text-5xl font-heading font-extrabold mb-8 tracking-tight">Starten Sie Ihr Projekt.</h2>
+        <a href="/kontakt" class="h-16 px-10 text-lg font-bold bg-white text-primary hover:bg-slate-100 rounded-none shadow-xl inline-flex items-center justify-center transition-colors">
+          Kostenloses Erstgespräch vereinbaren
+        </a>
+      </div>
+    </section>
+  </div>
+</BaseLayout>

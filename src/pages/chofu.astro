@@ -1,0 +1,129 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import chofuData from "../content/brand/chofu.de.json";
+import heroImage from "@assets/image_1767192343363.png";
+
+const { pageTitle, pageIntro, sections, faq, brand } = chofuData;
+---
+
+<BaseLayout
+  title="CHOFU – Wärmepumpentechnik aus Japan | meine-waermepumpe.at"
+  description="CHOFU SEISAKUSHO - japanischer Wärmepumpen-Hersteller seit 1954. Erfahren Sie mehr über Technologie, Qualität und Service in Österreich."
+>
+  {/* Hero Section */}
+  <section
+    class="relative bg-slate-900 text-white overflow-hidden"
+    style={`backgroundImage: url(${heroImage.src}); backgroundSize: cover; backgroundPosition: center;`}
+  >
+    <div class="absolute inset-0 bg-slate-900/75"></div>
+    <div class="relative container mx-auto px-4 py-24 md:py-32">
+      <div class="max-w-3xl">
+        <span class="inline-flex items-center gap-2 bg-white/10 backdrop-blur-sm border border-white/20 text-white/90 px-4 py-2 text-sm font-medium rounded-full mb-6">
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20"/><path d="M2 12h20"/></svg>
+          Seit 1954 &bull; Shimonoseki, Japan
+        </span>
+        <h1 class="text-4xl md:text-5xl lg:text-6xl font-heading font-bold mb-6 leading-tight">
+          {pageTitle}
+        </h1>
+        {pageIntro.map((paragraph: string) => (
+          <p class="text-lg md:text-xl text-slate-300 mb-4 leading-relaxed max-w-2xl">
+            {paragraph}
+          </p>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  {/* Main Content */}
+  <section class="bg-slate-50 py-16 md:py-24">
+    <div class="container mx-auto px-4">
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-12">
+
+        {/* Left Column - Main Content (8 cols) */}
+        <div class="lg:col-span-8 space-y-12">
+          {sections.map((section: { id: string; title: string; text: string[] }) => (
+            <article id={section.id} class="bg-white rounded-2xl shadow-sm border border-slate-200 p-8">
+              <h2 class="text-2xl md:text-3xl font-heading font-bold text-slate-900 mb-6">
+                {section.title}
+              </h2>
+              {section.text.map((paragraph: string) => (
+                <p class="text-slate-600 leading-relaxed mb-4 last:mb-0">
+                  {paragraph}
+                </p>
+              ))}
+            </article>
+          ))}
+
+          {/* CTA Card */}
+          <div class="bg-primary/5 border border-primary/20 rounded-2xl p-8 text-center">
+            <h3 class="text-2xl font-heading font-bold text-slate-900 mb-4">
+              Interessiert an einem CHOFU System?
+            </h3>
+            <p class="text-slate-600 mb-6 max-w-lg mx-auto">
+              Vereinbaren Sie einen kostenlosen Besichtigungstermin. Wir beraten Sie gerne zu den passenden Optionen.
+            </p>
+            <a
+              href="/kontakt"
+              class="inline-flex items-center justify-center bg-primary text-white font-bold uppercase tracking-wider px-8 py-3 text-sm hover:bg-primary/90 transition-colors shadow-md hover:shadow-lg"
+            >
+              Termin vereinbaren
+            </a>
+          </div>
+        </div>
+
+        {/* Right Column - Sidebar (4 cols) */}
+        <aside class="lg:col-span-4">
+          <div class="lg:sticky lg:top-28 space-y-8">
+
+            {/* FAQ Accordion */}
+            <div class="bg-white rounded-2xl shadow-sm border border-slate-200 p-6">
+              <h3 class="text-lg font-heading font-bold text-slate-900 mb-4">
+                Häufige Fragen
+              </h3>
+              <div class="space-y-2">
+                {faq.map((item: { question: string; answer: string }) => (
+                  <details class="group border border-slate-200 rounded-lg overflow-hidden">
+                    <summary class="cursor-pointer px-4 py-3 text-sm font-semibold text-slate-800 hover:text-primary transition-colors list-none flex justify-between items-center gap-2 bg-slate-50 hover:bg-slate-100">
+                      <span>{item.question}</span>
+                      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="shrink-0 transition-transform"><path d="m6 9 6 6 6-6"/></svg>
+                    </summary>
+                    <div class="px-4 py-3 text-sm text-slate-600 leading-relaxed border-t border-slate-200 bg-white">
+                      {item.answer}
+                    </div>
+                  </details>
+                ))}
+              </div>
+            </div>
+
+            {/* Contact Link */}
+            <div class="bg-slate-900 text-white rounded-2xl p-6">
+              <h3 class="text-lg font-bold mb-2">Noch Fragen?</h3>
+              <p class="text-slate-400 text-sm mb-4 leading-relaxed">
+                Unser Team steht Ihnen für eine persönliche Beratung gerne zur Verfügung.
+              </p>
+              <a
+                href="/kontakt"
+                class="inline-flex items-center gap-2 text-sm font-bold text-primary hover:text-primary/80 transition-colors"
+              >
+                Kontakt aufnehmen
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+              </a>
+            </div>
+
+          </div>
+        </aside>
+
+      </div>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  details[open] summary svg {
+    transform: rotate(180deg);
+  }
+
+  details summary::-webkit-details-marker {
+    display: none;
+  }
+</style>
